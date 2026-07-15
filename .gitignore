@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+orders.db
+*.log
+cloudflared.exe
+tunnel*.txt
+tunnel*.log
+PUBLIC_URL.txt

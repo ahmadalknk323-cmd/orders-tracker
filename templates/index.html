@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ kingdom.name }} - Orders Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="/" class="back-btn">الممالك</a>
+        <h1>{{ kingdom.name }}</h1>
+        <p>سجل الطلبيات</p>
+    </header>
+
+    <div class="stats-section">
+        <h2 class="stats-title">الاحصائيات الشاملة</h2>
+        <div class="stats-grid">
+            <div class="stat-card stat-all card-3d">
+                <div class="stat-label">الكل ( {{ stats.all[5] }} طلبية )</div>
+                <div class="stat-row">
+                    <span class="stat-food">{{ stats.all[0]|number_format }} ذره</span>
+                    <span class="stat-wood">{{ stats.all[1]|number_format }} خشب</span>
+                    <span class="stat-stone">{{ stats.all[2]|number_format }} حجر</span>
+                    <span class="stat-gold">{{ stats.all[3]|number_format }} ذهب</span>
+                    <span class="stat-price">{{ stats.all[4]|number_format }} $</span>
+                </div>
+            </div>
+            <div class="stat-card stat-finished card-3d">
+                <div class="stat-label">منتهية ( {{ stats.finished[5] }} طلبية )</div>
+                <div class="stat-row">
+                    <span class="stat-food">{{ stats.finished[0]|number_format }} ذره</span>
+                    <span class="stat-wood">{{ stats.finished[1]|number_format }} خشب</span>
+                    <span class="stat-stone">{{ stats.finished[2]|number_format }} حجر</span>
+                    <span class="stat-gold">{{ stats.finished[3]|number_format }} ذهب</span>
+                    <span class="stat-price">{{ stats.finished[4]|number_format }} $</span>
+                </div>
+            </div>
+            <div class="stat-card stat-active card-3d">
+                <div class="stat-label">قيد التنفيذ ( {{ stats.active[5] }} طلبية )</div>
+                <div class="stat-row">
+                    <span class="stat-food">{{ stats.active[0]|number_format }} ذره</span>
+                    <span class="stat-wood">{{ stats.active[1]|number_format }} خشب</span>
+                    <span class="stat-stone">{{ stats.active[2]|number_format }} حجر</span>
+                    <span class="stat-gold">{{ stats.active[3]|number_format }} ذهب</span>
+                    <span class="stat-price">{{ stats.active[4]|number_format }} $</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-form card-3d">
+        <h2>طلبية جديدة</h2>
+        <form action="/kingdom/{{ kingdom.id }}/add" method="POST">
+            <div class="form-row">
+                <div class="form-group full">
+                    <label>اسم الزبون</label>
+                    <input type="text" name="customer_name" required placeholder="اسم الزبون">
+                </div>
+            </div>
+            <div class="form-row resources">
+                <div class="form-group resource-food">
+                    <label>ذره</label>
+                    <input type="number" name="food" value="0" min="0">
+                </div>
+                <div class="form-group resource-wood">
+                    <label>خشب</label>
+                    <input type="number" name="wood" value="0" min="0">
+                </div>
+                <div class="form-group resource-stone">
+                    <label>حجر</label>
+                    <input type="number" name="stone" value="0" min="0">
+                </div>
+                <div class="form-group resource-gold">
+                    <label>ذهب</label>
+                    <input type="number" name="gold" value="0" min="0">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ثمن الاوردر</label>
+                    <input type="number" name="price" value="0" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label>نوعية الدفع</label>
+                    <input type="text" name="payment_type" placeholder="اكتب هنا...">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full">
+                    <label>ملاحظات</label>
+                    <input type="text" name="notes" placeholder="ملاحظات (اختياري)">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-add">اضافة طلبية</button>
+        </form>
+    </div>
+
+    <div class="orders-table card-3d">
+        <div class="orders-header">
+            <h2>الطلبيات ({{ orders|length }})</h2>
+            <form action="/kingdom/{{ kingdom.id }}/delete" method="POST" onsubmit="return confirm('حذف المملكه وكل طلبياتها؟')">
+                <button type="submit" class="btn btn-delete">حذف المملكه</button>
+            </form>
+        </div>
+        {% if orders %}
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>الزبون</th>
+                    <th>ذره</th>
+                    <th>خشب</th>
+                    <th>حجر</th>
+                    <th>ذهب</th>
+                    <th>الثمن</th>
+                    <th>الدفع</th>
+                    <th>ملاحظات</th>
+                    <th>التاريخ</th>
+                    <th>اجراء</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr class="{{ 'finished' if order.status == 'finished' else '' }}">
+                    <td class="row-num">{{ loop.index }}</td>
+                    <td class="customer">{{ order.customer_name }}</td>
+                    <td class="food">{{ order.food|number_format }}</td>
+                    <td class="wood">{{ order.wood|number_format }}</td>
+                    <td class="stone">{{ order.stone|number_format }}</td>
+                    <td class="gold">{{ order.gold|number_format }}</td>
+                    <td class="price">{{ "%.2f"|format(order.price) }} $</td>
+                    <td class="payment">{{ order.payment_type }}</td>
+                    <td class="notes-cell">{{ order.notes }}</td>
+                    <td class="date">{{ order.created_at }}</td>
+                    <td class="actions">
+                        <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
+                            {% if order.status == 'finished' %}
+                            <button type="submit" class="btn btn-active">منتهي</button>
+                            {% else %}
+                            <button type="submit" class="btn btn-finish">انتهت</button>
+                            {% endif %}
+                        </form>
+                        <button class="btn btn-copy" onclick="copyOrder({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')">نسخ</button>
+                        <button class="btn btn-edit" onclick="openEdit({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')">تعديل</button>
+                        <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
+                            <button type="submit" class="btn btn-delete">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-data">ما في طلبيات بعد</p>
+        {% endif %}
+    </div>
+</div>
+
+<div id="editModal" class="modal" style="display:none">
+    <div class="modal-content card-3d">
+        <span class="close" onclick="closeEdit()">&times;</span>
+        <h2>تعديل الطلبيه</h2>
+        <form id="editForm" method="POST">
+            <div class="form-row">
+                <div class="form-group full">
+                    <label>اسم الزبون</label>
+                    <input type="text" name="customer_name" id="edit_customer" required>
+                </div>
+            </div>
+            <div class="form-row resources">
+                <div class="form-group resource-food">
+                    <label>ذره</label>
+                    <input type="number" name="food" id="edit_food" min="0">
+                </div>
+                <div class="form-group resource-wood">
+                    <label>خشب</label>
+                    <input type="number" name="wood" id="edit_wood" min="0">
+                </div>
+                <div class="form-group resource-stone">
+                    <label>حجر</label>
+                    <input type="number" name="stone" id="edit_stone" min="0">
+                </div>
+                <div class="form-group resource-gold">
+                    <label>ذهب</label>
+                    <input type="number" name="gold" id="edit_gold" min="0">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ثمن الاوردر</label>
+                    <input type="number" name="price" id="edit_price" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label>نوعية الدفع</label>
+                    <input type="text" name="payment_type" id="edit_payment">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full">
+                    <label>ملاحظات</label>
+                    <input type="text" name="notes" id="edit_notes">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-add">حفظ التعديلات</button>
+        </form>
+    </div>
+</div>
+
+<div id="copyModal" class="modal" style="display:none">
+    <div class="modal-content card-3d">
+        <span class="close" onclick="closeCopy()">&times;</span>
+        <h2>نسخ الطلبيه</h2>
+        <form id="copyForm" method="POST">
+            <div class="form-row">
+                <div class="form-group full">
+                    <label>اسم الزبون الجديد</label>
+                    <input type="text" name="customer_name" id="copy_customer" required>
+                </div>
+            </div>
+            <div class="form-row resources">
+                <div class="form-group resource-food">
+                    <label>ذره</label>
+                    <input type="number" name="food" id="copy_food" min="0">
+                </div>
+                <div class="form-group resource-wood">
+                    <label>خشب</label>
+                    <input type="number" name="wood" id="copy_wood" min="0">
+                </div>
+                <div class="form-group resource-stone">
+                    <label>حجر</label>
+                    <input type="number" name="stone" id="copy_stone" min="0">
+                </div>
+                <div class="form-group resource-gold">
+                    <label>ذهب</label>
+                    <input type="number" name="gold" id="copy_gold" min="0">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ثمن الاوردر</label>
+                    <input type="number" name="price" id="copy_price" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label>نوعية الدفع</label>
+                    <input type="text" name="payment_type" id="copy_payment">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full">
+                    <label>ملاحظات</label>
+                    <input type="text" name="notes" id="copy_notes">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-add">اضافة الطلبيه المنسوخة</button>
+        </form>
+    </div>
+</div>
+
+<script>
+var kid = {{ kingdom.id }};
+
+function openEdit(id, name, food, wood, stone, gold, price, payment, notes) {
+    document.getElementById('editForm').action = '/kingdom/' + kid + '/edit/' + id;
+    document.getElementById('edit_customer').value = name;
+    document.getElementById('edit_food').value = food;
+    document.getElementById('edit_wood').value = wood;
+    document.getElementById('edit_stone').value = stone;
+    document.getElementById('edit_gold').value = gold;
+    document.getElementById('edit_price').value = price;
+    document.getElementById('edit_payment').value = payment;
+    document.getElementById('edit_notes').value = notes;
+    document.getElementById('editModal').style.display = 'block';
+}
+
+function closeEdit() {
+    document.getElementById('editModal').style.display = 'none';
+}
+
+function copyOrder(id, name, food, wood, stone, gold, price, payment, notes) {
+    document.getElementById('copyForm').action = '/kingdom/' + kid + '/copy/' + id;
+    document.getElementById('copy_customer').value = '';
+    document.getElementById('copy_food').value = food;
+    document.getElementById('copy_wood').value = wood;
+    document.getElementById('copy_stone').value = stone;
+    document.getElementById('copy_gold').value = gold;
+    document.getElementById('copy_price').value = price;
+    document.getElementById('copy_payment').value = payment;
+    document.getElementById('copy_notes').value = notes;
+    document.getElementById('copyModal').style.display = 'block';
+}
+
+function closeCopy() {
+    document.getElementById('copyModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target == document.getElementById('editModal')) closeEdit();
+    if (event.target == document.getElementById('copyModal')) closeCopy();
+}
+</script>
+
+</body>
+</html>

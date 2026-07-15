@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Tracker - ممالك</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Orders Tracker</h1>
+        <p>اختر مملكه</p>
+    </header>
+
+    <div class="kingdoms-form card-3d">
+        <h2>مملكه جديدة</h2>
+        <form action="/kingdom/new" method="POST">
+            <div class="form-row">
+                <div class="form-group full">
+                    <label>اسم المملكه</label>
+                    <input type="text" name="name" required placeholder="مثلا: مملكه الصاعقة، حلف الظلام...">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-add">اضافة مملكه</button>
+        </form>
+    </div>
+
+    {% if kingdoms %}
+    <div class="kingdoms-list">
+        {% for k in kingdoms %}
+        <a href="/kingdom/{{ k.id }}" class="kingdom-card card-3d">
+            <div class="kingdom-info">
+                <div class="kingdom-name">{{ k.name }}</div>
+                <div class="kingdom-meta">
+                    <span>{{ k.count }} طلبية</span>
+                    <span>{{ k.total_price|number_format }} $</span>
+                    <span>{{ k.created_at }}</span>
+                </div>
+            </div>
+            <div class="kingdom-arrow">&#8592;</div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-data">ما في ممالك بعد - اضف مملكه جديدة</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
