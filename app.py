@@ -232,3 +232,5 @@ def delete_kingdom(kingdom_id):
 if __name__ == "__main__":
     init_db()
     app.run(debug=False, host="0.0.0.0", port=8081)
+else:
+    init_db()

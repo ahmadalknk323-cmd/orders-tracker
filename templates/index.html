@@ -15,42 +15,6 @@
         <p>سجل الطلبيات</p>
     </header>
 
-    <div class="stats-section">
-        <h2 class="stats-title">الاحصائيات الشاملة</h2>
-        <div class="stats-grid">
-            <div class="stat-card stat-all card-3d">
-                <div class="stat-label">الكل ( {{ stats.all[5] }} طلبية )</div>
-                <div class="stat-row">
-                    <span class="stat-food">{{ stats.all[0]|number_format }} ذره</span>
-                    <span class="stat-wood">{{ stats.all[1]|number_format }} خشب</span>
-                    <span class="stat-stone">{{ stats.all[2]|number_format }} حجر</span>
-                    <span class="stat-gold">{{ stats.all[3]|number_format }} ذهب</span>
-                    <span class="stat-price">{{ stats.all[4]|number_format }} $</span>
-                </div>
-            </div>
-            <div class="stat-card stat-finished card-3d">
-                <div class="stat-label">منتهية ( {{ stats.finished[5] }} طلبية )</div>
-                <div class="stat-row">
-                    <span class="stat-food">{{ stats.finished[0]|number_format }} ذره</span>
-                    <span class="stat-wood">{{ stats.finished[1]|number_format }} خشب</span>
-                    <span class="stat-stone">{{ stats.finished[2]|number_format }} حجر</span>
-                    <span class="stat-gold">{{ stats.finished[3]|number_format }} ذهب</span>
-                    <span class="stat-price">{{ stats.finished[4]|number_format }} $</span>
-                </div>
-            </div>
-            <div class="stat-card stat-active card-3d">
-                <div class="stat-label">قيد التنفيذ ( {{ stats.active[5] }} طلبية )</div>
-                <div class="stat-row">
-                    <span class="stat-food">{{ stats.active[0]|number_format }} ذره</span>
-                    <span class="stat-wood">{{ stats.active[1]|number_format }} خشب</span>
-                    <span class="stat-stone">{{ stats.active[2]|number_format }} حجر</span>
-                    <span class="stat-gold">{{ stats.active[3]|number_format }} ذهب</span>
-                    <span class="stat-price">{{ stats.active[4]|number_format }} $</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="add-form card-3d">
         <h2>طلبية جديدة</h2>
         <form action="/kingdom/{{ kingdom.id }}/add" method="POST">
@@ -156,6 +120,42 @@
         {% else %}
         <p class="no-data">ما في طلبيات بعد</p>
         {% endif %}
+    </div>
+
+    <div class="stats-section">
+        <h2 class="stats-title">الاحصائيات الشاملة</h2>
+        <div class="stats-grid">
+            <div class="stat-card stat-all card-3d">
+                <div class="stat-label">الكل ( {{ stats.all[5] }} طلبية )</div>
+                <div class="stat-row">
+                    <span class="stat-food">{{ stats.all[0]|number_format }} ذره</span>
+                    <span class="stat-wood">{{ stats.all[1]|number_format }} خشب</span>
+                    <span class="stat-stone">{{ stats.all[2]|number_format }} حجر</span>
+                    <span class="stat-gold">{{ stats.all[3]|number_format }} ذهب</span>
+                    <span class="stat-price">{{ stats.all[4]|number_format }} $</span>
+                </div>
+            </div>
+            <div class="stat-card stat-finished card-3d">
+                <div class="stat-label">منتهية ( {{ stats.finished[5] }} طلبية )</div>
+                <div class="stat-row">
+                    <span class="stat-food">{{ stats.finished[0]|number_format }} ذره</span>
+                    <span class="stat-wood">{{ stats.finished[1]|number_format }} خشب</span>
+                    <span class="stat-stone">{{ stats.finished[2]|number_format }} حجر</span>
+                    <span class="stat-gold">{{ stats.finished[3]|number_format }} ذهب</span>
+                    <span class="stat-price">{{ stats.finished[4]|number_format }} $</span>
+                </div>
+            </div>
+            <div class="stat-card stat-active card-3d">
+                <div class="stat-label">قيد التنفيذ ( {{ stats.active[5] }} طلبية )</div>
+                <div class="stat-row">
+                    <span class="stat-food">{{ stats.active[0]|number_format }} ذره</span>
+                    <span class="stat-wood">{{ stats.active[1]|number_format }} خشب</span>
+                    <span class="stat-stone">{{ stats.active[2]|number_format }} حجر</span>
+                    <span class="stat-gold">{{ stats.active[3]|number_format }} ذهب</span>
+                    <span class="stat-price">{{ stats.active[4]|number_format }} $</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
