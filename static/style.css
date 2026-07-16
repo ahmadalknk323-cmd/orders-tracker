@@ -342,6 +342,89 @@ img{display:block;max-width:100%}
    ORDERS PAGE (index.html)
    ═══════════════════════════════════════ */
 
+/* ── Command Center Hero ── */
+.cmd-hero{
+  position:relative;overflow:hidden;
+  border-radius:var(--radius-xl);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-lg);
+}
+.cmd-hero-bg{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(135deg,rgba(15,23,42,.88),rgba(17,24,39,.85),rgba(30,41,59,.9)),
+    url("/static/images/background.webp");
+  background-size:cover;background-position:center;
+}
+.cmd-hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 50% 60% at 80% 20%,rgba(251,191,36,.08),transparent 60%),
+             radial-gradient(ellipse 40% 50% at 10% 80%,rgba(34,197,94,.05),transparent 60%);
+}
+.cmd-hero-content{
+  position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:32px 36px;gap:24px;
+}
+.cmd-hero-left{display:flex;align-items:center;gap:18px}
+.cmd-hero-logo{
+  width:56px;height:56px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dim));
+  border-radius:var(--radius-lg);color:#0B1120;flex-shrink:0;
+  box-shadow:0 4px 20px rgba(251,191,36,.2);
+}
+.cmd-hero-logo svg{width:28px;height:28px}
+.cmd-hero-badge{
+  display:inline-block;padding:3px 10px;border-radius:var(--radius-pill);
+  background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);
+  color:var(--gold);font-size:9px;font-weight:800;letter-spacing:.16em;margin-bottom:6px;
+}
+.cmd-hero-title{font-size:24px;font-weight:900;color:var(--text-bright);letter-spacing:-.02em;line-height:1.1}
+.cmd-hero-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.cmd-hero-right{display:flex;align-items:center;gap:24px;flex-shrink:0}
+.cmd-hero-stats{display:flex;align-items:center;gap:16px}
+.cmd-hero-stat{text-align:center}
+.cmd-hero-stat-num{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:18px;font-weight:800;line-height:1;letter-spacing:-.02em;
+}
+.cmd-active-num{color:var(--warning)}
+.cmd-finished-num{color:var(--success)}
+.cmd-total-num{color:var(--gold)}
+.cmd-hero-stat-label{font-size:10px;color:var(--muted-dim);font-weight:500;margin-top:3px}
+.cmd-hero-stat-divider{width:1px;height:32px;background:linear-gradient(180deg,transparent,var(--border),transparent)}
+.cmd-hero-actions{display:flex;gap:8px}
+.cmd-hero-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 18px;border-radius:var(--radius);font-size:12px;font-weight:700;
+  font-family:inherit;cursor:pointer;text-decoration:none;
+  transition:all .25s cubic-bezier(.4,0,.2,1);white-space:nowrap;border:none;
+}
+.cmd-hero-btn-gold{
+  background:linear-gradient(135deg,var(--gold),var(--gold-dim));
+  color:#0B1120;box-shadow:0 4px 16px rgba(251,191,36,.15);
+}
+.cmd-hero-btn-gold:hover{box-shadow:0 6px 24px rgba(251,191,36,.25);filter:brightness(1.05);transform:translateY(-1px)}
+.cmd-hero-btn-outline{
+  background:rgba(255,255,255,.05);color:var(--text);
+  border:1px solid var(--border);
+}
+.cmd-hero-btn-outline:hover{background:rgba(255,255,255,.1);border-color:var(--border-hover);transform:translateY(-1px)}
+
+@media(max-width:1024px){
+  .cmd-hero-content{flex-direction:column;text-align:center;padding:24px 20px}
+  .cmd-hero-left{flex-direction:column}
+  .cmd-hero-right{flex-direction:column}
+  .cmd-hero-actions{justify-content:center}
+}
+@media(max-width:640px){
+  .cmd-hero-title{font-size:20px}
+  .cmd-hero-stats{gap:10px}
+  .cmd-hero-stat-num{font-size:15px}
+  .cmd-hero-actions{flex-direction:column;width:100%}
+  .cmd-hero-btn{justify-content:center}
+}
+
 /* Dashboard grid: form + insight side by side */
 .dash-grid{display:grid;grid-template-columns:1fr 260px;gap:16px}
 

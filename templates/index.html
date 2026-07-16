@@ -56,8 +56,58 @@
 <!-- Content -->
 <div class="content">
 
+<!-- Hero Banner: Kingdom Command Center -->
+<div class="cmd-hero">
+  <div class="cmd-hero-bg"></div>
+  <div class="cmd-hero-content">
+    <div class="cmd-hero-left">
+      <div class="cmd-hero-logo"><i data-lucide="crown"></i></div>
+      <div class="cmd-hero-text">
+        <div class="cmd-hero-badge">TRSS KINGDOM COMMAND CENTER</div>
+        <h1 class="cmd-hero-title">{{ kingdom.name }}</h1>
+        <p class="cmd-hero-sub">Kingdom #{{ kingdom.id }} &bull; لوحة التحكم الرئيسية</p>
+      </div>
+    </div>
+    <div class="cmd-hero-right">
+      <div class="cmd-hero-stats">
+        <div class="cmd-hero-stat">
+          <div class="cmd-hero-stat-num cmd-active-num">
+            <i data-lucide="loader" style="width:14px;height:14px"></i>
+            <span>{{ stats.active[5] }}</span>
+          </div>
+          <div class="cmd-hero-stat-label">Active Orders</div>
+        </div>
+        <div class="cmd-hero-stat-divider"></div>
+        <div class="cmd-hero-stat">
+          <div class="cmd-hero-stat-num cmd-finished-num">
+            <i data-lucide="check-circle-2" style="width:14px;height:14px"></i>
+            <span>{{ stats.finished[5] }}</span>
+          </div>
+          <div class="cmd-hero-stat-label">Finished</div>
+        </div>
+        <div class="cmd-hero-stat-divider"></div>
+        <div class="cmd-hero-stat">
+          <div class="cmd-hero-stat-num cmd-total-num">
+            <i data-lucide="layers" style="width:14px;height:14px"></i>
+            <span>{{ orders|length }}</span>
+          </div>
+          <div class="cmd-hero-stat-label">Total</div>
+        </div>
+      </div>
+      <div class="cmd-hero-actions">
+        <a href="#dashboard" class="cmd-hero-btn cmd-hero-btn-gold">
+          <i data-lucide="plus-circle" style="width:15px;height:15px"></i> اضافة طلبية
+        </a>
+        <a href="#stats" class="cmd-hero-btn cmd-hero-btn-outline">
+          <i data-lucide="bar-chart-3" style="width:15px;height:15px"></i> الاحصائيات
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Dashboard grid: Form + Insight -->
-<div class="dash-grid">
+<div class="dash-grid" id="dashboard">
   <div class="card">
     <div class="card-header">
       <div>
@@ -195,7 +245,7 @@
 </div>
 
 <!-- Statistics -->
-<div class="card">
+<div class="card" id="stats">
   <div class="card-header">
     <div>
       <h2><i data-lucide="bar-chart-3" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> الاحصائيات الشاملة</h2>
