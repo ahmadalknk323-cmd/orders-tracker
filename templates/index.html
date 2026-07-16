@@ -111,7 +111,7 @@
 
 <!-- Dashboard grid: Form + Insight -->
 <div class="dash-grid" id="dashboard">
-  <div class="card">
+  <div class="card form-card">
     <div class="card-header">
       <div>
         <h2><i data-lucide="plus-circle" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> طلبية جديدة</h2>
@@ -120,48 +120,44 @@
       <div class="card-header-icon"><i data-lucide="file-plus"></i></div>
     </div>
     <form action="/kingdom/{{ kingdom.id }}/add" method="POST">
-      <div class="form-row">
-        <div class="form-group full">
-          <label>اسم الزبون</label>
-          <input type="text" name="customer_name" required placeholder="اسم الزبون"/>
+      <div class="fg">
+        <input type="text" name="customer_name" required placeholder=" "/>
+        <label>اسم الزبون</label>
+      </div>
+      <div class="fg-grid-4">
+        <div class="fg">
+          <input type="number" name="food" value="0" min="0" placeholder=" "/>
+          <label><i data-lucide="wheat" class="fg-icon food"></i> ذره</label>
+        </div>
+        <div class="fg">
+          <input type="number" name="wood" value="0" min="0" placeholder=" "/>
+          <label><i data-lucide="tree-pine" class="fg-icon wood"></i> خشب</label>
+        </div>
+        <div class="fg">
+          <input type="number" name="stone" value="0" min="0" placeholder=" "/>
+          <label><i data-lucide="mountain" class="fg-icon stone"></i> حجر</label>
+        </div>
+        <div class="fg">
+          <input type="number" name="gold" value="0" min="0" placeholder=" "/>
+          <label><i data-lucide="coins" class="fg-icon gold"></i> ذهب</label>
         </div>
       </div>
-      <div class="form-row resources">
-        <div class="form-group resource-food">
-          <label><i data-lucide="wheat" class="icon-label"></i> ذره</label>
-          <input type="number" name="food" value="0" min="0"/>
+      <div class="fg-grid-2">
+        <div class="fg">
+          <input type="number" name="price" value="0" step="0.01" min="0" placeholder=" "/>
+          <label>ثمن الاوردر ($)</label>
         </div>
-        <div class="form-group resource-wood">
-          <label><i data-lucide="tree-pine" class="icon-label"></i> خشب</label>
-          <input type="number" name="wood" value="0" min="0"/>
-        </div>
-        <div class="form-group resource-stone">
-          <label><i data-lucide="mountain" class="icon-label"></i> حجر</label>
-          <input type="number" name="stone" value="0" min="0"/>
-        </div>
-        <div class="form-group resource-gold">
-          <label><i data-lucide="coins" class="icon-label"></i> ذهب</label>
-          <input type="number" name="gold" value="0" min="0"/>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>ثمن الاوردر</label>
-          <input type="number" name="price" value="0" step="0.01" min="0"/>
-        </div>
-        <div class="form-group">
+        <div class="fg">
+          <input type="text" name="payment_type" placeholder=" "/>
           <label>نوعية الدفع</label>
-          <input type="text" name="payment_type" placeholder="اكتب هنا..."/>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group full">
-          <label>ملاحظات</label>
-          <input type="text" name="notes" placeholder="ملاحظات (اختياري)"/>
-        </div>
+      <div class="fg">
+        <input type="text" name="notes" placeholder=" "/>
+        <label>ملاحظات (اختياري)</label>
       </div>
-      <button type="submit" class="btn btn-primary">
-        <i data-lucide="plus" class="icon-btn"></i> اضافة طلبية
+      <button type="submit" class="form-submit">
+        <i data-lucide="plus" style="width:16px;height:16px"></i> اضافة طلبية
       </button>
     </form>
   </div>

@@ -221,6 +221,90 @@ img{display:block;max-width:100%}
 .resource-gold input:focus{border-color:var(--gold-res);box-shadow:0 0 0 3px rgba(251,191,36,.08)}
 
 /* ═══════════════════════════════════════
+   FLOATING LABEL FORM (New Order)
+   ═══════════════════════════════════════ */
+.form-card{
+  background:rgba(17,24,39,.5);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:var(--shadow),0 0 80px rgba(99,102,241,.03),inset 0 1px 0 rgba(255,255,255,.03);
+}
+.form-card .card-header{margin-bottom:28px}
+
+.fg{position:relative;margin-bottom:18px}
+.fg-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.fg-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+
+.fg input{
+  width:100%;padding:20px 16px 8px;
+  background:rgba(0,0,0,.35);border:1.5px solid rgba(255,255,255,.06);
+  border-radius:var(--radius-sm);
+  color:var(--text);font-size:14px;font-family:inherit;font-weight:500;
+  transition:all .35s cubic-bezier(.4,0,.2,1);outline:none;
+}
+.fg input::placeholder{color:transparent}
+
+.fg label{
+  position:absolute;top:50%;left:14px;
+  color:var(--muted-dim);font-size:13px;font-weight:500;
+  pointer-events:none;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  transform:translateY(-50%);
+  display:flex;align-items:center;gap:5px;
+}
+.fg-icon{width:14px;height:14px;opacity:.5;transition:all .3s}
+.fg-icon.food{color:var(--food)}
+.fg-icon.wood{color:var(--wood)}
+.fg-icon.stone{color:var(--stone)}
+.fg-icon.gold{color:var(--gold-res)}
+
+.fg input:focus~label,
+.fg input:not(:placeholder-shown)~label{
+  top:11px;transform:translateY(0);
+  font-size:10px;font-weight:600;color:var(--muted);
+  letter-spacing:.04em;
+}
+.fg input:focus~label{color:rgba(99,102,241,.7)}
+.fg input:focus~label .fg-icon{opacity:.9}
+
+.fg input:focus{
+  border-color:rgba(99,102,241,.3);
+  box-shadow:0 0 0 3px rgba(99,102,241,.06),0 4px 20px rgba(0,0,0,.15);
+  background:rgba(0,0,0,.42);
+}
+
+.fg-grid-4 .fg:nth-child(1) input:focus{border-color:rgba(249,115,22,.3);box-shadow:0 0 0 3px rgba(249,115,22,.06),0 4px 20px rgba(0,0,0,.15)}
+.fg-grid-4 .fg:nth-child(2) input:focus{border-color:rgba(210,166,121,.3);box-shadow:0 0 0 3px rgba(210,166,121,.06),0 4px 20px rgba(0,0,0,.15)}
+.fg-grid-4 .fg:nth-child(3) input:focus{border-color:rgba(148,163,184,.3);box-shadow:0 0 0 3px rgba(148,163,184,.06),0 4px 20px rgba(0,0,0,.15)}
+.fg-grid-4 .fg:nth-child(4) input:focus{border-color:rgba(251,191,36,.3);box-shadow:0 0 0 3px rgba(251,191,36,.06),0 4px 20px rgba(0,0,0,.15)}
+
+.fg-grid-4 .fg:nth-child(1) input:focus~label{color:rgba(249,115,22,.7)}
+.fg-grid-4 .fg:nth-child(2) input:focus~label{color:rgba(210,166,121,.7)}
+.fg-grid-4 .fg:nth-child(3) input:focus~label{color:rgba(148,163,184,.7)}
+.fg-grid-4 .fg:nth-child(4) input:focus~label{color:rgba(251,191,36,.7)}
+
+.form-submit{
+  width:100%;padding:14px 24px;margin-top:22px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(140deg,var(--gold),#D97706,#B45309);
+  color:#0B1120;font-size:14px;font-weight:800;font-family:inherit;
+  border:none;border-radius:var(--radius);cursor:pointer;
+  box-shadow:0 4px 24px rgba(251,191,36,.2),0 0 50px rgba(251,191,36,.06);
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;letter-spacing:.01em;
+}
+.form-submit::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.25),transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.form-submit:hover::before{opacity:1}
+.form-submit:hover{
+  box-shadow:0 8px 36px rgba(251,191,36,.3),0 0 70px rgba(251,191,36,.1);
+  transform:translateY(-2px);filter:brightness(1.06);
+}
+.form-submit:active{transform:translateY(0);filter:brightness(1)}
+
+/* ═══════════════════════════════════════
    BUTTONS
    ═══════════════════════════════════════ */
 .btn{
@@ -727,6 +811,10 @@ tbody tr.finished td.customer{color:var(--success)!important}
 
 @media(max-width:640px){
   .form-row.resources{grid-template-columns:repeat(2,1fr)}
+  .fg-grid-4{grid-template-columns:repeat(2,1fr)}
+  .fg-grid-2{grid-template-columns:1fr}
+  .fg input{padding:18px 14px 8px;font-size:13px}
+  .form-submit{padding:13px 20px;font-size:13px}
   .topbar{padding:0 16px}
   .topbar-title{font-size:13px}
   .content{padding:14px 14px 44px}
