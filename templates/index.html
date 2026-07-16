@@ -1,399 +1,405 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ kingdom.name }} - Orders Tracker</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>{{ kingdom.name }} - TRSS Kingdom Manager</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
-<input type="checkbox" id="sidebar-toggle" class="sidebar-toggle" hidden>
-<div class="app-shell">
-    <aside class="sidebar">
-        <div class="sidebar-top">
-            <div class="brand">
-                <div class="brand-mark logo-placeholder">TR</div>
-                <div class="brand-text">
-                    <div class="brand-title">TRSS</div>
-                    <div class="brand-subtitle">Orders Suite</div>
-                </div>
-            </div>
-            <label for="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Collapse sidebar">
-                <i data-lucide="menu" class="icon-sm"></i>
-            </label>
+<input type="checkbox" id="sidebar-toggle" class="sidebar-toggle" hidden/>
+<div class="layout">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">TRSS</div>
+    <div class="sidebar-brand-text">
+      <h3>TRSS Manager</h3>
+      <span>{{ kingdom.name }}</span>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Navigation</div>
+      <a href="{{ url_for('index') }}" class="sidebar-link">
+        <i data-lucide="layout-dashboard"></i>
+        <span>All Kingdoms</span>
+      </a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-card">
+      <h4>{{ kingdom.name }}</h4>
+      <p>Manage orders and track resources for this kingdom.</p>
+    </div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main-wrap">
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="topbar-left">
+    <label for="sidebar-toggle" class="sidebar-toggle-btn"><i data-lucide="menu"></i></label>
+    <span class="topbar-title">{{ kingdom.name }}</span>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-pill"><i data-lucide="package" style="width:12px;height:12px"></i> {{ orders|length }} Orders</span>
+    <span class="topbar-pill"><span class="status-dot"></span> Live</span>
+    <div class="topbar-avatar">TRSS</div>
+  </div>
+</header>
+
+<!-- Content -->
+<div class="content">
+
+<!-- Dashboard grid: Form + Insight -->
+<div class="dash-grid">
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <h2>طلبية جديدة</h2>
+        <p>أدخل بيانات الطلب بشكل واضح واحترافي.</p>
+      </div>
+      <div class="card-header-icon"><i data-lucide="plus-circle"></i></div>
+    </div>
+    <form action="/kingdom/{{ kingdom.id }}/add" method="POST">
+      <div class="form-row">
+        <div class="form-group full">
+          <label>اسم الزبون</label>
+          <input type="text" name="customer_name" required placeholder="اسم الزبون"/>
         </div>
-
-        <nav class="sidebar-nav">
-            <a class="sidebar-nav-item" href="/">
-                <i data-lucide="castle" class="icon-nav"></i>
-                <span>الممالك</span>
-            </a>
-            <a class="sidebar-nav-item active" href="#dashboard">
-                <i data-lucide="layout-dashboard" class="icon-nav"></i>
-                <span>لوحة</span>
-            </a>
-        </nav>
-
-        <div class="sidebar-card">
-            <div class="sidebar-card-title">مركز القيادة</div>
-            <p>تابع الطلبات والتقدم اليومي للمملكه بكل وضوح.</p>
-            <a class="sidebar-card-link" href="#orders"><i data-lucide="arrow-down" class="icon-xs"></i> تصفح الطلبات</a>
+      </div>
+      <div class="form-row resources">
+        <div class="form-group resource-food">
+          <label><i data-lucide="wheat" class="icon-label"></i> ذره</label>
+          <input type="number" name="food" value="0" min="0"/>
         </div>
-    </aside>
+        <div class="form-group resource-wood">
+          <label><i data-lucide="tree-pine" class="icon-label"></i> خشب</label>
+          <input type="number" name="wood" value="0" min="0"/>
+        </div>
+        <div class="form-group resource-stone">
+          <label><i data-lucide="mountain" class="icon-label"></i> حجر</label>
+          <input type="number" name="stone" value="0" min="0"/>
+        </div>
+        <div class="form-group resource-gold">
+          <label><i data-lucide="coins" class="icon-label"></i> ذهب</label>
+          <input type="number" name="gold" value="0" min="0"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>ثمن الاوردر</label>
+          <input type="number" name="price" value="0" step="0.01" min="0"/>
+        </div>
+        <div class="form-group">
+          <label>نوعية الدفع</label>
+          <input type="text" name="payment_type" placeholder="اكتب هنا..."/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group full">
+          <label>ملاحظات</label>
+          <input type="text" name="notes" placeholder="ملاحظات (اختياري)"/>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i data-lucide="plus" class="icon-btn"></i> اضافة طلبية
+      </button>
+    </form>
+  </div>
 
-    <main class="main-panel" id="dashboard">
-        <header class="topbar">
-            <div>
-                <div class="topbar-label">لوحة التحكم</div>
-                <div class="topbar-title">{{ kingdom.name }}</div>
-            </div>
-            <div class="topbar-actions">
-                <div class="status-pill"><span class="status-dot"></span>Live</div>
-                <div class="avatar-pill">TR</div>
-            </div>
-        </header>
-
-        <section class="dashboard-grid">
-            <div class="card-3d add-form">
-                <div class="section-head">
-                    <div class="section-head-row">
-                        <div>
-                            <h2>طلبية جديدة</h2>
-                            <p>أدخل بيانات الطلب بشكل واضح واحترافي لإدارة المملكه بكفاءة.</p>
-                        </div>
-                        <div class="section-head-icon"><i data-lucide="plus-circle" class="icon-section"></i></div>
-                    </div>
-                </div>
-                <form action="/kingdom/{{ kingdom.id }}/add" method="POST">
-                    <div class="form-row">
-                        <div class="form-group full">
-                            <label>اسم الزبون</label>
-                            <input type="text" name="customer_name" required placeholder="اسم الزبون">
-                        </div>
-                    </div>
-                    <div class="form-row resources">
-                        <div class="form-group resource-food">
-                            <label><i data-lucide="wheat" class="icon-label"></i> ذره</label>
-                            <input type="number" name="food" value="0" min="0">
-                        </div>
-                        <div class="form-group resource-wood">
-                            <label><i data-lucide="tree-pine" class="icon-label"></i> خشب</label>
-                            <input type="number" name="wood" value="0" min="0">
-                        </div>
-                        <div class="form-group resource-stone">
-                            <label><i data-lucide="mountain" class="icon-label"></i> حجر</label>
-                            <input type="number" name="stone" value="0" min="0">
-                        </div>
-                        <div class="form-group resource-gold">
-                            <label><i data-lucide="coins" class="icon-label"></i> ذهب</label>
-                            <input type="number" name="gold" value="0" min="0">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>ثمن الاوردر</label>
-                            <input type="number" name="price" value="0" step="0.01" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label>نوعية الدفع</label>
-                            <input type="text" name="payment_type" placeholder="اكتب هنا...">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group full">
-                            <label>ملاحظات</label>
-                            <input type="text" name="notes" placeholder="ملاحظات (اختياري)">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-add"><i data-lucide="plus" class="icon-btn"></i> اضافة طلبية</button>
-                </form>
-            </div>
-
-            <div class="card-3d insight-card">
-                <div class="insight-icon-wrap"><i data-lucide="file-text" class="icon-insight"></i></div>
-                <div class="insight-label">ملخص سريع</div>
-                <div class="insight-number">{{ orders|length }}</div>
-                <p class="insight-copy">طلبية مسجلة حالياً</p>
-                <div class="insight-pill"><i data-lucide="check-circle" class="icon-xs"></i> جاهز للتسليم</div>
-            </div>
-        </section>
-
-        <section class="card-3d orders-table" id="orders">
-            <div class="orders-header">
-                <div class="section-head compact">
-                    <div class="section-head-row">
-                        <div>
-                            <h2>الطلبيات ({{ orders|length }})</h2>
-                            <p>تابع حالة كل طلبية وأدارتها بسهولة.</p>
-                        </div>
-                        <div class="section-head-icon"><i data-lucide="list" class="icon-section"></i></div>
-                    </div>
-                </div>
-                <form action="/kingdom/{{ kingdom.id }}/delete" method="POST" onsubmit="return confirm('حذف المملكه وكل طلبياتها؟')">
-                    <button type="submit" class="btn btn-delete"><i data-lucide="trash-2" class="icon-btn"></i> حذف المملكه</button>
-                </form>
-            </div>
-            {% if orders %}
-            <div class="table-shell">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>الزبون</th>
-                            <th><i data-lucide="wheat" class="icon-th"></i> ذره</th>
-                            <th><i data-lucide="tree-pine" class="icon-th"></i> خشب</th>
-                            <th><i data-lucide="mountain" class="icon-th"></i> حجر</th>
-                            <th><i data-lucide="coins" class="icon-th"></i> ذهب</th>
-                            <th>الثمن</th>
-                            <th>الدفع</th>
-                            <th>ملاحظات</th>
-                            <th>التاريخ</th>
-                            <th>اجراء</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for order in orders %}
-                        <tr class="{{ 'finished' if order.status == 'finished' else '' }}">
-                            <td class="row-num">{{ loop.index }}</td>
-                            <td class="customer">{{ order.customer_name }}</td>
-                            <td class="food">{{ order.food|number_format }}</td>
-                            <td class="wood">{{ order.wood|number_format }}</td>
-                            <td class="stone">{{ order.stone|number_format }}</td>
-                            <td class="gold">{{ order.gold|number_format }}</td>
-                            <td class="price">{{ "%.2f"|format(order.price) }} $</td>
-                            <td class="payment">{{ order.payment_type }}</td>
-                            <td class="notes-cell">{{ order.notes }}</td>
-                            <td class="date">{{ order.created_at }}</td>
-                            <td class="actions">
-                                <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
-                                    {% if order.status == 'finished' %}
-                                    <button type="submit" class="btn btn-active">منتهي</button>
-                                    {% else %}
-                                    <button type="submit" class="btn btn-finish">انتهت</button>
-                                    {% endif %}
-                                </form>
-                                <button class="btn btn-copy" onclick="copyOrder({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')"><i data-lucide="copy" class="icon-btn"></i></button>
-                                <button class="btn btn-edit" onclick="openEdit({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')"><i data-lucide="pencil" class="icon-btn"></i></button>
-                                <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
-                                    <button type="submit" class="btn btn-delete"><i data-lucide="trash-2" class="icon-btn"></i></button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <div class="empty-state compact">
-                <div class="empty-state-icon-wrap">
-                    <i data-lucide="inbox" class="icon-empty"></i>
-                </div>
-                <h3>ما في طلبيات بعد</h3>
-                <p>ابدأ بإضافة طلبية جديدة لبدء تتبع الأداء.</p>
-            </div>
-            {% endif %}
-        </section>
-
-        <section class="stats-section">
-            <div class="section-head compact">
-                <div class="section-head-row">
-                    <div>
-                        <h2>الاحصائيات الشاملة</h2>
-                        <p>مؤشرات الأداء لكل الطلبات والعمليات.</p>
-                    </div>
-                    <div class="section-head-icon"><i data-lucide="bar-chart-3" class="icon-section"></i></div>
-                </div>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-card stat-all card-3d">
-                    <div class="stat-header">
-                        <i data-lucide="layers" class="icon-stat"></i>
-                        <div class="stat-label">الكل ( {{ stats.all[5] }} طلبية )</div>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-food"><i data-lucide="wheat" class="icon-stat-sm"></i> {{ stats.all[0]|number_format }} ذره</span>
-                        <span class="stat-wood"><i data-lucide="tree-pine" class="icon-stat-sm"></i> {{ stats.all[1]|number_format }} خشب</span>
-                        <span class="stat-stone"><i data-lucide="mountain" class="icon-stat-sm"></i> {{ stats.all[2]|number_format }} حجر</span>
-                        <span class="stat-gold"><i data-lucide="coins" class="icon-stat-sm"></i> {{ stats.all[3]|number_format }} ذهب</span>
-                        <span class="stat-price"><i data-lucide="banknote" class="icon-stat-sm"></i> {{ stats.all[4]|number_format }} $</span>
-                    </div>
-                </div>
-                <div class="stat-card stat-finished card-3d">
-                    <div class="stat-header">
-                        <i data-lucide="check-circle-2" class="icon-stat icon-stat-green"></i>
-                        <div class="stat-label">منتهية ( {{ stats.finished[5] }} طلبية )</div>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-food">{{ stats.finished[0]|number_format }} ذره</span>
-                        <span class="stat-wood">{{ stats.finished[1]|number_format }} خشب</span>
-                        <span class="stat-stone">{{ stats.finished[2]|number_format }} حجر</span>
-                        <span class="stat-gold">{{ stats.finished[3]|number_format }} ذهب</span>
-                        <span class="stat-price">{{ stats.finished[4]|number_format }} $</span>
-                    </div>
-                </div>
-                <div class="stat-card stat-active card-3d">
-                    <div class="stat-header">
-                        <i data-lucide="loader" class="icon-stat icon-stat-amber"></i>
-                        <div class="stat-label">قيد التنفيذ ( {{ stats.active[5] }} طلبية )</div>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-food">{{ stats.active[0]|number_format }} ذره</span>
-                        <span class="stat-wood">{{ stats.active[1]|number_format }} خشب</span>
-                        <span class="stat-stone">{{ stats.active[2]|number_format }} حجر</span>
-                        <span class="stat-gold">{{ stats.active[3]|number_format }} ذهب</span>
-                        <span class="stat-price">{{ stats.active[4]|number_format }} $</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <a href="#dashboard" class="fab" aria-label="Back to top"><i data-lucide="arrow-up" class="icon-fab"></i></a>
-    </main>
+  <div class="card insight-card">
+    <div class="insight-icon"><i data-lucide="file-text"></i></div>
+    <div class="insight-label">ملخص سريع</div>
+    <div class="insight-number">{{ orders|length }}</div>
+    <p class="insight-copy">طلبية مسجلة حالياً</p>
+    <div class="insight-pill"><i data-lucide="check-circle"></i> جاهز للتسليم</div>
+  </div>
 </div>
 
+<!-- Orders Table -->
+<div class="card table-card">
+  <div class="table-header">
+    <div>
+      <h2>الطلبيات ({{ orders|length }})</h2>
+      <p>تابع حالة كل طلبية وأدارتها بسهولة.</p>
+    </div>
+    <form action="/kingdom/{{ kingdom.id }}/delete" method="POST" onsubmit="return confirm('حذف المملكه وكل طلبياتها؟')">
+      <button type="submit" class="btn btn-danger-ghost">
+        <i data-lucide="trash-2" class="icon"></i> حذف المملكه
+      </button>
+    </form>
+  </div>
+  {% if orders %}
+  <div class="table-shell">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>الزبون</th>
+          <th><i data-lucide="wheat" class="icon-th"></i> ذره</th>
+          <th><i data-lucide="tree-pine" class="icon-th"></i> خشب</th>
+          <th><i data-lucide="mountain" class="icon-th"></i> حجر</th>
+          <th><i data-lucide="coins" class="icon-th"></i> ذهب</th>
+          <th>الثمن</th>
+          <th>الدفع</th>
+          <th>ملاحظات</th>
+          <th>التاريخ</th>
+          <th>اجراء</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr class="{{ 'finished' if order.status == 'finished' else '' }}">
+          <td class="row-num">{{ loop.index }}</td>
+          <td class="customer">{{ order.customer_name }}</td>
+          <td class="food">{{ order.food|number_format }}</td>
+          <td class="wood">{{ order.wood|number_format }}</td>
+          <td class="stone">{{ order.stone|number_format }}</td>
+          <td class="gold">{{ order.gold|number_format }}</td>
+          <td class="price">{{ "%.2f"|format(order.price) }} $</td>
+          <td class="payment">{{ order.payment_type }}</td>
+          <td class="notes-cell">{{ order.notes }}</td>
+          <td class="date">{{ order.created_at }}</td>
+          <td class="actions">
+            <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
+              {% if order.status == 'finished' %}
+              <button type="submit" class="btn btn-green-ghost btn-sm">منتهي</button>
+              {% else %}
+              <button type="submit" class="btn btn-gold-ghost btn-sm">انتهت</button>
+              {% endif %}
+            </form>
+            <button class="btn btn-ghost btn-sm" onclick="copyOrder({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')"><i data-lucide="copy" class="icon"></i></button>
+            <button class="btn btn-ghost btn-sm" onclick="openEdit({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')"><i data-lucide="pencil" class="icon"></i></button>
+            <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
+              <button type="submit" class="btn btn-danger-ghost btn-sm"><i data-lucide="trash-2" class="icon"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i data-lucide="inbox"></i></div>
+    <h3>ما في طلبيات بعد</h3>
+    <p>ابدأ بإضافة طلبية جديدة لبدء تتبع الأداء.</p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Statistics -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <h2>الاحصائيات الشاملة</h2>
+      <p>مؤشرات الأداء لكل الطلبات والعمليات.</p>
+    </div>
+    <div class="card-header-icon"><i data-lucide="bar-chart-3"></i></div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card stat-all">
+      <div class="stat-header">
+        <i data-lucide="layers" class="green"></i>
+        <div class="stat-label">الكل ( {{ stats.all[5] }} طلبية )</div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-food"><i data-lucide="wheat" class="icon-stat-sm"></i> {{ stats.all[0]|number_format }} ذره</span>
+        <span class="stat-wood"><i data-lucide="tree-pine" class="icon-stat-sm"></i> {{ stats.all[1]|number_format }} خشب</span>
+        <span class="stat-stone"><i data-lucide="mountain" class="icon-stat-sm"></i> {{ stats.all[2]|number_format }} حجر</span>
+        <span class="stat-gold"><i data-lucide="coins" class="icon-stat-sm"></i> {{ stats.all[3]|number_format }} ذهب</span>
+        <span class="stat-price"><i data-lucide="banknote" class="icon-stat-sm"></i> {{ stats.all[4]|number_format }} $</span>
+      </div>
+    </div>
+    <div class="stat-card stat-finished">
+      <div class="stat-header">
+        <i data-lucide="check-circle-2" class="green"></i>
+        <div class="stat-label">منتهية ( {{ stats.finished[5] }} طلبية )</div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-food">{{ stats.finished[0]|number_format }} ذره</span>
+        <span class="stat-wood">{{ stats.finished[1]|number_format }} خشب</span>
+        <span class="stat-stone">{{ stats.finished[2]|number_format }} حجر</span>
+        <span class="stat-gold">{{ stats.finished[3]|number_format }} ذهب</span>
+        <span class="stat-price">{{ stats.finished[4]|number_format }} $</span>
+      </div>
+    </div>
+    <div class="stat-card stat-active">
+      <div class="stat-header">
+        <i data-lucide="loader" class="amber"></i>
+        <div class="stat-label">قيد التنفيذ ( {{ stats.active[5] }} طلبية )</div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-food">{{ stats.active[0]|number_format }} ذره</span>
+        <span class="stat-wood">{{ stats.active[1]|number_format }} خشب</span>
+        <span class="stat-stone">{{ stats.active[2]|number_format }} حجر</span>
+        <span class="stat-gold">{{ stats.active[3]|number_format }} ذهب</span>
+        <span class="stat-price">{{ stats.active[4]|number_format }} $</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- Edit Modal -->
 <div id="editModal" class="modal" style="display:none">
-    <div class="modal-content card-3d">
-        <span class="close" onclick="closeEdit()"><i data-lucide="x" class="icon-modal-close"></i></span>
-        <h2>تعديل الطلبيه</h2>
-        <form id="editForm" method="POST">
-            <div class="form-row">
-                <div class="form-group full">
-                    <label>اسم الزبون</label>
-                    <input type="text" name="customer_name" id="edit_customer" required>
-                </div>
-            </div>
-            <div class="form-row resources">
-                <div class="form-group resource-food">
-                    <label><i data-lucide="wheat" class="icon-label"></i> ذره</label>
-                    <input type="number" name="food" id="edit_food" min="0">
-                </div>
-                <div class="form-group resource-wood">
-                    <label><i data-lucide="tree-pine" class="icon-label"></i> خشب</label>
-                    <input type="number" name="wood" id="edit_wood" min="0">
-                </div>
-                <div class="form-group resource-stone">
-                    <label><i data-lucide="mountain" class="icon-label"></i> حجر</label>
-                    <input type="number" name="stone" id="edit_stone" min="0">
-                </div>
-                <div class="form-group resource-gold">
-                    <label><i data-lucide="coins" class="icon-label"></i> ذهب</label>
-                    <input type="number" name="gold" id="edit_gold" min="0">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>ثمن الاوردر</label>
-                    <input type="number" name="price" id="edit_price" step="0.01" min="0">
-                </div>
-                <div class="form-group">
-                    <label>نوعية الدفع</label>
-                    <input type="text" name="payment_type" id="edit_payment">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group full">
-                    <label>ملاحظات</label>
-                    <input type="text" name="notes" id="edit_notes">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-add"><i data-lucide="save" class="icon-btn"></i> حفظ التعديلات</button>
-        </form>
-    </div>
+  <div class="modal-content">
+    <span class="close" onclick="closeEdit()"><i data-lucide="x"></i></span>
+    <h2>تعديل الطلبيه</h2>
+    <form id="editForm" method="POST">
+      <div class="form-row">
+        <div class="form-group full">
+          <label>اسم الزبون</label>
+          <input type="text" name="customer_name" id="edit_customer" required/>
+        </div>
+      </div>
+      <div class="form-row resources">
+        <div class="form-group resource-food">
+          <label><i data-lucide="wheat" class="icon-label"></i> ذره</label>
+          <input type="number" name="food" id="edit_food" min="0"/>
+        </div>
+        <div class="form-group resource-wood">
+          <label><i data-lucide="tree-pine" class="icon-label"></i> خشب</label>
+          <input type="number" name="wood" id="edit_wood" min="0"/>
+        </div>
+        <div class="form-group resource-stone">
+          <label><i data-lucide="mountain" class="icon-label"></i> حجر</label>
+          <input type="number" name="stone" id="edit_stone" min="0"/>
+        </div>
+        <div class="form-group resource-gold">
+          <label><i data-lucide="coins" class="icon-label"></i> ذهب</label>
+          <input type="number" name="gold" id="edit_gold" min="0"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>ثمن الاوردر</label>
+          <input type="number" name="price" id="edit_price" step="0.01" min="0"/>
+        </div>
+        <div class="form-group">
+          <label>نوعية الدفع</label>
+          <input type="text" name="payment_type" id="edit_payment"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group full">
+          <label>ملاحظات</label>
+          <input type="text" name="notes" id="edit_notes"/>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i data-lucide="save" class="icon"></i> حفظ التعديلات
+      </button>
+    </form>
+  </div>
 </div>
 
+<!-- Copy Modal -->
 <div id="copyModal" class="modal" style="display:none">
-    <div class="modal-content card-3d">
-        <span class="close" onclick="closeCopy()"><i data-lucide="x" class="icon-modal-close"></i></span>
-        <h2>نسخ الطلبيه</h2>
-        <form id="copyForm" method="POST">
-            <div class="form-row">
-                <div class="form-group full">
-                    <label>اسم الزبون الجديد</label>
-                    <input type="text" name="customer_name" id="copy_customer" required>
-                </div>
-            </div>
-            <div class="form-row resources">
-                <div class="form-group resource-food">
-                    <label><i data-lucide="wheat" class="icon-label"></i> ذره</label>
-                    <input type="number" name="food" id="copy_food" min="0">
-                </div>
-                <div class="form-group resource-wood">
-                    <label><i data-lucide="tree-pine" class="icon-label"></i> خشب</label>
-                    <input type="number" name="wood" id="copy_wood" min="0">
-                </div>
-                <div class="form-group resource-stone">
-                    <label><i data-lucide="mountain" class="icon-label"></i> حجر</label>
-                    <input type="number" name="stone" id="copy_stone" min="0">
-                </div>
-                <div class="form-group resource-gold">
-                    <label><i data-lucide="coins" class="icon-label"></i> ذهب</label>
-                    <input type="number" name="gold" id="copy_gold" min="0">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>ثمن الاوردر</label>
-                    <input type="number" name="price" id="copy_price" step="0.01" min="0">
-                </div>
-                <div class="form-group">
-                    <label>نوعية الدفع</label>
-                    <input type="text" name="payment_type" id="copy_payment">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group full">
-                    <label>ملاحظات</label>
-                    <input type="text" name="notes" id="copy_notes">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-add"><i data-lucide="copy" class="icon-btn"></i> اضافة الطلبيه المنسوخة</button>
-        </form>
-    </div>
+  <div class="modal-content">
+    <span class="close" onclick="closeCopy()"><i data-lucide="x"></i></span>
+    <h2>نسخ الطلبيه</h2>
+    <form id="copyForm" method="POST">
+      <div class="form-row">
+        <div class="form-group full">
+          <label>اسم الزبون الجديد</label>
+          <input type="text" name="customer_name" id="copy_customer" required/>
+        </div>
+      </div>
+      <div class="form-row resources">
+        <div class="form-group resource-food">
+          <label><i data-lucide="wheat" class="icon-label"></i> ذره</label>
+          <input type="number" name="food" id="copy_food" min="0"/>
+        </div>
+        <div class="form-group resource-wood">
+          <label><i data-lucide="tree-pine" class="icon-label"></i> خشب</label>
+          <input type="number" name="wood" id="copy_wood" min="0"/>
+        </div>
+        <div class="form-group resource-stone">
+          <label><i data-lucide="mountain" class="icon-label"></i> حجر</label>
+          <input type="number" name="stone" id="copy_stone" min="0"/>
+        </div>
+        <div class="form-group resource-gold">
+          <label><i data-lucide="coins" class="icon-label"></i> ذهب</label>
+          <input type="number" name="gold" id="copy_gold" min="0"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>ثمن الاوردر</label>
+          <input type="number" name="price" id="copy_price" step="0.01" min="0"/>
+        </div>
+        <div class="form-group">
+          <label>نوعية الدفع</label>
+          <input type="text" name="payment_type" id="copy_payment"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group full">
+          <label>ملاحظات</label>
+          <input type="text" name="notes" id="copy_notes"/>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i data-lucide="copy" class="icon"></i> اضافة الطلبيه المنسوخة
+      </button>
+    </form>
+  </div>
 </div>
+
+<canvas id="bgCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;pointer-events:none"></canvas>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 <script>
 lucide.createIcons();
 var kid = {{ kingdom.id }};
 
 function openEdit(id, name, food, wood, stone, gold, price, payment, notes) {
-    document.getElementById('editForm').action = '/kingdom/' + kid + '/edit/' + id;
-    document.getElementById('edit_customer').value = name;
-    document.getElementById('edit_food').value = food;
-    document.getElementById('edit_wood').value = wood;
-    document.getElementById('edit_stone').value = stone;
-    document.getElementById('edit_gold').value = gold;
-    document.getElementById('edit_price').value = price;
-    document.getElementById('edit_payment').value = payment;
-    document.getElementById('edit_notes').value = notes;
-    document.getElementById('editModal').style.display = 'block';
+  document.getElementById('editForm').action = '/kingdom/' + kid + '/edit/' + id;
+  document.getElementById('edit_customer').value = name;
+  document.getElementById('edit_food').value = food;
+  document.getElementById('edit_wood').value = wood;
+  document.getElementById('edit_stone').value = stone;
+  document.getElementById('edit_gold').value = gold;
+  document.getElementById('edit_price').value = price;
+  document.getElementById('edit_payment').value = payment;
+  document.getElementById('edit_notes').value = notes;
+  document.getElementById('editModal').style.display = 'flex';
 }
 
 function closeEdit() {
-    document.getElementById('editModal').style.display = 'none';
+  document.getElementById('editModal').style.display = 'none';
 }
 
 function copyOrder(id, name, food, wood, stone, gold, price, payment, notes) {
-    document.getElementById('copyForm').action = '/kingdom/' + kid + '/copy/' + id;
-    document.getElementById('copy_customer').value = '';
-    document.getElementById('copy_food').value = food;
-    document.getElementById('copy_wood').value = wood;
-    document.getElementById('copy_stone').value = stone;
-    document.getElementById('copy_gold').value = gold;
-    document.getElementById('copy_price').value = price;
-    document.getElementById('copy_payment').value = payment;
-    document.getElementById('copy_notes').value = notes;
-    document.getElementById('copyModal').style.display = 'block';
+  document.getElementById('copyForm').action = '/kingdom/' + kid + '/copy/' + id;
+  document.getElementById('copy_customer').value = '';
+  document.getElementById('copy_food').value = food;
+  document.getElementById('copy_wood').value = wood;
+  document.getElementById('copy_stone').value = stone;
+  document.getElementById('copy_gold').value = gold;
+  document.getElementById('copy_price').value = price;
+  document.getElementById('copy_payment').value = payment;
+  document.getElementById('copy_notes').value = notes;
+  document.getElementById('copyModal').style.display = 'flex';
 }
 
 function closeCopy() {
-    document.getElementById('copyModal').style.display = 'none';
+  document.getElementById('copyModal').style.display = 'none';
 }
 
 window.onclick = function(event) {
-    if (event.target == document.getElementById('editModal')) closeEdit();
-    if (event.target == document.getElementById('copyModal')) closeCopy();
+  if (event.target == document.getElementById('editModal')) closeEdit();
+  if (event.target == document.getElementById('copyModal')) closeCopy();
 }
 </script>
-
 </body>
 </html>

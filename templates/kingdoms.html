@@ -1,159 +1,210 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRSS Kingdom Manager</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>TRSS Kingdom Manager</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
-<input type="checkbox" id="sidebar-toggle" class="sidebar-toggle" hidden>
-<div class="app-shell">
-    <aside class="sidebar">
-        <div class="sidebar-top">
-            <div class="brand">
-                <div class="brand-mark logo-placeholder">TR</div>
-                <div class="brand-text">
-                    <div class="brand-title">TRSS</div>
-                    <div class="brand-subtitle">Kingdom Manager</div>
-                </div>
-            </div>
-            <label for="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Collapse sidebar">
-                <i data-lucide="menu" class="icon-sm"></i>
-            </label>
-        </div>
+<input type="checkbox" id="sidebar-toggle" class="sidebar-toggle" hidden/>
+<div class="layout">
 
-        <nav class="sidebar-nav">
-            <a class="sidebar-nav-item active" href="/">
-                <i data-lucide="castle" class="icon-nav"></i>
-                <span>الممالك</span>
-            </a>
-        </nav>
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">TRSS</div>
+    <div class="sidebar-brand-text">
+      <h3>TRSS Manager</h3>
+      <span>Kingdoms Dashboard</span>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Main</div>
+      <a href="{{ url_for('index') }}" class="sidebar-link active">
+        <i data-lucide="layout-dashboard"></i>
+        <span>All Kingdoms</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Navigation</div>
+      {% for k in kingdoms %}
+      <a href="{{ url_for('index', kingdom_id=k.id) }}" class="sidebar-link">
+        <i data-lucide="shield"></i>
+        <span>{{ k.name }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% if not kingdoms %}
+    <div class="sidebar-section">
+      <a href="#" class="sidebar-link" style="color:var(--muted-dim);pointer-events:none;opacity:.5">
+        <i data-lucide="inbox"></i>
+        <span>No kingdoms yet</span>
+      </a>
+    </div>
+    {% endif %}
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-card">
+      <h4>TRSS Kingdom Manager</h4>
+      <p>Organize your kingdoms. Track resources. Dominate.</p>
+    </div>
+  </div>
+</aside>
 
-        <div class="sidebar-card">
-            <div class="sidebar-card-title">مركز القيادة</div>
-            <p>تابع الطلبات والتقدم اليومي لكل مملكه.</p>
-        </div>
-    </aside>
+<!-- Main -->
+<div class="main-wrap">
 
-    <main class="main-panel">
-        <div class="hero-dashboard">
-            <div class="hero-content">
-                <div class="hero-badge">TRSS</div>
-                <h1 class="hero-title">Kingdom Manager</h1>
-                <p class="hero-subtitle">Manage your kingdom like a commander.</p>
-            </div>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <div class="hero-stat-number">{{ kingdoms|length }}</div>
-                    <div class="hero-stat-label">Active Kingdom{{ 's' if kingdoms|length != 1 else '' }}</div>
-                </div>
-                <div class="hero-stat-divider"></div>
-                <div class="hero-stat">
-                    <div class="hero-stat-number">{{ total_orders }}</div>
-                    <div class="hero-stat-label">Total Orders</div>
-                </div>
-            </div>
-        </div>
+<!-- Topbar -->
+<header class="topbar">
+  <div class="topbar-left">
+    <label for="sidebar-toggle" class="sidebar-toggle-btn"><i data-lucide="menu"></i></label>
+    <span class="topbar-title">All Kingdoms</span>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-pill"><i data-lucide="shield" style="width:12px;height:12px"></i> {{ kingdoms|length }} Kingdom{{ 's' if kingdoms|length != 1 }}</span>
+    <span class="topbar-pill"><span class="status-dot"></span> Active</span>
+    <div class="topbar-avatar">TRSS</div>
+  </div>
+</header>
 
-        <div class="quick-stats">
-            <div class="quick-stat-card">
-                <div class="quick-stat-icon icon-box icon-box-gold">
-                    <i data-lucide="package" class="icon-qs"></i>
-                </div>
-                <div class="quick-stat-info">
-                    <div class="quick-stat-num">{{ orders_today }}</div>
-                    <div class="quick-stat-label">Orders Today</div>
-                </div>
-            </div>
-            <div class="quick-stat-card">
-                <div class="quick-stat-icon icon-box icon-box-green">
-                    <i data-lucide="banknote" class="icon-qs"></i>
-                </div>
-                <div class="quick-stat-info">
-                    <div class="quick-stat-num">{{ total_revenue|number_format }} $</div>
-                    <div class="quick-stat-label">Revenue</div>
-                </div>
-            </div>
-            <div class="quick-stat-card">
-                <div class="quick-stat-icon icon-box icon-box-blue">
-                    <i data-lucide="users" class="icon-qs"></i>
-                </div>
-                <div class="quick-stat-info">
-                    <div class="quick-stat-num">{{ total_customers }}</div>
-                    <div class="quick-stat-label">Customers</div>
-                </div>
-            </div>
-            <div class="quick-stat-card">
-                <div class="quick-stat-icon icon-box icon-box-amber">
-                    <i data-lucide="clock" class="icon-qs"></i>
-                </div>
-                <div class="quick-stat-info">
-                    <div class="quick-stat-num">{{ pending_orders }}</div>
-                    <div class="quick-stat-label">Pending Orders</div>
-                </div>
-            </div>
-        </div>
+<!-- Content -->
+<div class="content">
 
-        <div class="card-3d kingdoms-create">
-            <div class="section-head">
-                <div class="section-head-row">
-                    <div>
-                        <h2>مملكه جديدة</h2>
-                        <p>انشئ مملكه جديده لبدء ادارة الطلبيات.</p>
-                    </div>
-                    <div class="section-head-icon"><i data-lucide="plus-circle" class="icon-section"></i></div>
-                </div>
-            </div>
-            <form action="/kingdom/new" method="POST">
-                <div class="form-row">
-                    <div class="form-group full">
-                        <label>اسم المملكه</label>
-                        <input type="text" name="name" required placeholder="مثلا: مملكه الصاعقة، حلف الظلام...">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-add"><i data-lucide="plus" class="icon-btn"></i> اضافة مملكه</button>
-            </form>
-        </div>
-
-        {% if kingdoms %}
-        <div class="kingdoms-grid">
-            {% for k in kingdoms %}
-            <a href="/kingdom/{{ k.id }}" class="kingdom-tile">
-                <div class="kingdom-tile-top">
-                    <div class="kingdom-tile-icon-wrap">
-                        <i data-lucide="castle" class="icon-kingdom"></i>
-                    </div>
-                    <div class="kingdom-tile-arrow"><i data-lucide="arrow-left" class="icon-sm"></i></div>
-                </div>
-                <div class="kingdom-tile-name">{{ k.name }}</div>
-                <div class="kingdom-tile-stats">
-                    <div class="kingdom-tile-stat">
-                        <span class="kingdom-tile-stat-num">{{ k.count }}</span>
-                        <span class="kingdom-tile-stat-label">طلبية</span>
-                    </div>
-                    <div class="kingdom-tile-stat">
-                        <span class="kingdom-tile-stat-num">{{ k.total_price|number_format }} $</span>
-                        <span class="kingdom-tile-stat-label">الثمن</span>
-                    </div>
-                </div>
-                <div class="kingdom-tile-date"><i data-lucide="calendar" class="icon-xs"></i> {{ k.created_at }}</div>
-            </a>
-            {% endfor %}
-        </div>
-        {% else %}
-        <div class="empty-state">
-            <div class="empty-state-icon-wrap">
-                <i data-lucide="castle" class="icon-empty"></i>
-            </div>
-            <h3>ما في ممالك بعد</h3>
-            <p>ابدأ بإنشاء مملكه جديدة لتبدأ رحلتك.</p>
-        </div>
-        {% endif %}
-    </main>
+<!-- Hero -->
+<div class="hero-banner">
+  <div class="hero-content">
+    <span class="hero-badge">TRSS</span>
+    <h1 class="hero-title">Kingdom Manager</h1>
+    <p class="hero-subtitle">Manage your kingdoms like a commander.</p>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">{{ kingdoms|length }}</div>
+      <div class="hero-stat-label">Kingdoms</div>
+    </div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">{{ total_orders }}</div>
+      <div class="hero-stat-label">Total Orders</div>
+    </div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">{{ total_revenue }}</div>
+      <div class="hero-stat-label">Total Revenue</div>
+    </div>
+  </div>
 </div>
 
+<!-- Quick stats -->
+<div class="quick-stats">
+  <div class="qs-card">
+    <div class="qs-icon qs-icon-gold"><i data-lucide="package-plus"></i></div>
+    <div>
+      <div class="qs-num">{{ orders_today }}</div>
+      <div class="qs-label">Orders Today</div>
+    </div>
+  </div>
+  <div class="qs-card">
+    <div class="qs-icon qs-icon-green"><i data-lucide="banknote"></i></div>
+    <div>
+      <div class="qs-num">{{ total_revenue }}</div>
+      <div class="qs-label">Revenue</div>
+    </div>
+  </div>
+  <div class="qs-card">
+    <div class="qs-icon qs-icon-blue"><i data-lucide="users"></i></div>
+    <div>
+      <div class="qs-num">{{ total_customers }}</div>
+      <div class="qs-label">Customers</div>
+    </div>
+  </div>
+  <div class="qs-card">
+    <div class="qs-icon qs-icon-amber"><i data-lucide="clock"></i></div>
+    <div>
+      <div class="qs-num">{{ pending_orders }}</div>
+      <div class="qs-label">Pending Orders</div>
+    </div>
+  </div>
+</div>
+
+<!-- Kingdoms + Create -->
+<div class="dash-grid">
+  <div>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Kingdoms</h2>
+          <p>All your kingdoms in one place.</p>
+        </div>
+        <div class="card-header-icon"><i data-lucide="shield"></i></div>
+      </div>
+      {% if kingdoms %}
+      <div class="kingdoms-grid">
+        {% for k in kingdoms %}
+        <a href="{{ url_for('index', kingdom_id=k.id) }}" class="kingdom-tile">
+          <div class="kingdom-tile-top">
+            <div class="kingdom-tile-icon"><i data-lucide="shield"></i></div>
+            <div class="kingdom-tile-arrow"><i data-lucide="arrow-left"></i></div>
+          </div>
+          <div class="kingdom-tile-name">{{ k.name }}</div>
+          <div class="kingdom-tile-meta">
+            <div class="kingdom-tile-stat">
+              <strong>{{ k.order_count or 0 }}</strong>
+              <span>Orders</span>
+            </div>
+            <div class="kingdom-tile-stat">
+              <strong>${{ k.total_revenue or 0 }}</strong>
+              <span>Revenue</span>
+            </div>
+          </div>
+          <div class="kingdom-tile-date">
+            <i data-lucide="calendar"></i>
+            {{ k.created_at }}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-state-icon"><i data-lucide="shield-off"></i></div>
+        <h3>No kingdoms yet</h3>
+        <p>Create your first kingdom to start tracking orders and resources.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div>
+    <div class="card kingdoms-create">
+      <div class="card-header">
+        <div>
+          <h2>New Kingdom</h2>
+          <p>Launch a new kingdom.</p>
+        </div>
+        <div class="card-header-icon"><i data-lucide="plus"></i></div>
+      </div>
+      <form method="POST" action="{{ url_for('create_kingdom') }}">
+        <div class="form-group">
+          <label>Kingdom Name</label>
+          <input type="text" name="name" required placeholder="e.g. Kingdom 4127"/>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i data-lucide="plus" style="width:14px;height:14px"></i> Create Kingdom
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+
+<canvas id="bgCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;pointer-events:none"></canvas>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 <script>lucide.createIcons();</script>
 </body>
 </html>
