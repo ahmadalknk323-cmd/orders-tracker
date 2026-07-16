@@ -175,7 +175,7 @@
 <div class="card table-card">
   <div class="table-header">
     <div>
-      <h2><i data-lucide="list" style="width:16px;height:16px;vertical-align:middle;opacity:.8"></i> الطلبيات ({{ orders|length }})</h2>
+      <h2><i data-lucide="list" style="width:16px;height:16px;vertical-align:middle;opacity:.8"></i> الطلبيات <span class="table-count">{{ orders|length }}</span></h2>
       <p>تابع حالة كل طلبية وأدارتها بسهولة.</p>
     </div>
     <form action="/kingdom/{{ kingdom.id }}/delete" method="POST" onsubmit="return confirm('حذف المملكه وكل طلبياتها؟')">
