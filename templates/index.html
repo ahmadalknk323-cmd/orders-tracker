@@ -59,49 +59,52 @@
 <!-- Hero Banner: Kingdom Command Center -->
 <div class="cmd-hero">
   <div class="cmd-hero-bg"></div>
-  <div class="cmd-hero-content">
-    <div class="cmd-hero-left">
-      <div class="cmd-hero-logo"><i data-lucide="crown"></i></div>
+  <canvas class="cmd-hero-particles" id="heroCanvas"></canvas>
+  <div class="cmd-hero-light"></div>
+  <div class="cmd-hero-glow cmd-hero-glow-1"></div>
+  <div class="cmd-hero-glow cmd-hero-glow-2"></div>
+  <div class="cmd-hero-glass">
+    <div class="cmd-hero-top">
+      <div class="cmd-hero-crown-wrap">
+        <div class="cmd-hero-crown"><i data-lucide="crown"></i></div>
+        <div class="cmd-hero-crown-ring"></div>
+      </div>
       <div class="cmd-hero-text">
         <div class="cmd-hero-badge">TRSS KINGDOM COMMAND CENTER</div>
         <h1 class="cmd-hero-title">{{ kingdom.name }}</h1>
         <p class="cmd-hero-sub">Kingdom #{{ kingdom.id }} &bull; لوحة التحكم الرئيسية</p>
       </div>
     </div>
-    <div class="cmd-hero-right">
-      <div class="cmd-hero-stats">
-        <div class="cmd-hero-stat">
-          <div class="cmd-hero-stat-num cmd-active-num">
-            <i data-lucide="loader" style="width:14px;height:14px"></i>
-            <span>{{ stats.active[5] }}</span>
-          </div>
+    <div class="cmd-hero-stats-row">
+      <div class="cmd-hero-stat-card">
+        <div class="cmd-hero-stat-icon"><i data-lucide="loader"></i></div>
+        <div class="cmd-hero-stat-info">
+          <div class="cmd-hero-stat-num cmd-active-num">{{ stats.active[5] }}</div>
           <div class="cmd-hero-stat-label">Active Orders</div>
         </div>
-        <div class="cmd-hero-stat-divider"></div>
-        <div class="cmd-hero-stat">
-          <div class="cmd-hero-stat-num cmd-finished-num">
-            <i data-lucide="check-circle-2" style="width:14px;height:14px"></i>
-            <span>{{ stats.finished[5] }}</span>
-          </div>
+      </div>
+      <div class="cmd-hero-stat-card">
+        <div class="cmd-hero-stat-icon"><i data-lucide="check-circle-2"></i></div>
+        <div class="cmd-hero-stat-info">
+          <div class="cmd-hero-stat-num cmd-finished-num">{{ stats.finished[5] }}</div>
           <div class="cmd-hero-stat-label">Finished</div>
         </div>
-        <div class="cmd-hero-stat-divider"></div>
-        <div class="cmd-hero-stat">
-          <div class="cmd-hero-stat-num cmd-total-num">
-            <i data-lucide="layers" style="width:14px;height:14px"></i>
-            <span>{{ orders|length }}</span>
-          </div>
+      </div>
+      <div class="cmd-hero-stat-card">
+        <div class="cmd-hero-stat-icon"><i data-lucide="layers"></i></div>
+        <div class="cmd-hero-stat-info">
+          <div class="cmd-hero-stat-num cmd-total-num">{{ orders|length }}</div>
           <div class="cmd-hero-stat-label">Total</div>
         </div>
       </div>
-      <div class="cmd-hero-actions">
-        <a href="#dashboard" class="cmd-hero-btn cmd-hero-btn-gold">
-          <i data-lucide="plus-circle" style="width:15px;height:15px"></i> اضافة طلبية
-        </a>
-        <a href="#stats" class="cmd-hero-btn cmd-hero-btn-outline">
-          <i data-lucide="bar-chart-3" style="width:15px;height:15px"></i> الاحصائيات
-        </a>
-      </div>
+    </div>
+    <div class="cmd-hero-actions">
+      <a href="#dashboard" class="cmd-hero-btn cmd-hero-btn-gold">
+        <i data-lucide="plus-circle"></i> اضافة طلبية
+      </a>
+      <a href="#stats" class="cmd-hero-btn cmd-hero-btn-outline">
+        <i data-lucide="bar-chart-3"></i> الاحصائيات
+      </a>
     </div>
   </div>
 </div>
@@ -450,6 +453,51 @@ window.onclick = function(event) {
   if (event.target == document.getElementById('editModal')) closeEdit();
   if (event.target == document.getElementById('copyModal')) closeCopy();
 }
+</script>
+<script>
+(function(){
+  var c=document.getElementById('heroCanvas');
+  if(!c)return;
+  var ctx=c.getContext('2d');
+  function resize(){c.width=c.offsetWidth;c.height=c.offsetHeight}
+  resize();
+  window.addEventListener('resize',resize);
+  var particles=[];
+  var count=50;
+  for(var i=0;i<count;i++){
+    particles.push({
+      x:Math.random()*c.width,y:Math.random()*c.height,
+      r:Math.random()*2+0.5,
+      dx:(Math.random()-0.5)*0.4,
+      dy:(Math.random()-0.5)*0.25-0.1,
+      o:Math.random()*0.4+0.08,
+      pulse:Math.random()*Math.PI*2
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    for(var i=0;i<particles.length;i++){
+      var p=particles[i];
+      p.pulse+=0.015;
+      var alpha=p.o+Math.sin(p.pulse)*0.1;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(251,191,36,'+Math.max(0,alpha)+')';
+      ctx.fill();
+      if(p.r>1.2){
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r*3,0,Math.PI*2);
+        ctx.fillStyle='rgba(251,191,36,'+Math.max(0,alpha*0.12)+')';
+        ctx.fill();
+      }
+      p.x+=p.dx;p.y+=p.dy;
+      if(p.x<-10)p.x=c.width+10;if(p.x>c.width+10)p.x=-10;
+      if(p.y<-10)p.y=c.height+10;if(p.y>c.height+10)p.y=-10;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 </script>
 </body>
 </html>
