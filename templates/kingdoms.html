@@ -31,7 +31,7 @@
     <div class="sidebar-section">
       <div class="sidebar-section-title">التنقل</div>
       {% for k in kingdoms %}
-      <a href="{{ url_for('index', kingdom_id=k.id) }}" class="sidebar-link">
+      <a href="{{ url_for('kingdom_page', kingdom_id=k.id) }}" class="sidebar-link">
         <i data-lucide="shield"></i>
         <span>{{ k.name }}</span>
       </a>
@@ -144,7 +144,7 @@
       {% if kingdoms %}
       <div class="kingdoms-grid">
         {% for k in kingdoms %}
-        <a href="{{ url_for('index', kingdom_id=k.id) }}" class="kingdom-tile">
+        <a href="{{ url_for('kingdom_page', kingdom_id=k.id) }}" class="kingdom-tile">
           <div class="kingdom-tile-top">
             <div class="kingdom-tile-icon"><i data-lucide="shield"></i></div>
             <div class="kingdom-tile-arrow"><i data-lucide="arrow-left"></i></div>
