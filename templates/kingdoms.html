@@ -54,8 +54,39 @@
                 </div>
                 <div class="hero-stat-divider"></div>
                 <div class="hero-stat">
-                    <div class="hero-stat-number">{% set total = [] %}{% for k in kingdoms %}{% if total.append(k.count) %}{% endif %}{% endfor %}{{ total|sum }}</div>
+                    <div class="hero-stat-number">{{ total_orders }}</div>
                     <div class="hero-stat-label">Total Orders</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-stats">
+            <div class="quick-stat-card">
+                <div class="quick-stat-icon">📦</div>
+                <div class="quick-stat-info">
+                    <div class="quick-stat-num">{{ orders_today }}</div>
+                    <div class="quick-stat-label">Orders Today</div>
+                </div>
+            </div>
+            <div class="quick-stat-card">
+                <div class="quick-stat-icon">💰</div>
+                <div class="quick-stat-info">
+                    <div class="quick-stat-num">{{ total_revenue|number_format }} $</div>
+                    <div class="quick-stat-label">Revenue</div>
+                </div>
+            </div>
+            <div class="quick-stat-card">
+                <div class="quick-stat-icon">👥</div>
+                <div class="quick-stat-info">
+                    <div class="quick-stat-num">{{ total_customers }}</div>
+                    <div class="quick-stat-label">Customers</div>
+                </div>
+            </div>
+            <div class="quick-stat-card">
+                <div class="quick-stat-icon">⏳</div>
+                <div class="quick-stat-info">
+                    <div class="quick-stat-num">{{ pending_orders }}</div>
+                    <div class="quick-stat-label">Pending Orders</div>
                 </div>
             </div>
         </div>

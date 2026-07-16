@@ -88,8 +88,19 @@ def index():
         count = rows[0] or 0
         total_price = int(rows[1] or 0)
         kingdom_stats.append({"id": k["id"], "name": k["name"], "count": count, "total_price": total_price, "created_at": k["created_at"]})
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    orders_today = conn.execute("SELECT COUNT(*) FROM orders WHERE created_at LIKE ?", (today + "%",)).fetchone()[0] or 0
+    total_revenue = conn.execute("SELECT COALESCE(SUM(price), 0) FROM orders").fetchone()[0] or 0
+    total_customers = conn.execute("SELECT COUNT(DISTINCT customer_name) FROM orders").fetchone()[0] or 0
+    pending_orders = conn.execute("SELECT COUNT(*) FROM orders WHERE status='active'").fetchone()[0] or 0
+    total_orders = conn.execute("SELECT COUNT(*) FROM orders").fetchone()[0] or 0
+
     conn.close()
-    return render_template("kingdoms.html", kingdoms=kingdom_stats)
+    return render_template("kingdoms.html", kingdoms=kingdom_stats,
+                           orders_today=orders_today, total_revenue=total_revenue,
+                           total_customers=total_customers, pending_orders=pending_orders,
+                           total_orders=total_orders)
 
 
 @app.route("/kingdom/new", methods=["POST"])

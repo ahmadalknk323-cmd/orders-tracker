@@ -945,6 +945,56 @@ tbody tr.finished td.customer { color: var(--success) !important; }
   padding: 24px;
 }
 
+/* ── Quick Stats Bar ── */
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.quick-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  transition: border-color var(--transition);
+}
+
+.quick-stat-card:hover {
+  border-color: var(--border-hover);
+}
+
+.quick-stat-icon {
+  font-size: 28px;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,.04);
+  border-radius: var(--radius);
+  flex-shrink: 0;
+}
+
+.quick-stat-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+
+.quick-stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
 /* ── Kingdom Tiles Grid ── */
 .kingdoms-grid {
   display: grid;
@@ -1090,6 +1140,9 @@ tbody tr.finished td.customer { color: var(--success) !important; }
   }
   .kingdoms-grid {
     grid-template-columns: 1fr;
+  }
+  .quick-stats {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
