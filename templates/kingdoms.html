@@ -73,27 +73,57 @@
 <!-- Content -->
 <div class="content">
 
-<!-- Hero -->
+<!-- Hero Banner -->
 <div class="hero-banner">
-  <div class="hero-content">
-    <span class="hero-badge"><i data-lucide="crown" style="width:11px;height:11px"></i> TRSS</span>
-    <h1 class="hero-title">TRSS Kingdom Manager</h1>
-    <p class="hero-subtitle">نظّم ممالكك كالقائد الأعلى.</p>
-  </div>
-  <div class="hero-stats">
-      <div class="hero-stat">
-      <div class="hero-stat-num">{{ kingdoms|length }}</div>
-      <div class="hero-stat-label">الممالك</div>
+  <div class="hero-bg"></div>
+  <canvas class="hero-particles" id="heroCanvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="hero-light"></div>
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div class="hero-glass">
+    <div class="hero-layout">
+      <div class="hero-left">
+        <div class="hero-logo"><span>TRSS</span></div>
+      </div>
+      <div class="hero-center">
+        <div class="hero-badge"><i data-lucide="crown" style="width:11px;height:11px"></i> TRSS KINGDOM MANAGER</div>
+        <h1 class="hero-title">Welcome to the Kingdom</h1>
+        <p class="hero-subtitle">نظّم ممالكك كالقائد الأعلى. تابع الطلبات والموارد بكل وضوح.</p>
+        <div class="hero-btns">
+          <a href="#create" class="hero-btn hero-btn-gold"><i data-lucide="plus-circle" style="width:15px;height:15px"></i> مملكة جديدة</a>
+          <a href="#kingdoms" class="hero-btn hero-btn-outline"><i data-lucide="shield" style="width:15px;height:15px"></i> الممالك</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-kingdom-count">
+          <div class="hero-kingdom-num">{{ kingdoms|length }}</div>
+          <div class="hero-kingdom-label">ممالك</div>
+        </div>
+      </div>
     </div>
-    <div class="hero-stat-div"></div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">{{ total_orders }}</div>
-      <div class="hero-stat-label">اجمالي الطلبات</div>
-    </div>
-    <div class="hero-stat-div"></div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">{{ total_revenue }}</div>
-      <div class="hero-stat-label">اجمالي الايرادات</div>
+    <div class="hero-floating-stats">
+      <div class="hero-fstat">
+        <div class="hero-fstat-icon"><i data-lucide="package"></i></div>
+        <div class="hero-fstat-info">
+          <div class="hero-fstat-num">{{ total_orders }}</div>
+          <div class="hero-fstat-label">طلبات</div>
+        </div>
+      </div>
+      <div class="hero-fstat">
+        <div class="hero-fstat-icon"><i data-lucide="banknote"></i></div>
+        <div class="hero-fstat-info">
+          <div class="hero-fstat-num">{{ total_revenue }}</div>
+          <div class="hero-fstat-label">ايرادات</div>
+        </div>
+      </div>
+      <div class="hero-fstat">
+        <div class="hero-fstat-icon"><i data-lucide="users"></i></div>
+        <div class="hero-fstat-info">
+          <div class="hero-fstat-num">{{ total_customers }}</div>
+          <div class="hero-fstat-label">زبائن</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -132,7 +162,7 @@
 
 <!-- Kingdoms + Create -->
 <div class="dash-grid">
-  <div>
+  <div id="kingdoms">
     <div class="card">
       <div class="card-header">
         <div>
@@ -178,7 +208,7 @@
   </div>
 
   <div>
-    <div class="card kingdoms-create">
+    <div class="card kingdoms-create" id="create">
       <div class="card-header">
         <div>
           <h2><i data-lucide="plus-circle" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> مملكة جديدة</h2>
@@ -206,5 +236,49 @@
 <canvas id="bgCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;pointer-events:none"></canvas>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 <script>lucide.createIcons();</script>
+<script>
+(function(){
+  var c=document.getElementById('heroCanvas');
+  if(!c)return;
+  var ctx=c.getContext('2d');
+  function resize(){c.width=c.offsetWidth;c.height=c.offsetHeight}
+  resize();
+  window.addEventListener('resize',resize);
+  var particles=[];
+  for(var i=0;i<45;i++){
+    particles.push({
+      x:Math.random()*c.width,y:Math.random()*c.height,
+      r:Math.random()*2+0.5,
+      dx:(Math.random()-0.5)*0.35,
+      dy:(Math.random()-0.5)*0.2-0.08,
+      o:Math.random()*0.35+0.06,
+      pulse:Math.random()*Math.PI*2
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    for(var i=0;i<particles.length;i++){
+      var p=particles[i];
+      p.pulse+=0.012;
+      var alpha=p.o+Math.sin(p.pulse)*0.08;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(251,191,36,'+Math.max(0,alpha)+')';
+      ctx.fill();
+      if(p.r>1.2){
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r*3.5,0,Math.PI*2);
+        ctx.fillStyle='rgba(251,191,36,'+Math.max(0,alpha*0.1)+')';
+        ctx.fill();
+      }
+      p.x+=p.dx;p.y+=p.dy;
+      if(p.x<-10)p.x=c.width+10;if(p.x>c.width+10)p.x=-10;
+      if(p.y<-10)p.y=c.height+10;if(p.y>c.height+10)p.y=-10;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
 </body>
 </html>

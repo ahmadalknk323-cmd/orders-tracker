@@ -345,33 +345,230 @@ img{display:block;max-width:100%}
 .btn .icon{width:13px;height:13px}
 
 /* ═══════════════════════════════════════
-   KINGDOMS PAGE
+   HERO BANNER — AAA Game Style
    ═══════════════════════════════════════ */
-
 .hero-banner{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:36px 40px;position:relative;overflow:hidden;
-  background:var(--surface);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  position:relative;overflow:hidden;
+  height:340px;
+  border-radius:var(--radius-xl);
   border:1px solid var(--border);
-  border-radius:var(--radius-xl);box-shadow:var(--shadow-lg),0 0 60px rgba(59,130,246,.03);
+  box-shadow:var(--shadow-lg),0 0 120px rgba(59,130,246,.06);
 }
-.hero-banner::before{content:'';position:absolute;top:-60%;right:-15%;width:380px;height:380px;background:radial-gradient(circle,rgba(251,191,36,.07) 0%,transparent 70%);pointer-events:none}
-.hero-banner::after{content:'';position:absolute;bottom:-50px;left:8%;width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.05) 0%,transparent 70%);pointer-events:none}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(160deg,rgba(8,12,24,.94),rgba(12,18,35,.9),rgba(18,26,48,.94)),
+    url("/static/images/background.webp");
+  background-size:cover;background-position:center;
+}
+.hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 70% at 80% 15%,rgba(251,191,36,.09),transparent 55%),
+             radial-gradient(ellipse 50% 60% at 15% 85%,rgba(99,102,241,.07),transparent 55%);
+}
 
-.hero-content{position:relative;z-index:1}
+/* Particles */
+.hero-particles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+
+/* Vignette */
+.hero-vignette{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse 70% 65% at 50% 50%,transparent 40%,rgba(6,10,20,.55) 100%);
+}
+
+/* Animated lighting sweep */
+.hero-light{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:linear-gradient(115deg,transparent 30%,rgba(251,191,36,.02) 40%,rgba(251,191,36,.05) 50%,rgba(251,191,36,.02) 60%,transparent 70%);
+  background-size:280% 100%;
+  animation:heroLightSweep 7s ease-in-out infinite;
+}
+@keyframes heroLightSweep{
+  0%,100%{background-position:280% 0}
+  50%{background-position:-280% 0}
+}
+
+/* Ambient glow orbs */
+.hero-glow{
+  position:absolute;border-radius:50%;pointer-events:none;z-index:1;
+  filter:blur(90px);animation:heroGlowFloat 9s ease-in-out infinite;
+}
+.hero-glow-1{top:-25%;right:8%;width:280px;height:280px;background:rgba(251,191,36,.07)}
+.hero-glow-2{bottom:-20%;left:5%;width:240px;height:240px;background:rgba(99,102,241,.06);animation-delay:4s}
+@keyframes heroGlowFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(12px,-8px) scale(1.08)}
+}
+
+/* Glass overlay */
+.hero-glass{
+  position:relative;z-index:4;
+  width:100%;height:100%;
+  padding:0 48px;
+  display:flex;flex-direction:column;justify-content:center;
+  background:rgba(8,12,24,.15);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+
+/* Layout: Logo | Text | Kingdom Count */
+.hero-layout{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:40px;flex:1;
+}
+
+/* Left: TRSS Logo */
+.hero-left{flex-shrink:0}
+.hero-logo{
+  width:90px;height:90px;display:grid;place-items:center;
+  background:linear-gradient(140deg,var(--gold),#D97706,#B45309);
+  border-radius:24px;position:relative;
+  box-shadow:0 12px 48px rgba(251,191,36,.3),0 0 90px rgba(251,191,36,.1),inset 0 1px 0 rgba(255,255,255,.25);
+  animation:logoPulse 5s ease-in-out infinite;
+}
+.hero-logo span{
+  font-size:22px;font-weight:900;color:#0B1120;letter-spacing:.5px;
+  text-shadow:0 1px 2px rgba(0,0,0,.15);
+}
+.hero-logo::after{
+  content:'';position:absolute;inset:-7px;border-radius:30px;
+  border:2px solid rgba(251,191,36,.1);
+  animation:logoRingPulse 5s ease-in-out infinite;
+}
+@keyframes logoPulse{
+  0%,100%{box-shadow:0 12px 48px rgba(251,191,36,.3),0 0 90px rgba(251,191,36,.1),inset 0 1px 0 rgba(255,255,255,.25)}
+  50%{box-shadow:0 14px 56px rgba(251,191,36,.4),0 0 110px rgba(251,191,36,.16),inset 0 1px 0 rgba(255,255,255,.3)}
+}
+@keyframes logoRingPulse{
+  0%,100%{border-color:rgba(251,191,36,.1);transform:scale(1)}
+  50%{border-color:rgba(251,191,36,.2);transform:scale(1.03)}
+}
+
+/* Center: Welcome text */
+.hero-center{flex:1;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
 .hero-badge{
-  display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:var(--radius-pill);
-  background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(251,191,36,.04));border:1px solid rgba(251,191,36,.18);
-  color:var(--gold);font-size:10px;font-weight:800;letter-spacing:.14em;margin-bottom:12px;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 16px;border-radius:var(--radius-pill);
+  background:linear-gradient(135deg,rgba(251,191,36,.14),rgba(251,191,36,.04));
+  border:1px solid rgba(251,191,36,.22);
+  color:var(--gold);font-size:10px;font-weight:800;letter-spacing:.18em;
+  margin-bottom:12px;
 }
-.hero-title{font-size:32px;font-weight:900;color:var(--text-bright);letter-spacing:-.03em;line-height:1.1;margin-bottom:8px}
-.hero-subtitle{font-size:14px;color:var(--muted);font-weight:400}
+.hero-title{
+  font-size:36px;font-weight:900;color:var(--text-bright);
+  letter-spacing:-.03em;line-height:1.1;
+  text-shadow:0 2px 24px rgba(0,0,0,.4);
+}
+.hero-subtitle{font-size:14px;color:var(--muted);font-weight:400;margin-top:4px;max-width:420px;line-height:1.6}
 
-.hero-stats{display:flex;align-items:center;gap:28px;position:relative;z-index:1}
-.hero-stat{text-align:center}
-.hero-stat-num{font-size:40px;font-weight:900;color:var(--gold);line-height:1;letter-spacing:-.03em}
-.hero-stat-label{font-size:11px;color:var(--muted);font-weight:500;margin-top:4px}
-.hero-stat-div{width:1px;height:48px;background:linear-gradient(180deg,transparent,var(--border),transparent)}
+/* Buttons */
+.hero-btns{display:flex;gap:12px;margin-top:16px}
+.hero-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 22px;border-radius:var(--radius);font-size:13px;font-weight:700;
+  font-family:inherit;cursor:pointer;text-decoration:none;
+  transition:all .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;border:none;
+}
+.hero-btn-gold{
+  background:linear-gradient(140deg,var(--gold),#D97706);
+  color:#0B1120;
+  box-shadow:0 4px 24px rgba(251,191,36,.2),0 0 50px rgba(251,191,36,.06);
+}
+.hero-btn-gold:hover{
+  box-shadow:0 8px 36px rgba(251,191,36,.32),0 0 70px rgba(251,191,36,.1);
+  filter:brightness(1.08);transform:translateY(-2px);
+}
+.hero-btn-outline{
+  background:rgba(255,255,255,.04);color:var(--text);
+  border:1px solid rgba(255,255,255,.08);
+}
+.hero-btn-outline:hover{
+  background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);
+  transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15);
+}
+
+/* Right: Kingdom count */
+.hero-right{flex-shrink:0}
+.hero-kingdom-count{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:120px;height:120px;
+  background:rgba(255,255,255,.035);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:28px;position:relative;overflow:hidden;
+}
+.hero-kingdom-count::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(251,191,36,.06),transparent 60%);pointer-events:none;
+}
+.hero-kingdom-num{
+  font-size:44px;font-weight:900;color:var(--gold);line-height:1;
+  letter-spacing:-.03em;text-shadow:0 2px 16px rgba(251,191,36,.2);
+}
+.hero-kingdom-label{
+  font-size:11px;color:var(--muted-dim);font-weight:600;
+  text-transform:uppercase;letter-spacing:.12em;margin-top:4px;
+}
+
+/* Floating stats row */
+.hero-floating-stats{
+  display:flex;justify-content:center;gap:14px;
+  padding-bottom:4px;
+}
+.hero-fstat{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 22px;border-radius:var(--radius-lg);
+  background:rgba(255,255,255,.035);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.05);
+  transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;
+}
+.hero-fstat::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.02),transparent 60%);pointer-events:none;
+}
+.hero-fstat:hover{
+  background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);
+  transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15);
+}
+.hero-fstat-icon{
+  width:40px;height:40px;display:grid;place-items:center;
+  border-radius:var(--radius);flex-shrink:0;
+  background:linear-gradient(140deg,rgba(251,191,36,.12),rgba(251,191,36,.04));
+  border:1px solid rgba(251,191,36,.12);color:var(--gold);
+}
+.hero-fstat-icon svg{width:18px;height:18px}
+.hero-fstat-info{text-align:right}
+.hero-fstat-num{font-size:20px;font-weight:900;color:var(--text-bright);line-height:1;letter-spacing:-.02em}
+.hero-fstat-label{font-size:10px;color:var(--muted-dim);font-weight:500;margin-top:3px}
+
+/* Hero responsive */
+@media(max-width:1024px){
+  .hero-banner{height:auto;min-height:340px}
+  .hero-glass{padding:28px 24px}
+  .hero-layout{flex-direction:column;text-align:center;gap:20px}
+  .hero-center{order:-1}
+  .hero-left{order:0}
+  .hero-right{order:1}
+  .hero-logo{width:72px;height:72px;border-radius:20px}
+  .hero-logo span{font-size:18px}
+  .hero-logo::after{border-radius:26px}
+  .hero-kingdom-count{width:100px;height:100px;border-radius:24px}
+  .hero-kingdom-num{font-size:36px}
+  .hero-floating-stats{flex-wrap:wrap;justify-content:center}
+  .hero-btns{justify-content:center}
+}
+@media(max-width:640px){
+  .hero-glass{padding:20px 16px}
+  .hero-title{font-size:24px}
+  .hero-subtitle{font-size:12px}
+  .hero-logo{width:60px;height:60px;border-radius:16px}
+  .hero-logo span{font-size:15px}
+  .hero-logo::after{border-radius:22px}
+  .hero-kingdom-count{width:80px;height:80px;border-radius:20px}
+  .hero-kingdom-num{font-size:28px}
+  .hero-kingdom-label{font-size:9px}
+  .hero-fstat{padding:12px 16px}
+  .hero-fstat-num{font-size:17px}
+  .hero-btns{flex-direction:column;width:100%}
+  .hero-btn{justify-content:center}
+}
 
 /* Quick stats */
 .quick-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -876,10 +1073,6 @@ tbody tr.finished td.customer{color:var(--success)!important;font-weight:600}
   .topbar{padding:0 16px}
   .topbar-title{font-size:13px}
   .content{padding:14px 14px 44px}
-  .hero-banner{flex-direction:column;text-align:center;gap:24px;padding:28px 24px}
-  .hero-title{font-size:24px}
-  .hero-stats{gap:16px}
-  .hero-stat-num{font-size:30px}
   .quick-stats{grid-template-columns:1fr 1fr}
   .kingdoms-grid{grid-template-columns:1fr}
   .stats-grid{grid-template-columns:1fr}
