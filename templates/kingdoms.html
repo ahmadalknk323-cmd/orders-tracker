@@ -76,7 +76,7 @@
 <!-- Hero -->
 <div class="hero-banner">
   <div class="hero-content">
-    <span class="hero-badge">TRSS</span>
+    <span class="hero-badge"><i data-lucide="crown" style="width:11px;height:11px"></i> TRSS</span>
     <h1 class="hero-title">Kingdom Manager</h1>
     <p class="hero-subtitle">Manage your kingdoms like a commander.</p>
   </div>
@@ -136,10 +136,10 @@
     <div class="card">
       <div class="card-header">
         <div>
-          <h2>Kingdoms</h2>
+          <h2><i data-lucide="shield" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> Kingdoms</h2>
           <p>All your kingdoms in one place.</p>
         </div>
-        <div class="card-header-icon"><i data-lucide="shield"></i></div>
+        <div class="card-header-icon"><i data-lucide="layout-grid"></i></div>
       </div>
       {% if kingdoms %}
       <div class="kingdoms-grid">
@@ -181,10 +181,10 @@
     <div class="card kingdoms-create">
       <div class="card-header">
         <div>
-          <h2>New Kingdom</h2>
+          <h2><i data-lucide="plus-circle" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> New Kingdom</h2>
           <p>Launch a new kingdom.</p>
         </div>
-        <div class="card-header-icon"><i data-lucide="plus"></i></div>
+        <div class="card-header-icon"><i data-lucide="rocket"></i></div>
       </div>
       <form method="POST" action="{{ url_for('create_kingdom') }}">
         <div class="form-group">

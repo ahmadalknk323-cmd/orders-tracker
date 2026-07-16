@@ -61,10 +61,10 @@
   <div class="card">
     <div class="card-header">
       <div>
-        <h2>طلبية جديدة</h2>
+        <h2><i data-lucide="plus-circle" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> طلبية جديدة</h2>
         <p>أدخل بيانات الطلب بشكل واضح واحترافي.</p>
       </div>
-      <div class="card-header-icon"><i data-lucide="plus-circle"></i></div>
+      <div class="card-header-icon"><i data-lucide="file-plus"></i></div>
     </div>
     <form action="/kingdom/{{ kingdom.id }}/add" method="POST">
       <div class="form-row">
@@ -126,7 +126,7 @@
 <div class="card table-card">
   <div class="table-header">
     <div>
-      <h2>الطلبيات ({{ orders|length }})</h2>
+      <h2><i data-lucide="list" style="width:16px;height:16px;vertical-align:middle;opacity:.8"></i> الطلبيات ({{ orders|length }})</h2>
       <p>تابع حالة كل طلبية وأدارتها بسهولة.</p>
     </div>
     <form action="/kingdom/{{ kingdom.id }}/delete" method="POST" onsubmit="return confirm('حذف المملكه وكل طلبياتها؟')">
@@ -198,10 +198,10 @@
 <div class="card">
   <div class="card-header">
     <div>
-      <h2>الاحصائيات الشاملة</h2>
+      <h2><i data-lucide="bar-chart-3" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> الاحصائيات الشاملة</h2>
       <p>مؤشرات الأداء لكل الطلبات والعمليات.</p>
     </div>
-    <div class="card-header-icon"><i data-lucide="bar-chart-3"></i></div>
+    <div class="card-header-icon"><i data-lucide="trending-up"></i></div>
   </div>
   <div class="stats-grid">
     <div class="stat-card stat-all">
