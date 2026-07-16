@@ -564,8 +564,9 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: linear-gradient(135deg, rgba(251,191,36,.08) 0%, rgba(34,197,94,.05) 100%);
+  background: linear-gradient(135deg, rgba(251,191,36,.06) 0%, rgba(34,197,94,.03) 100%);
   border-color: var(--border-gold);
+  padding: 28px 20px;
 }
 
 .insight-label {
@@ -713,7 +714,7 @@ tbody tr.finished td.customer { color: var(--success) !important; }
 /* Empty state */
 .empty-state {
   text-align: center;
-  padding: 60px 24px;
+  padding: 56px 24px;
 }
 
 .empty-state.compact {
@@ -727,15 +728,18 @@ tbody tr.finished td.customer { color: var(--success) !important; }
 }
 
 .empty-state h3 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--text-bright);
   margin-bottom: 6px;
 }
 
 .empty-state p {
   font-size: 13px;
   color: var(--muted);
+  max-width: 300px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
 .no-data {
@@ -779,15 +783,17 @@ tbody tr.finished td.customer { color: var(--success) !important; }
 
 .stat-card {
   padding: 20px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   text-align: center;
   background: rgba(0,0,0,.2);
   border: 1px solid var(--border);
-  transition: border-color var(--transition);
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
 .stat-card:hover {
   border-color: var(--border-hover);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 .stat-label {
@@ -1100,9 +1106,9 @@ tbody tr.finished td.customer { color: var(--success) !important; }
 }
 
 .kingdom-tile:hover {
-  border-color: var(--border-gold);
-  box-shadow: 0 0 0 1px var(--gold-glow), var(--shadow-lg);
-  transform: translateY(-3px);
+  border-color: rgba(251,191,36,.25);
+  box-shadow: 0 0 0 1px rgba(251,191,36,.1), 0 12px 32px rgba(0,0,0,.35);
+  transform: translateY(-4px);
 }
 
 .kingdom-tile-top {
@@ -1163,6 +1169,130 @@ tbody tr.finished td.customer { color: var(--success) !important; }
   color: var(--muted-dim);
   padding-top: 12px;
   border-top: 1px solid var(--border);
+}
+
+/* ── Lucide Icon Sizes ── */
+.icon-xs { width: 12px; height: 12px; }
+.icon-sm { width: 18px; height: 18px; }
+.icon-nav { width: 18px; height: 18px; flex-shrink: 0; }
+.icon-btn { width: 14px; height: 14px; }
+.icon-label { width: 14px; height: 14px; vertical-align: -2px; }
+.icon-section { width: 28px; height: 28px; color: var(--muted-dim); }
+.icon-qs { width: 22px; height: 22px; }
+.icon-kingdom { width: 24px; height: 24px; }
+.icon-stat { width: 20px; height: 20px; }
+.icon-stat-sm { width: 13px; height: 13px; vertical-align: -2px; }
+.icon-stat-green { color: var(--success); }
+.icon-stat-amber { color: var(--warning); }
+.icon-empty { width: 48px; height: 48px; color: var(--muted-dim); }
+.icon-insight { width: 32px; height: 32px; color: var(--gold); }
+.icon-fab { width: 20px; height: 20px; }
+.icon-th { width: 13px; height: 13px; vertical-align: -2px; opacity: .7; }
+.icon-modal-close { width: 22px; height: 22px; }
+
+/* ── Section Head Row ── */
+.section-head-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-head-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* ── Quick Stat Icon Boxes ── */
+.icon-box {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+}
+
+.icon-box-gold {
+  background: rgba(251,191,36,.08);
+  border: 1px solid rgba(251,191,36,.12);
+  color: var(--gold);
+}
+
+.icon-box-green {
+  background: rgba(34,197,94,.08);
+  border: 1px solid rgba(34,197,94,.12);
+  color: var(--success);
+}
+
+.icon-box-blue {
+  background: rgba(99,102,241,.08);
+  border: 1px solid rgba(99,102,241,.12);
+  color: #818CF8;
+}
+
+.icon-box-amber {
+  background: rgba(245,158,11,.08);
+  border: 1px solid rgba(245,158,11,.12);
+  color: var(--warning);
+}
+
+/* ── Kingdom Tile Icon ── */
+.kingdom-tile-icon-wrap {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  background: var(--gold-glow);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius);
+  color: var(--gold);
+}
+
+.kingdom-tile:hover .kingdom-tile-icon-wrap {
+  background: rgba(251,191,36,.15);
+  box-shadow: 0 0 16px rgba(251,191,36,.1);
+}
+
+/* ── Empty State Icon ── */
+.empty-state-icon-wrap {
+  width: 80px;
+  height: 80px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  margin: 0 auto 16px;
+}
+
+/* ── Insight Icon ── */
+.insight-icon-wrap {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  background: rgba(251,191,36,.1);
+  border: 1px solid rgba(251,191,36,.12);
+  border-radius: var(--radius-lg);
+  margin-bottom: 12px;
+}
+
+/* ── Stat Header ── */
+.stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
 }
 
 /* ── Logo Placeholder ── */

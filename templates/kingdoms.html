@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TRSS Kingdom Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle" hidden>
@@ -19,17 +20,13 @@
                 </div>
             </div>
             <label for="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Collapse sidebar">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="4" y1="7" x2="20" y2="7"></line>
-                    <line x1="4" y1="12" x2="20" y2="12"></line>
-                    <line x1="4" y1="17" x2="20" y2="17"></line>
-                </svg>
+                <i data-lucide="menu" class="icon-sm"></i>
             </label>
         </div>
 
         <nav class="sidebar-nav">
             <a class="sidebar-nav-item active" href="/">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg>
+                <i data-lucide="castle" class="icon-nav"></i>
                 <span>الممالك</span>
             </a>
         </nav>
@@ -62,28 +59,36 @@
 
         <div class="quick-stats">
             <div class="quick-stat-card">
-                <div class="quick-stat-icon">📦</div>
+                <div class="quick-stat-icon icon-box icon-box-gold">
+                    <i data-lucide="package" class="icon-qs"></i>
+                </div>
                 <div class="quick-stat-info">
                     <div class="quick-stat-num">{{ orders_today }}</div>
                     <div class="quick-stat-label">Orders Today</div>
                 </div>
             </div>
             <div class="quick-stat-card">
-                <div class="quick-stat-icon">💰</div>
+                <div class="quick-stat-icon icon-box icon-box-green">
+                    <i data-lucide="banknote" class="icon-qs"></i>
+                </div>
                 <div class="quick-stat-info">
                     <div class="quick-stat-num">{{ total_revenue|number_format }} $</div>
                     <div class="quick-stat-label">Revenue</div>
                 </div>
             </div>
             <div class="quick-stat-card">
-                <div class="quick-stat-icon">👥</div>
+                <div class="quick-stat-icon icon-box icon-box-blue">
+                    <i data-lucide="users" class="icon-qs"></i>
+                </div>
                 <div class="quick-stat-info">
                     <div class="quick-stat-num">{{ total_customers }}</div>
                     <div class="quick-stat-label">Customers</div>
                 </div>
             </div>
             <div class="quick-stat-card">
-                <div class="quick-stat-icon">⏳</div>
+                <div class="quick-stat-icon icon-box icon-box-amber">
+                    <i data-lucide="clock" class="icon-qs"></i>
+                </div>
                 <div class="quick-stat-info">
                     <div class="quick-stat-num">{{ pending_orders }}</div>
                     <div class="quick-stat-label">Pending Orders</div>
@@ -93,8 +98,13 @@
 
         <div class="card-3d kingdoms-create">
             <div class="section-head">
-                <h2>مملكه جديدة</h2>
-                <p>انشئ مملكه جديده لبدء ادارة الطلبيات.</p>
+                <div class="section-head-row">
+                    <div>
+                        <h2>مملكه جديدة</h2>
+                        <p>انشئ مملكه جديده لبدء ادارة الطلبيات.</p>
+                    </div>
+                    <div class="section-head-icon"><i data-lucide="plus-circle" class="icon-section"></i></div>
+                </div>
             </div>
             <form action="/kingdom/new" method="POST">
                 <div class="form-row">
@@ -103,7 +113,7 @@
                         <input type="text" name="name" required placeholder="مثلا: مملكه الصاعقة، حلف الظلام...">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-add">+ اضافة مملكه</button>
+                <button type="submit" class="btn btn-add"><i data-lucide="plus" class="icon-btn"></i> اضافة مملكه</button>
             </form>
         </div>
 
@@ -112,8 +122,10 @@
             {% for k in kingdoms %}
             <a href="/kingdom/{{ k.id }}" class="kingdom-tile">
                 <div class="kingdom-tile-top">
-                    <div class="kingdom-tile-icon">👑</div>
-                    <div class="kingdom-tile-arrow">←</div>
+                    <div class="kingdom-tile-icon-wrap">
+                        <i data-lucide="castle" class="icon-kingdom"></i>
+                    </div>
+                    <div class="kingdom-tile-arrow"><i data-lucide="arrow-left" class="icon-sm"></i></div>
                 </div>
                 <div class="kingdom-tile-name">{{ k.name }}</div>
                 <div class="kingdom-tile-stats">
@@ -126,13 +138,15 @@
                         <span class="kingdom-tile-stat-label">الثمن</span>
                     </div>
                 </div>
-                <div class="kingdom-tile-date">{{ k.created_at }}</div>
+                <div class="kingdom-tile-date"><i data-lucide="calendar" class="icon-xs"></i> {{ k.created_at }}</div>
             </a>
             {% endfor %}
         </div>
         {% else %}
         <div class="empty-state">
-            <div class="empty-icon">⚔️</div>
+            <div class="empty-state-icon-wrap">
+                <i data-lucide="castle" class="icon-empty"></i>
+            </div>
             <h3>ما في ممالك بعد</h3>
             <p>ابدأ بإنشاء مملكه جديدة لتبدأ رحلتك.</p>
         </div>
@@ -140,5 +154,6 @@
     </main>
 </div>
 
+<script>lucide.createIcons();</script>
 </body>
 </html>
