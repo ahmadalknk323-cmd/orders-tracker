@@ -22,14 +22,14 @@
   </div>
   <nav class="sidebar-nav">
     <div class="sidebar-section">
-      <div class="sidebar-section-title">Main</div>
+      <div class="sidebar-section-title">الرئيسية</div>
       <a href="{{ url_for('index') }}" class="sidebar-link active">
         <i data-lucide="layout-dashboard"></i>
-        <span>All Kingdoms</span>
+        <span>الممالك</span>
       </a>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-section-title">Navigation</div>
+      <div class="sidebar-section-title">التنقل</div>
       {% for k in kingdoms %}
       <a href="{{ url_for('index', kingdom_id=k.id) }}" class="sidebar-link">
         <i data-lucide="shield"></i>
@@ -41,7 +41,7 @@
     <div class="sidebar-section">
       <a href="#" class="sidebar-link" style="color:var(--muted-dim);pointer-events:none;opacity:.5">
         <i data-lucide="inbox"></i>
-        <span>No kingdoms yet</span>
+        <span>لا توجد ممالك بعد</span>
       </a>
     </div>
     {% endif %}
@@ -49,7 +49,7 @@
   <div class="sidebar-footer">
     <div class="sidebar-footer-card">
       <h4>TRSS Kingdom Manager</h4>
-      <p>Organize your kingdoms. Track resources. Dominate.</p>
+      <p>نظّم ممالكك. تابع الموارد. سيطر.</p>
     </div>
   </div>
 </aside>
@@ -61,11 +61,11 @@
 <header class="topbar">
   <div class="topbar-left">
     <label for="sidebar-toggle" class="sidebar-toggle-btn"><i data-lucide="menu"></i></label>
-    <span class="topbar-title">All Kingdoms</span>
+    <span class="topbar-title">الممالك</span>
   </div>
   <div class="topbar-right">
-    <span class="topbar-pill"><i data-lucide="shield" style="width:12px;height:12px"></i> {{ kingdoms|length }} Kingdom{{ 's' if kingdoms|length != 1 }}</span>
-    <span class="topbar-pill"><span class="status-dot"></span> Active</span>
+    <span class="topbar-pill"><i data-lucide="shield" style="width:12px;height:12px"></i> {{ kingdoms|length }} مملك{{ 'ة' if kingdoms|length != 1 else 'ات' }}</span>
+    <span class="topbar-pill"><span class="status-dot"></span> نشط</span>
     <div class="topbar-avatar">TRSS</div>
   </div>
 </header>
@@ -77,23 +77,23 @@
 <div class="hero-banner">
   <div class="hero-content">
     <span class="hero-badge"><i data-lucide="crown" style="width:11px;height:11px"></i> TRSS</span>
-    <h1 class="hero-title">Kingdom Manager</h1>
-    <p class="hero-subtitle">Manage your kingdoms like a commander.</p>
+    <h1 class="hero-title">TRSS Kingdom Manager</h1>
+    <p class="hero-subtitle">نظّم ممالكك كالقائد الأعلى.</p>
   </div>
   <div class="hero-stats">
-    <div class="hero-stat">
+      <div class="hero-stat">
       <div class="hero-stat-num">{{ kingdoms|length }}</div>
-      <div class="hero-stat-label">Kingdoms</div>
+      <div class="hero-stat-label">الممالك</div>
     </div>
     <div class="hero-stat-div"></div>
     <div class="hero-stat">
       <div class="hero-stat-num">{{ total_orders }}</div>
-      <div class="hero-stat-label">Total Orders</div>
+      <div class="hero-stat-label">اجمالي الطلبات</div>
     </div>
     <div class="hero-stat-div"></div>
     <div class="hero-stat">
       <div class="hero-stat-num">{{ total_revenue }}</div>
-      <div class="hero-stat-label">Total Revenue</div>
+      <div class="hero-stat-label">اجمالي الايرادات</div>
     </div>
   </div>
 </div>
@@ -104,28 +104,28 @@
     <div class="qs-icon qs-icon-gold"><i data-lucide="package-plus"></i></div>
     <div>
       <div class="qs-num">{{ orders_today }}</div>
-      <div class="qs-label">Orders Today</div>
+      <div class="qs-label">طلبات اليوم</div>
     </div>
   </div>
   <div class="qs-card">
     <div class="qs-icon qs-icon-green"><i data-lucide="banknote"></i></div>
     <div>
       <div class="qs-num">{{ total_revenue }}</div>
-      <div class="qs-label">Revenue</div>
+      <div class="qs-label">الايرادات</div>
     </div>
   </div>
   <div class="qs-card">
     <div class="qs-icon qs-icon-blue"><i data-lucide="users"></i></div>
     <div>
       <div class="qs-num">{{ total_customers }}</div>
-      <div class="qs-label">Customers</div>
+      <div class="qs-label">الزبائن</div>
     </div>
   </div>
   <div class="qs-card">
     <div class="qs-icon qs-icon-amber"><i data-lucide="clock"></i></div>
     <div>
       <div class="qs-num">{{ pending_orders }}</div>
-      <div class="qs-label">Pending Orders</div>
+      <div class="qs-label">طلبات معلقة</div>
     </div>
   </div>
 </div>
@@ -136,8 +136,8 @@
     <div class="card">
       <div class="card-header">
         <div>
-          <h2><i data-lucide="shield" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> Kingdoms</h2>
-          <p>All your kingdoms in one place.</p>
+          <h2><i data-lucide="shield" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> الممالك</h2>
+          <p>جميع ممالكك في مكان واحد.</p>
         </div>
         <div class="card-header-icon"><i data-lucide="layout-grid"></i></div>
       </div>
@@ -153,11 +153,11 @@
           <div class="kingdom-tile-meta">
             <div class="kingdom-tile-stat">
               <strong>{{ k.order_count or 0 }}</strong>
-              <span>Orders</span>
+              <span>طلبات</span>
             </div>
             <div class="kingdom-tile-stat">
               <strong>${{ k.total_revenue or 0 }}</strong>
-              <span>Revenue</span>
+              <span>الايرادات</span>
             </div>
           </div>
           <div class="kingdom-tile-date">
@@ -170,8 +170,8 @@
       {% else %}
       <div class="empty-state">
         <div class="empty-state-icon"><i data-lucide="shield-off"></i></div>
-        <h3>No kingdoms yet</h3>
-        <p>Create your first kingdom to start tracking orders and resources.</p>
+        <h3>لا توجد ممالك بعد</h3>
+        <p>أنشئ مملكتك الأولى لبدء تتبع الطلبات والموارد.</p>
       </div>
       {% endif %}
     </div>
@@ -181,18 +181,18 @@
     <div class="card kingdoms-create">
       <div class="card-header">
         <div>
-          <h2><i data-lucide="plus-circle" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> New Kingdom</h2>
-          <p>Launch a new kingdom.</p>
+          <h2><i data-lucide="plus-circle" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> مملكة جديدة</h2>
+          <p>أنشئ مملكة جديدة.</p>
         </div>
         <div class="card-header-icon"><i data-lucide="rocket"></i></div>
       </div>
       <form method="POST" action="{{ url_for('new_kingdom') }}">
         <div class="form-group">
-          <label>Kingdom Name</label>
-          <input type="text" name="name" required placeholder="e.g. Kingdom 4127"/>
+          <label>اسم المملكة</label>
+          <input type="text" name="name" required placeholder="مثال: مملكة 4127"/>
         </div>
         <button type="submit" class="btn btn-primary">
-          <i data-lucide="plus" style="width:14px;height:14px"></i> Create Kingdom
+          <i data-lucide="plus" style="width:14px;height:14px"></i> انشاء مملكة
         </button>
       </form>
     </div>

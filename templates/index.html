@@ -25,14 +25,14 @@
       <div class="sidebar-section-title">Navigation</div>
       <a href="{{ url_for('index') }}" class="sidebar-link">
         <i data-lucide="layout-dashboard"></i>
-        <span>All Kingdoms</span>
+        <span>الممالك</span>
       </a>
     </div>
   </nav>
   <div class="sidebar-footer">
     <div class="sidebar-footer-card">
       <h4>{{ kingdom.name }}</h4>
-      <p>Manage orders and track resources for this kingdom.</p>
+      <p>تابع الطلبات والتقدم اليومي للمملكه بكل وضوح.</p>
     </div>
   </div>
 </aside>
@@ -47,8 +47,8 @@
     <span class="topbar-title">{{ kingdom.name }}</span>
   </div>
   <div class="topbar-right">
-    <span class="topbar-pill"><i data-lucide="package" style="width:12px;height:12px"></i> {{ orders|length }} Orders</span>
-    <span class="topbar-pill"><span class="status-dot"></span> Live</span>
+    <span class="topbar-pill"><i data-lucide="package" style="width:12px;height:12px"></i> {{ orders|length }} طلبية</span>
+    <span class="topbar-pill"><span class="status-dot"></span> مباشر</span>
     <div class="topbar-avatar">TRSS</div>
   </div>
 </header>
