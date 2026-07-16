@@ -44,7 +44,7 @@
 }
 
 html{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased}
-html,body{min-height:100vh;background:var(--bg-body);color:var(--text)}
+html,body{min-height:100vh;color:var(--text)}
 
 body{background:
   linear-gradient(rgba(15,23,42,0.82),rgba(17,24,39,0.82),rgba(30,41,59,0.88)),
