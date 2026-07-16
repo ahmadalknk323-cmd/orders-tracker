@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orders Tracker - ممالك</title>
+    <title>TRSS Kingdom Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -15,7 +15,7 @@
                 <div class="brand-mark">TR</div>
                 <div class="brand-text">
                     <div class="brand-title">TRSS</div>
-                    <div class="brand-subtitle">Orders Suite</div>
+                    <div class="brand-subtitle">Kingdom Manager</div>
                 </div>
             </div>
             <label for="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Collapse sidebar">
@@ -41,13 +41,30 @@
     </aside>
 
     <main class="main-panel">
-        <div class="kingdoms-page-header">
-            <h1><span class="accent">Orders Tracker</span></h1>
-            <p>اختر مملكه لإدارة الطلبيات</p>
+        <div class="hero-dashboard">
+            <div class="hero-content">
+                <div class="hero-badge">TRSS</div>
+                <h1 class="hero-title">Kingdom Manager</h1>
+                <p class="hero-subtitle">Manage your kingdom like a commander.</p>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-number">{{ kingdoms|length }}</div>
+                    <div class="hero-stat-label">Active Kingdom{{ 's' if kingdoms|length != 1 else '' }}</div>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">{% set total = [] %}{% for k in kingdoms %}{% if total.append(k.count) %}{% endif %}{% endfor %}{{ total|sum }}</div>
+                    <div class="hero-stat-label">Total Orders</div>
+                </div>
+            </div>
         </div>
 
         <div class="card-3d kingdoms-create">
-            <h2>مملكه جديدة</h2>
+            <div class="section-head">
+                <h2>مملكه جديدة</h2>
+                <p>انشئ مملكه جديده لبدء ادارة الطلبيات.</p>
+            </div>
             <form action="/kingdom/new" method="POST">
                 <div class="form-row">
                     <div class="form-group full">
@@ -55,31 +72,38 @@
                         <input type="text" name="name" required placeholder="مثلا: مملكه الصاعقة، حلف الظلام...">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-add">اضافة مملكه</button>
+                <button type="submit" class="btn btn-add">+ اضافة مملكه</button>
             </form>
         </div>
 
         {% if kingdoms %}
-        <div class="kingdoms-list">
+        <div class="kingdoms-grid">
             {% for k in kingdoms %}
-            <a href="/kingdom/{{ k.id }}" class="kingdom-card">
-                <div class="kingdom-info">
-                    <div class="kingdom-name">{{ k.name }}</div>
-                    <div class="kingdom-meta">
-                        <span>📦 {{ k.count }} طلبية</span>
-                        <span>💰 {{ k.total_price|number_format }} $</span>
-                        <span>📅 {{ k.created_at }}</span>
+            <a href="/kingdom/{{ k.id }}" class="kingdom-tile">
+                <div class="kingdom-tile-top">
+                    <div class="kingdom-tile-icon">👑</div>
+                    <div class="kingdom-tile-arrow">←</div>
+                </div>
+                <div class="kingdom-tile-name">{{ k.name }}</div>
+                <div class="kingdom-tile-stats">
+                    <div class="kingdom-tile-stat">
+                        <span class="kingdom-tile-stat-num">{{ k.count }}</span>
+                        <span class="kingdom-tile-stat-label">طلبية</span>
+                    </div>
+                    <div class="kingdom-tile-stat">
+                        <span class="kingdom-tile-stat-num">{{ k.total_price|number_format }} $</span>
+                        <span class="kingdom-tile-stat-label">الثمن</span>
                     </div>
                 </div>
-                <div class="kingdom-arrow">←</div>
+                <div class="kingdom-tile-date">{{ k.created_at }}</div>
             </a>
             {% endfor %}
         </div>
         {% else %}
         <div class="empty-state">
-            <div class="empty-icon">👑</div>
+            <div class="empty-icon">⚔️</div>
             <h3>ما في ممالك بعد</h3>
-            <p>اضف مملكه جديدة لبدء تتبع الطلبيات.</p>
+            <p>ابدأ بإنشاء مملكه جديدة لتبدأ رحلتك.</p>
         </div>
         {% endif %}
     </main>
