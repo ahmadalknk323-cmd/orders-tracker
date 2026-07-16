@@ -7,156 +7,231 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
-<div class="container">
-    <header>
-        <a href="/" class="back-btn">الممالك</a>
-        <h1>{{ kingdom.name }}</h1>
-        <p>سجل الطلبيات</p>
-    </header>
-
-    <div class="add-form card-3d">
-        <h2>طلبية جديدة</h2>
-        <form action="/kingdom/{{ kingdom.id }}/add" method="POST">
-            <div class="form-row">
-                <div class="form-group full">
-                    <label>اسم الزبون</label>
-                    <input type="text" name="customer_name" required placeholder="اسم الزبون">
+<input type="checkbox" id="sidebar-toggle" class="sidebar-toggle" hidden>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="brand">
+                <div class="brand-mark">TR</div>
+                <div class="brand-text">
+                    <div class="brand-title">TRSS</div>
+                    <div class="brand-subtitle">Orders Suite</div>
                 </div>
             </div>
-            <div class="form-row resources">
-                <div class="form-group resource-food">
-                    <label>ذره</label>
-                    <input type="number" name="food" value="0" min="0">
-                </div>
-                <div class="form-group resource-wood">
-                    <label>خشب</label>
-                    <input type="number" name="wood" value="0" min="0">
-                </div>
-                <div class="form-group resource-stone">
-                    <label>حجر</label>
-                    <input type="number" name="stone" value="0" min="0">
-                </div>
-                <div class="form-group resource-gold">
-                    <label>ذهب</label>
-                    <input type="number" name="gold" value="0" min="0">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>ثمن الاوردر</label>
-                    <input type="number" name="price" value="0" step="0.01" min="0">
-                </div>
-                <div class="form-group">
-                    <label>نوعية الدفع</label>
-                    <input type="text" name="payment_type" placeholder="اكتب هنا...">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group full">
-                    <label>ملاحظات</label>
-                    <input type="text" name="notes" placeholder="ملاحظات (اختياري)">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-add">اضافة طلبية</button>
-        </form>
-    </div>
-
-    <div class="orders-table card-3d">
-        <div class="orders-header">
-            <h2>الطلبيات ({{ orders|length }})</h2>
-            <form action="/kingdom/{{ kingdom.id }}/delete" method="POST" onsubmit="return confirm('حذف المملكه وكل طلبياتها؟')">
-                <button type="submit" class="btn btn-delete">حذف المملكه</button>
-            </form>
+            <label for="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Collapse sidebar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="7" x2="20" y2="7"></line>
+                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                    <line x1="4" y1="17" x2="20" y2="17"></line>
+                </svg>
+            </label>
         </div>
-        {% if orders %}
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>الزبون</th>
-                    <th>ذره</th>
-                    <th>خشب</th>
-                    <th>حجر</th>
-                    <th>ذهب</th>
-                    <th>الثمن</th>
-                    <th>الدفع</th>
-                    <th>ملاحظات</th>
-                    <th>التاريخ</th>
-                    <th>اجراء</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                <tr class="{{ 'finished' if order.status == 'finished' else '' }}">
-                    <td class="row-num">{{ loop.index }}</td>
-                    <td class="customer">{{ order.customer_name }}</td>
-                    <td class="food">{{ order.food|number_format }}</td>
-                    <td class="wood">{{ order.wood|number_format }}</td>
-                    <td class="stone">{{ order.stone|number_format }}</td>
-                    <td class="gold">{{ order.gold|number_format }}</td>
-                    <td class="price">{{ "%.2f"|format(order.price) }} $</td>
-                    <td class="payment">{{ order.payment_type }}</td>
-                    <td class="notes-cell">{{ order.notes }}</td>
-                    <td class="date">{{ order.created_at }}</td>
-                    <td class="actions">
-                        <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
-                            {% if order.status == 'finished' %}
-                            <button type="submit" class="btn btn-active">منتهي</button>
-                            {% else %}
-                            <button type="submit" class="btn btn-finish">انتهت</button>
-                            {% endif %}
-                        </form>
-                        <button class="btn btn-copy" onclick="copyOrder({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')">نسخ</button>
-                        <button class="btn btn-edit" onclick="openEdit({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')">تعديل</button>
-                        <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
-                            <button type="submit" class="btn btn-delete">حذف</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p class="no-data">ما في طلبيات بعد</p>
-        {% endif %}
-    </div>
 
-    <div class="stats-section">
-        <h2 class="stats-title">الاحصائيات الشاملة</h2>
-        <div class="stats-grid">
-            <div class="stat-card stat-all card-3d">
-                <div class="stat-label">الكل ( {{ stats.all[5] }} طلبية )</div>
-                <div class="stat-row">
-                    <span class="stat-food">{{ stats.all[0]|number_format }} ذره</span>
-                    <span class="stat-wood">{{ stats.all[1]|number_format }} خشب</span>
-                    <span class="stat-stone">{{ stats.all[2]|number_format }} حجر</span>
-                    <span class="stat-gold">{{ stats.all[3]|number_format }} ذهب</span>
-                    <span class="stat-price">{{ stats.all[4]|number_format }} $</span>
-                </div>
-            </div>
-            <div class="stat-card stat-finished card-3d">
-                <div class="stat-label">منتهية ( {{ stats.finished[5] }} طلبية )</div>
-                <div class="stat-row">
-                    <span class="stat-food">{{ stats.finished[0]|number_format }} ذره</span>
-                    <span class="stat-wood">{{ stats.finished[1]|number_format }} خشب</span>
-                    <span class="stat-stone">{{ stats.finished[2]|number_format }} حجر</span>
-                    <span class="stat-gold">{{ stats.finished[3]|number_format }} ذهب</span>
-                    <span class="stat-price">{{ stats.finished[4]|number_format }} $</span>
-                </div>
-            </div>
-            <div class="stat-card stat-active card-3d">
-                <div class="stat-label">قيد التنفيذ ( {{ stats.active[5] }} طلبية )</div>
-                <div class="stat-row">
-                    <span class="stat-food">{{ stats.active[0]|number_format }} ذره</span>
-                    <span class="stat-wood">{{ stats.active[1]|number_format }} خشب</span>
-                    <span class="stat-stone">{{ stats.active[2]|number_format }} حجر</span>
-                    <span class="stat-gold">{{ stats.active[3]|number_format }} ذهب</span>
-                    <span class="stat-price">{{ stats.active[4]|number_format }} $</span>
-                </div>
-            </div>
+        <nav class="sidebar-nav">
+            <a class="sidebar-nav-item" href="/">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg>
+                <span>الممالك</span>
+            </a>
+            <a class="sidebar-nav-item active" href="#dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v7H4z"></path><path d="M13 4h7v4h-7z"></path><path d="M13 10h7v10h-7z"></path><path d="M4 13h7v7H4z"></path></svg>
+                <span>لوحة</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-card">
+            <div class="sidebar-card-title">مركز القيادة</div>
+            <p>تابع الطلبات والتقدم اليومي للمملكه بكل وضوح.</p>
+            <a class="sidebar-card-link" href="#orders">تصفح الطلبات</a>
         </div>
-    </div>
+    </aside>
+
+    <main class="main-panel" id="dashboard">
+        <header class="topbar">
+            <div>
+                <div class="topbar-label">لوحة التحكم</div>
+                <div class="topbar-title">{{ kingdom.name }}</div>
+            </div>
+            <div class="topbar-actions">
+                <div class="status-pill"><span class="status-dot"></span>Live</div>
+                <div class="avatar-pill">TR</div>
+            </div>
+        </header>
+
+        <section class="dashboard-grid">
+            <div class="card-3d add-form">
+                <div class="section-head">
+                    <div>
+                        <h2>طلبية جديدة</h2>
+                        <p>أدخل بيانات الطلب بشكل واضح واحترافي لإدارة المملكه بكفاءة.</p>
+                    </div>
+                </div>
+                <form action="/kingdom/{{ kingdom.id }}/add" method="POST">
+                    <div class="form-row">
+                        <div class="form-group full">
+                            <label>اسم الزبون</label>
+                            <input type="text" name="customer_name" required placeholder="اسم الزبون">
+                        </div>
+                    </div>
+                    <div class="form-row resources">
+                        <div class="form-group resource-food">
+                            <label>🌾 ذره</label>
+                            <input type="number" name="food" value="0" min="0">
+                        </div>
+                        <div class="form-group resource-wood">
+                            <label>🪵 خشب</label>
+                            <input type="number" name="wood" value="0" min="0">
+                        </div>
+                        <div class="form-group resource-stone">
+                            <label>🪨 حجر</label>
+                            <input type="number" name="stone" value="0" min="0">
+                        </div>
+                        <div class="form-group resource-gold">
+                            <label>🪙 ذهب</label>
+                            <input type="number" name="gold" value="0" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>ثمن الاوردر</label>
+                            <input type="number" name="price" value="0" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>نوعية الدفع</label>
+                            <input type="text" name="payment_type" placeholder="اكتب هنا...">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full">
+                            <label>ملاحظات</label>
+                            <input type="text" name="notes" placeholder="ملاحظات (اختياري)">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-add">اضافة طلبية</button>
+                </form>
+            </div>
+
+            <div class="card-3d insight-card">
+                <div class="insight-label">ملخص سريع</div>
+                <div class="insight-number">{{ orders|length }}</div>
+                <p class="insight-copy">طلبية مسجلة حالياً</p>
+                <div class="insight-pill">جاهز للتسليم</div>
+            </div>
+        </section>
+
+        <section class="card-3d orders-table" id="orders">
+            <div class="orders-header">
+                <div class="section-head compact">
+                    <div>
+                        <h2>الطلبيات ({{ orders|length }})</h2>
+                        <p>تابع حالة كل طلبية وأدارتها بسهولة.</p>
+                    </div>
+                </div>
+                <form action="/kingdom/{{ kingdom.id }}/delete" method="POST" onsubmit="return confirm('حذف المملكه وكل طلبياتها؟')">
+                    <button type="submit" class="btn btn-delete">حذف المملكه</button>
+                </form>
+            </div>
+            {% if orders %}
+            <div class="table-shell">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>الزبون</th>
+                            <th>🌾 ذره</th>
+                            <th>🪵 خشب</th>
+                            <th>🪨 حجر</th>
+                            <th>🪙 ذهب</th>
+                            <th>الثمن</th>
+                            <th>الدفع</th>
+                            <th>ملاحظات</th>
+                            <th>التاريخ</th>
+                            <th>اجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr class="{{ 'finished' if order.status == 'finished' else '' }}">
+                            <td class="row-num">{{ loop.index }}</td>
+                            <td class="customer">{{ order.customer_name }}</td>
+                            <td class="food">{{ order.food|number_format }}</td>
+                            <td class="wood">{{ order.wood|number_format }}</td>
+                            <td class="stone">{{ order.stone|number_format }}</td>
+                            <td class="gold">{{ order.gold|number_format }}</td>
+                            <td class="price">{{ "%.2f"|format(order.price) }} $</td>
+                            <td class="payment">{{ order.payment_type }}</td>
+                            <td class="notes-cell">{{ order.notes }}</td>
+                            <td class="date">{{ order.created_at }}</td>
+                            <td class="actions">
+                                <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
+                                    {% if order.status == 'finished' %}
+                                    <button type="submit" class="btn btn-active">منتهي</button>
+                                    {% else %}
+                                    <button type="submit" class="btn btn-finish">انتهت</button>
+                                    {% endif %}
+                                </form>
+                                <button class="btn btn-copy" onclick="copyOrder({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')">نسخ</button>
+                                <button class="btn btn-edit" onclick="openEdit({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')">تعديل</button>
+                                <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
+                                    <button type="submit" class="btn btn-delete">حذف</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state compact">
+                <div class="empty-icon">◆</div>
+                <h3>ما في طلبيات بعد</h3>
+                <p>ابدأ بإضافة طلبية جديدة لبدء تتبع الأداء.</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="stats-section">
+            <div class="section-head compact">
+                <div>
+                    <h2 class="stats-title">الاحصائيات الشاملة</h2>
+                    <p>مؤشرات الأداء لكل الطلبات والعمليات.</p>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card stat-all card-3d">
+                    <div class="stat-label">الكل ( {{ stats.all[5] }} طلبية )</div>
+                    <div class="stat-row">
+                        <span class="stat-food">{{ stats.all[0]|number_format }} ذره</span>
+                        <span class="stat-wood">{{ stats.all[1]|number_format }} خشب</span>
+                        <span class="stat-stone">{{ stats.all[2]|number_format }} حجر</span>
+                        <span class="stat-gold">{{ stats.all[3]|number_format }} ذهب</span>
+                        <span class="stat-price">{{ stats.all[4]|number_format }} $</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-finished card-3d">
+                    <div class="stat-label">منتهية ( {{ stats.finished[5] }} طلبية )</div>
+                    <div class="stat-row">
+                        <span class="stat-food">{{ stats.finished[0]|number_format }} ذره</span>
+                        <span class="stat-wood">{{ stats.finished[1]|number_format }} خشب</span>
+                        <span class="stat-stone">{{ stats.finished[2]|number_format }} حجر</span>
+                        <span class="stat-gold">{{ stats.finished[3]|number_format }} ذهب</span>
+                        <span class="stat-price">{{ stats.finished[4]|number_format }} $</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-active card-3d">
+                    <div class="stat-label">قيد التنفيذ ( {{ stats.active[5] }} طلبية )</div>
+                    <div class="stat-row">
+                        <span class="stat-food">{{ stats.active[0]|number_format }} ذره</span>
+                        <span class="stat-wood">{{ stats.active[1]|number_format }} خشب</span>
+                        <span class="stat-stone">{{ stats.active[2]|number_format }} حجر</span>
+                        <span class="stat-gold">{{ stats.active[3]|number_format }} ذهب</span>
+                        <span class="stat-price">{{ stats.active[4]|number_format }} $</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <a href="#dashboard" class="fab" aria-label="Back to top">↑</a>
+    </main>
 </div>
 
 <div id="editModal" class="modal" style="display:none">
@@ -172,19 +247,19 @@
             </div>
             <div class="form-row resources">
                 <div class="form-group resource-food">
-                    <label>ذره</label>
+                    <label>🌾 ذره</label>
                     <input type="number" name="food" id="edit_food" min="0">
                 </div>
                 <div class="form-group resource-wood">
-                    <label>خشب</label>
+                    <label>🪵 خشب</label>
                     <input type="number" name="wood" id="edit_wood" min="0">
                 </div>
                 <div class="form-group resource-stone">
-                    <label>حجر</label>
+                    <label>🪨 حجر</label>
                     <input type="number" name="stone" id="edit_stone" min="0">
                 </div>
                 <div class="form-group resource-gold">
-                    <label>ذهب</label>
+                    <label>🪙 ذهب</label>
                     <input type="number" name="gold" id="edit_gold" min="0">
                 </div>
             </div>
@@ -222,19 +297,19 @@
             </div>
             <div class="form-row resources">
                 <div class="form-group resource-food">
-                    <label>ذره</label>
+                    <label>🌾 ذره</label>
                     <input type="number" name="food" id="copy_food" min="0">
                 </div>
                 <div class="form-group resource-wood">
-                    <label>خشب</label>
+                    <label>🪵 خشب</label>
                     <input type="number" name="wood" id="copy_wood" min="0">
                 </div>
                 <div class="form-group resource-stone">
-                    <label>حجر</label>
+                    <label>🪨 حجر</label>
                     <input type="number" name="stone" id="copy_stone" min="0">
                 </div>
                 <div class="form-group resource-gold">
-                    <label>ذهب</label>
+                    <label>🪙 ذهب</label>
                     <input type="number" name="gold" id="copy_gold" min="0">
                 </div>
             </div>
@@ -258,7 +333,6 @@
         </form>
     </div>
 </div>
-
 <script>
 var kid = {{ kingdom.id }};
 

@@ -7,45 +7,82 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
-<div class="container">
-    <header>
-        <h1>Orders Tracker</h1>
-        <p>اختر مملكه</p>
-    </header>
-
-    <div class="kingdoms-form card-3d">
-        <h2>مملكه جديدة</h2>
-        <form action="/kingdom/new" method="POST">
-            <div class="form-row">
-                <div class="form-group full">
-                    <label>اسم المملكه</label>
-                    <input type="text" name="name" required placeholder="مثلا: مملكه الصاعقة، حلف الظلام...">
+<input type="checkbox" id="sidebar-toggle" class="sidebar-toggle" hidden>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="brand">
+                <div class="brand-mark">TR</div>
+                <div class="brand-text">
+                    <div class="brand-title">TRSS</div>
+                    <div class="brand-subtitle">Orders Suite</div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-add">اضافة مملكه</button>
-        </form>
-    </div>
+            <label for="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Collapse sidebar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="7" x2="20" y2="7"></line>
+                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                    <line x1="4" y1="17" x2="20" y2="17"></line>
+                </svg>
+            </label>
+        </div>
 
-    {% if kingdoms %}
-    <div class="kingdoms-list">
-        {% for k in kingdoms %}
-        <a href="/kingdom/{{ k.id }}" class="kingdom-card card-3d">
-            <div class="kingdom-info">
-                <div class="kingdom-name">{{ k.name }}</div>
-                <div class="kingdom-meta">
-                    <span>{{ k.count }} طلبية</span>
-                    <span>{{ k.total_price|number_format }} $</span>
-                    <span>{{ k.created_at }}</span>
+        <nav class="sidebar-nav">
+            <a class="sidebar-nav-item active" href="/">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg>
+                <span>الممالك</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-card">
+            <div class="sidebar-card-title">مركز القيادة</div>
+            <p>تابع الطلبات والتقدم اليومي لكل مملكه.</p>
+        </div>
+    </aside>
+
+    <main class="main-panel">
+        <div class="kingdoms-page-header">
+            <h1><span class="accent">Orders Tracker</span></h1>
+            <p>اختر مملكه لإدارة الطلبيات</p>
+        </div>
+
+        <div class="card-3d kingdoms-create">
+            <h2>مملكه جديدة</h2>
+            <form action="/kingdom/new" method="POST">
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label>اسم المملكه</label>
+                        <input type="text" name="name" required placeholder="مثلا: مملكه الصاعقة، حلف الظلام...">
+                    </div>
                 </div>
-            </div>
-            <div class="kingdom-arrow">&#8592;</div>
-        </a>
-        {% endfor %}
-    </div>
-    {% else %}
-    <p class="no-data">ما في ممالك بعد - اضف مملكه جديدة</p>
-    {% endif %}
+                <button type="submit" class="btn btn-add">اضافة مملكه</button>
+            </form>
+        </div>
+
+        {% if kingdoms %}
+        <div class="kingdoms-list">
+            {% for k in kingdoms %}
+            <a href="/kingdom/{{ k.id }}" class="kingdom-card">
+                <div class="kingdom-info">
+                    <div class="kingdom-name">{{ k.name }}</div>
+                    <div class="kingdom-meta">
+                        <span>📦 {{ k.count }} طلبية</span>
+                        <span>💰 {{ k.total_price|number_format }} $</span>
+                        <span>📅 {{ k.created_at }}</span>
+                    </div>
+                </div>
+                <div class="kingdom-arrow">←</div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">👑</div>
+            <h3>ما في ممالك بعد</h3>
+            <p>اضف مملكه جديدة لبدء تتبع الطلبيات.</p>
+        </div>
+        {% endif %}
+    </main>
 </div>
 
 </body>
