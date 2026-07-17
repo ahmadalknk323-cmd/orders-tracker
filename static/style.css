@@ -1316,3 +1316,412 @@ img{display:block;max-width:100%}
     display: inline-block;
     transition: transform 0.2s;
 }
+
+/* ── Glass Bubble Pro ── */
+.glass-bubble-pro {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3);
+    padding: 10px 20px;
+    color: white;
+    display: inline-block;
+}
+
+/* ═══════════════════════════════════════
+   GLASS BUBBLE PRO — Full Site Override
+   ═══════════════════════════════════════ */
+
+/* ── Cards ── */
+.card,
+.form-card,
+.table-card,
+.stat-card,
+.qs-card,
+.kingdom-tile,
+.insight-card,
+.modal-content,
+.premium-empty {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.18),
+    0 4px 6px rgba(0,0,0,0.25),
+    0 12px 40px rgba(15,23,42,.35);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+/* ── Form Inputs ── */
+.field-input-wrap input,
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.12),
+    0 2px 6px rgba(0,0,0,0.2);
+  border-radius:12px;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+}
+.field-input-wrap input:focus,
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.12),
+    0 0 0 3px rgba(59,130,246,.12),
+    0 4px 12px rgba(0,0,0,0.2);
+  background:rgba(255,255,255,.06);
+  border-color:rgba(59,130,246,.4);
+}
+.resource-field.food-field .field-input-wrap input:focus{box-shadow:inset 0 2px 4px rgba(255,255,255,.12),0 0 0 3px rgba(124,255,113,.08),0 4px 12px rgba(0,0,0,.2);border-color:rgba(124,255,113,.35)}
+.resource-field.wood-field .field-input-wrap input:focus{box-shadow:inset 0 2px 4px rgba(255,255,255,.12),0 0 0 3px rgba(255,154,82,.08),0 4px 12px rgba(0,0,0,.2);border-color:rgba(255,154,82,.35)}
+.resource-field.stone-field .field-input-wrap input:focus{box-shadow:inset 0 2px 4px rgba(255,255,255,.12),0 0 0 3px rgba(184,212,255,.08),0 4px 12px rgba(0,0,0,.2);border-color:rgba(184,212,255,.35)}
+.resource-field.gold-field .field-input-wrap input:focus{box-shadow:inset 0 2px 4px rgba(255,255,255,.12),0 0 0 3px rgba(255,213,74,.08),0 4px 12px rgba(0,0,0,.2);border-color:rgba(255,213,74,.35)}
+
+/* ── Buttons ── */
+.btn,
+.btn-primary,
+.btn-ghost,
+.btn-danger-ghost,
+.btn-gold-ghost,
+.btn-green-ghost,
+.btn-amber-ghost {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.2),
+    0 4px 6px rgba(0,0,0,0.3);
+}
+.form-submit {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.22),
+    0 4px 6px rgba(0,0,0,0.25),
+    0 8px 24px rgba(250,204,21,.22);
+}
+.form-submit:hover {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.3),
+    0 6px 10px rgba(0,0,0,0.3),
+    0 12px 32px rgba(250,204,21,.3);
+}
+
+/* ── Action Buttons (circular) ── */
+.action-btn {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.2),
+    0 4px 6px rgba(0,0,0,0.3);
+}
+.action-btn-edit:hover{box-shadow:inset 0 2px 4px rgba(255,255,255,.2),0 0 18px rgba(255,196,0,.25),0 4px 14px rgba(59,130,246,.12)}
+.action-btn-copy:hover{box-shadow:inset 0 2px 4px rgba(255,255,255,.2),0 0 18px rgba(255,196,0,.25),0 4px 14px rgba(139,92,246,.12)}
+.action-btn-delete:hover{box-shadow:inset 0 2px 4px rgba(255,255,255,.2),0 0 18px rgba(255,196,0,.25),0 4px 14px rgba(239,68,68,.12)}
+.action-btn-complete:hover{box-shadow:inset 0 2px 4px rgba(255,255,255,.2),0 0 18px rgba(255,196,0,.25),0 4px 14px rgba(34,197,94,.12)}
+
+/* ── Hero Buttons ── */
+.cmd-hero-btn,
+.hero-btn {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.2),
+    0 4px 6px rgba(0,0,0,0.3);
+}
+.cmd-hero-btn-gold {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.22),
+    0 4px 6px rgba(0,0,0,0.25),
+    0 4px 20px rgba(250,204,21,.2);
+}
+.cmd-hero-btn-outline {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.12),
+    0 4px 6px rgba(0,0,0,0.2);
+}
+.hero-btn-gold {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.22),
+    0 4px 6px rgba(0,0,0,0.25),
+    0 4px 24px rgba(250,204,21,.2);
+}
+.hero-btn-outline {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.12),
+    0 4px 6px rgba(0,0,0,0.2);
+}
+
+/* ── Badges & Pills ── */
+.payment-badge,
+.status-badge,
+.stats-trend,
+.table-count,
+.cmd-hero-badge,
+.hero-badge,
+.section-badge,
+.topbar-pill,
+.insight-pill,
+.customer-pill,
+.stats-toggle-btn {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.18),
+    0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  box-shadow:
+    inset -2px 0 4px rgba(255,255,255,0.06),
+    4px 0 32px rgba(15,23,42,.25);
+}
+.sidebar-link {
+  box-shadow:none;
+}
+.sidebar-link:hover {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.1),
+    0 2px 6px rgba(0,0,0,0.15);
+}
+.sidebar-link.active {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.12),
+    0 0 20px rgba(250,204,21,.06),
+    0 4px 12px rgba(0,0,0,0.2);
+}
+.sidebar-footer-card {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.12),
+    0 4px 8px rgba(0,0,0,0.2);
+}
+.sidebar-logo {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.22),
+    0 4px 16px rgba(250,204,21,.2),
+    0 6px 8px rgba(0,0,0,0.3);
+}
+
+/* ── Topbar ── */
+.topbar {
+  box-shadow:
+    inset 0 -2px 4px rgba(255,255,255,0.04),
+    0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* ── Stat Cards ── */
+.stat-card {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.14),
+    0 4px 6px rgba(0,0,0,0.2),
+    0 6px 20px rgba(15,23,42,.12);
+}
+.stat-trend {
+  box-shadow:
+    inset 0 1px 3px rgba(255,255,255,0.12),
+    0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* ── Quick Stat Cards ── */
+.qs-card {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.14),
+    0 4px 6px rgba(0,0,0,0.2),
+    0 6px 20px rgba(15,23,42,.2);
+}
+
+/* ── Kingdom Tiles ── */
+.kingdom-tile {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.14),
+    0 4px 6px rgba(0,0,0,0.2),
+    0 6px 20px rgba(15,23,42,.2);
+}
+.kingdom-tile:hover {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.18),
+    0 8px 16px rgba(0,0,0,0.3),
+    0 12px 40px rgba(15,23,42,.35);
+}
+.kingdom-tile-icon {
+  box-shadow:
+    inset 0 1px 3px rgba(255,255,255,0.12),
+    0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ── Insight Card ── */
+.insight-card {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.14),
+    0 4px 6px rgba(0,0,0,0.2),
+    0 6px 20px rgba(15,23,42,.2);
+}
+.insight-icon {
+  box-shadow:
+    inset 0 1px 3px rgba(255,255,255,0.14),
+    0 2px 6px rgba(0,0,0,0.2),
+    0 0 24px rgba(250,204,21,.08);
+}
+
+/* ── Command Center Hero Stat Cards ── */
+.cmd-hero-stat-card {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.14),
+    0 4px 6px rgba(0,0,0,0.2),
+    0 4px 14px rgba(15,23,42,.14);
+}
+.cmd-hero-stat-card:hover {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.2),
+    0 8px 16px rgba(0,0,0,0.3),
+    0 16px 36px rgba(15,23,42,.24);
+}
+
+/* ── Hero Fstats ── */
+.hero-fstat {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.14),
+    0 4px 6px rgba(0,0,0,0.2),
+    0 2px 8px rgba(15,23,42,.1);
+}
+.hero-fstat:hover {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.18),
+    0 8px 16px rgba(0,0,0,0.25),
+    0 8px 24px rgba(15,23,42,.15);
+}
+
+/* ── Hero Kingdom Count ── */
+.hero-kingdom-count {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.16),
+    0 4px 6px rgba(0,0,0,0.25);
+}
+
+/* ── Table Shell ── */
+.table-shell {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.08),
+    0 4px 6px rgba(0,0,0,0.2),
+    0 10px 35px rgba(15,23,42,.22);
+}
+.table-shell tbody tr {
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,0.06),
+    0 2px 6px rgba(0,0,0,0.15);
+}
+.table-shell tbody tr:hover {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.1),
+    0 4px 12px rgba(0,0,0,0.2),
+    0 4px 20px rgba(59,130,246,.1);
+}
+
+/* ── Modal ── */
+.modal-content {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.14),
+    0 8px 16px rgba(0,0,0,0.3),
+    0 24px 64px rgba(15,23,42,.5);
+}
+
+/* ── Stats Toggle ── */
+.stats-toggle-btn {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.12),
+    0 4px 6px rgba(0,0,0,0.2);
+}
+.stats-toggle-btn:hover {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.18),
+    0 4px 12px rgba(0,0,0,0.25),
+    0 2px 12px rgba(15,23,42,.15);
+}
+
+/* ── Topbar Avatar ── */
+.topbar-avatar {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.2),
+    0 2px 6px rgba(0,0,0,0.2),
+    0 2px 8px rgba(250,204,21,.15);
+}
+
+/* ── Empty State Icon ── */
+.empty-state-icon {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.1),
+    0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* ── Card Header Icon ── */
+.card-header-icon {
+  box-shadow:
+    inset 0 1px 3px rgba(255,255,255,0.1),
+    0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* ── Auth Page (login/register) ── */
+.auth-card {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.14),
+    0 8px 16px rgba(0,0,0,0.3),
+    0 24px 64px rgba(15,23,42,.5);
+}
+.auth-field input {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.1),
+    0 2px 6px rgba(0,0,0,0.2);
+}
+.auth-field input:focus {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.12),
+    0 0 0 3px rgba(250,204,21,.08),
+    0 4px 12px rgba(0,0,0,0.2);
+}
+.auth-submit {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.22),
+    0 4px 6px rgba(0,0,0,0.25),
+    0 4px 20px rgba(250,204,21,.2);
+}
+.auth-submit:hover {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.3),
+    0 6px 10px rgba(0,0,0,0.3),
+    0 8px 32px rgba(250,204,21,.3);
+}
+.auth-logo-icon {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.22),
+    0 4px 6px rgba(0,0,0,0.3),
+    0 8px 32px rgba(250,204,21,.25);
+}
+
+/* ── FAB ── */
+.fab {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.22),
+    0 4px 6px rgba(0,0,0,0.3),
+    0 4px 20px rgba(250,204,21,.2);
+}
+.fab:hover {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.3),
+    0 6px 10px rgba(0,0,0,0.3),
+    0 8px 28px rgba(250,204,21,.3);
+}
+
+/* ── Sidebar Toggle Button ── */
+.sidebar-toggle-btn {
+  box-shadow:
+    inset 0 1px 3px rgba(255,255,255,0.1),
+    0 2px 4px rgba(0,0,0,0.15);
+}
+.sidebar-toggle-btn:hover {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.14),
+    0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* ── Hero Banner ── */
+.hero-banner {
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.08),
+    0 4px 6px rgba(0,0,0,0.25),
+    var(--shadow-lg);
+}
