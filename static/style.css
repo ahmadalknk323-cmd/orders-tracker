@@ -805,9 +805,9 @@ img{display:block;max-width:100%}
 .table-shell tbody tr td:last-child{border-radius:0 14px 14px 0;padding-right:20px}
 .table-shell tbody tr td:only-child{border-radius:14px}
 
-.row-num{font-size:17px;color:#60A5FA;font-weight:700;letter-spacing:.02em;text-shadow:0 0 10px rgba(96,165,250,.2)}
-.customer{font-weight:600;color:#F8FAFC;font-size:15px}
-.customer-pill{
+.table-shell .row-num{font-size:17px;color:#60A5FA;font-weight:700;letter-spacing:.02em;text-shadow:0 0 10px rgba(96,165,250,.2)}
+.table-shell .customer{font-weight:600;color:#F8FAFC;font-size:15px}
+.table-shell .customer-pill{
   display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;
   background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#F8FAFC;font-size:13px;font-weight:600;
   text-shadow:none;backdrop-filter:blur(8px);
@@ -823,14 +823,14 @@ img{display:block;max-width:100%}
 .payment-default{background:rgba(99,102,241,.18);color:#A5B4FC;border:1px solid rgba(99,102,241,.25)}
 
 .food,.wood,.stone,.gold,.price{font-weight:700;font-size:17px;letter-spacing:.01em}
-.food{color:#22C55E;text-shadow:0 0 10px rgba(34,197,94,.2)}
-.wood{color:#C08457;text-shadow:0 0 10px rgba(192,132,87,.2)}
-.stone{color:#CBD5E1;text-shadow:0 0 10px rgba(203,213,225,.15)}
-.gold{color:#FBBF24;text-shadow:0 0 10px rgba(251,191,36,.2)}
-.price{color:#10B981;font-size:17px;font-weight:800;text-shadow:0 0 10px rgba(16,185,129,.15)}
+.table-shell .food{color:#22C55E!important;text-shadow:0 0 10px rgba(34,197,94,.2)}
+.table-shell .wood{color:#C08457!important;text-shadow:0 0 10px rgba(192,132,87,.2)}
+.table-shell .stone{color:#CBD5E1!important;text-shadow:0 0 10px rgba(203,213,225,.15)}
+.table-shell .gold{color:#FBBF24!important;text-shadow:0 0 10px rgba(251,191,36,.2)}
+.table-shell .price{color:#10B981;font-size:17px;font-weight:800;text-shadow:0 0 10px rgba(16,185,129,.15)}
 
-.notes-cell{max-width:140px;color:#94A3B8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px;font-weight:500;font-style:italic;text-shadow:0 0 6px rgba(148,163,184,.1)}
-.date{color:#93C5FD;font-size:15px;font-weight:600;text-shadow:0 0 8px rgba(147,197,253,.15)}
+.table-shell .notes-cell{max-width:140px;color:#94A3B8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px;font-weight:500;font-style:italic;text-shadow:0 0 6px rgba(148,163,184,.1)}
+.table-shell .date{color:#93C5FD;font-size:15px;font-weight:600;text-shadow:0 0 8px rgba(147,197,253,.15)}
 
 .actions{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:nowrap}
 .action-group{display:flex;align-items:center;gap:6px}
