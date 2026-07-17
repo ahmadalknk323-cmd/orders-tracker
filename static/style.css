@@ -1426,10 +1426,16 @@ img{display:block;max-width:100%}
     0 4px 6px rgba(0,0,0,0.3);
 }
 .cmd-hero-btn-gold {
+  background:linear-gradient(140deg,#FFD54A,#F59E0B,#D97706)!important;
+  color:#1A1A2E!important;
+  font-weight:800;
+  border:1px solid rgba(255,213,74,.35);
   box-shadow:
-    inset 0 2px 4px rgba(255,255,255,0.22),
-    0 4px 6px rgba(0,0,0,0.25),
-    0 4px 20px rgba(250,204,21,.2);
+    inset 0 2px 4px rgba(255,255,255,.3),
+    0 4px 6px rgba(0,0,0,.2),
+    0 4px 24px rgba(250,204,21,.35),
+    0 0 48px rgba(255,213,74,.12);
+  text-shadow:0 1px 1px rgba(255,255,255,.3);
 }
 .cmd-hero-btn-outline {
   box-shadow:
@@ -1925,56 +1931,44 @@ html,body,
    GLASS TYPOGRAPHY — BUTTONS
    ═══════════════════════════════════════ */
 
-/* Gold Button Text */
-.form-submit,
-.btn-primary,
-.cmd-hero-btn-gold,
-.hero-btn-gold,
-.auth-submit,
-.kingdoms-create .btn-primary{
-  background-image:none;
-  color:transparent;
-  background-color:linear-gradient(140deg,#F59E0B,#D97706);
-  background:linear-gradient(140deg,#F59E0B,#D97706);
-}
-
+/* Gold Button Text — keep bg, glossy dark text */
 .form-submit,
 .btn-primary,
 .cmd-hero-btn-gold,
 .hero-btn-gold,
 .auth-submit{
+  color:#0F1720;
+  text-shadow:0 1px 2px rgba(255,255,255,.25),0 -1px 1px rgba(0,0,0,.1);
   position:relative;
 }
-
 .form-submit > i, .form-submit > span,
-.btn-primary > i, .btn-primary > span{
-  filter:drop-shadow(0 1px 1px rgba(15,23,42,.2));
+.btn-primary > i, .btn-primary > span,
+.cmd-hero-btn-gold > i, .cmd-hero-btn-gold > span,
+.hero-btn-gold > i, .hero-btn-gold > span,
+.auth-submit > i, .auth-submit > span{
+  filter:drop-shadow(0 1px 1px rgba(255,255,255,.2));
 }
 
-/* Ghost Button Text */
+/* Ghost Buttons — preserve original bg */
 .btn-ghost,
 .btn-danger-ghost,
 .btn-gold-ghost,
 .btn-green-ghost,
 .btn-amber-ghost{
   position:relative;
+  text-shadow:0 0 6px rgba(255,255,255,.06);
 }
+.btn-ghost{color:#DCEBFF}
+.btn-danger-ghost{color:#FCA5A5}
+.btn-gold-ghost{color:#FFD54A}
+.btn-green-ghost{color:#86EFAC}
+.btn-amber-ghost{color:#FDE68A}
 
-.btn-ghost{
-  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
-}
-.btn-ghost:hover{
-  background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.04));
-}
-
-/* Hero Outline Button */
+/* Hero Outline Button — glass text */
 .cmd-hero-btn-outline,
 .hero-btn-outline{
-  background:rgba(255,255,255,.04);
-}
-.cmd-hero-btn-outline:hover,
-.hero-btn-outline:hover{
-  background:rgba(255,255,255,.08);
+  color:#DCEBFF;
+  text-shadow:0 0 8px rgba(220,235,255,.08);
 }
 
 /* Button Text Glow on Hover */
@@ -2148,14 +2142,13 @@ html,body,
   text-shadow:none;
 }
 
+/* Topbar Pill — glass text, preserve pill bg */
 .topbar-pill{
-  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  color:#B8D4FF;
+  text-shadow:0 0 6px rgba(184,212,255,.12);
 }
-.topbar-pill span{
-  background:linear-gradient(180deg,#DBEAFE 0%,#93C5FD 50%,#7BB8E8 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 1px 4px rgba(147,197,253,.12));
-  text-shadow:none;
+.topbar-pill i{
+  opacity:.7;
 }
 
 /* ═══════════════════════════════════════
@@ -2317,52 +2310,15 @@ html,body,
    GLASS TYPOGRAPHY — TABLE
    ═══════════════════════════════════════ */
 
-/* Table Header Text — Glowing Glass */
-.table-shell thead th{
-  background:linear-gradient(180deg,rgba(30,41,59,.95),rgba(30,41,59,.95))!important;
-  color:transparent;
-  background-clip:padding-box;
-}
-.th-food{
-  background:linear-gradient(180deg,#C6FFC0 0%,#7CFF71 40%,#4ADE80 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 2px 8px rgba(124,255,113,.25)) drop-shadow(0 0 16px rgba(74,222,128,.1));
-}
-.th-wood{
-  background:linear-gradient(180deg,#FFD4B0 0%,#FF9A52 40%,#FB923C 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 2px 8px rgba(255,154,82,.25)) drop-shadow(0 0 16px rgba(251,146,60,.1));
-}
-.th-stone{
-  background:linear-gradient(180deg,#E0EAFF 0%,#B8D4FF 40%,#93C5FD 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 2px 8px rgba(184,212,255,.2)) drop-shadow(0 0 16px rgba(147,197,253,.08));
-}
-.th-gold{
-  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 80%,#EAB308 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 2px 10px rgba(250,204,21,.28)) drop-shadow(0 0 18px rgba(234,179,8,.1));
-}
-.th-price{
-  background:linear-gradient(180deg,#D1FAE5 0%,#A7F3D0 30%,#6EE7B7 70%,#34D399 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 2px 8px rgba(52,211,153,.2)) drop-shadow(0 0 14px rgba(16,185,129,.1));
-}
-.th-payment{
-  background:linear-gradient(180deg,#EDE9FE 0%,#C4B5FD 40%,#A78BFA 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 2px 8px rgba(167,139,250,.2)) drop-shadow(0 0 14px rgba(139,92,246,.1));
-}
-.th-notes{
-  background:linear-gradient(180deg,#E0EAFF 0%,#BFDBFE 40%,#93C5FD 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 1px 5px rgba(147,197,253,.12));
-}
-.th-date{
-  background:linear-gradient(180deg,#DBEAFE 0%,#93C5FD 40%,#60A5FA 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 2px 8px rgba(96,165,250,.2));
-}
+/* Table Header Text — Glowing Glass (no background override) */
+.th-food{color:#7CFF71!important;text-shadow:0 0 12px rgba(124,255,113,.3),0 1px 2px rgba(0,0,0,.2)!important}
+.th-wood{color:#FF9A52!important;text-shadow:0 0 12px rgba(255,154,82,.3),0 1px 2px rgba(0,0,0,.2)!important}
+.th-stone{color:#B8D4FF!important;text-shadow:0 0 12px rgba(184,212,255,.25),0 1px 2px rgba(0,0,0,.2)!important}
+.th-gold{color:#FFD54A!important;text-shadow:0 0 12px rgba(255,213,74,.3),0 1px 2px rgba(0,0,0,.2)!important}
+.th-price{color:#79FF8D!important;text-shadow:0 0 12px rgba(121,255,141,.3),0 1px 2px rgba(0,0,0,.2)!important}
+.th-payment{color:#C4B5FD!important;text-shadow:0 0 12px rgba(196,181,253,.25),0 1px 2px rgba(0,0,0,.2)!important}
+.th-notes{color:#9DDCFF!important;text-shadow:0 0 8px rgba(157,220,255,.18),0 1px 2px rgba(0,0,0,.2)!important}
+.th-date{color:#93C5FD!important;text-shadow:0 0 12px rgba(147,197,253,.25),0 1px 2px rgba(0,0,0,.2)!important}
 .th-num,.th-actions{
   background:rgba(255,255,255,.06)!important;
   color:#D7F1FF!important;
@@ -2379,10 +2335,7 @@ html,body,
 
 /* Table Customer Name */
 .table-shell .customer{
-  background:linear-gradient(180deg,#FFFFFF 0%,#E8F0FE 40%,#D7F1FF 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   filter:drop-shadow(0 1px 6px rgba(255,255,255,.08));
-  text-shadow:none;
 }
 
 /* Table Resource Values — Colored Glass */
@@ -2454,123 +2407,61 @@ html,body,
    GLASS TYPOGRAPHY — BADGES & CAPSULES
    ═══════════════════════════════════════ */
 
-/* Customer Pill */
+/* Customer Pill — glass text, preserve pill bg */
 .customer-pill{
-  background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.04));
-  color:transparent;
-}
-.customer-pill{
-  background:linear-gradient(180deg,#E8F0FE 0%,#D7F1FF 30%,#B8D4FF 70%,#93C5FD 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 1px 5px rgba(184,212,255,.12));
-  text-shadow:none;
+  color:#DCEBFF;
+  text-shadow:0 0 8px rgba(220,235,255,.1);
 }
 
-/* Payment Badges */
-.payment-usdt{
-  background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(139,92,246,.08));
+/* Payment Badges — glass text on colored bg */
+.payment-usdt,.payment-cash,.payment-bank,.payment-default{
+  text-shadow:0 0 6px currentColor;
 }
-.payment-usdt span{
-  background:linear-gradient(180deg,#EDE9FE 0%,#C4B5FD 40%,#A78BFA 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.payment-cash{
-  background:linear-gradient(135deg,rgba(16,185,129,.2),rgba(16,185,129,.08));
-}
-.payment-cash span{
-  background:linear-gradient(180deg,#D1FAE5 0%,#6EE7B7 40%,#34D399 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.payment-bank{
-  background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(59,130,246,.08));
-}
-.payment-bank span{
-  background:linear-gradient(180deg,#DBEAFE 0%,#93C5FD 40%,#60A5FA 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.payment-default{
-  background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.08));
-}
+.payment-usdt{color:#C4B5FD}
+.payment-cash{color:#6EE7B7}
+.payment-bank{color:#93C5FD}
+.payment-default{color:#A5B4FC}
 
-/* Table Count Badge */
+/* Table Count Badge — glass gold text */
 .table-count{
-  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 2px 6px rgba(250,204,21,.2));
+  color:#FFD54A!important;
+  text-shadow:0 0 8px rgba(255,213,74,.2),0 1px 2px rgba(0,0,0,.2);
 }
 
-/* Stats Trend Badges */
-.stats-trend-warn{
-  background:linear-gradient(135deg,rgba(250,204,21,.12),rgba(250,204,21,.06));
-}
-.stats-trend-warn{
-  background:linear-gradient(180deg,#FEF9C3 0%,#FFD54A 50%,#FACC15 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 1px 4px rgba(250,204,21,.18));
-}
-.stats-trend-success{
-  background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.06));
-}
-.stats-trend-success{
-  background:linear-gradient(180deg,#D1FAE5 0%,#6EE7B7 50%,#34D399 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 1px 4px rgba(52,211,153,.18));
-}
-.stats-trend-gold{
-  background:linear-gradient(135deg,rgba(250,204,21,.12),rgba(250,204,21,.06));
-}
-.stats-trend-gold{
-  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 30%,#FFD54A 70%,#FACC15 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 1px 5px rgba(250,204,21,.2));
-}
+/* Stats Trend Badges — glass text on transparent bg */
+.stats-trend-warn{color:#FFD54A;text-shadow:0 0 8px rgba(255,213,74,.2)}
+.stats-trend-success{color:#63FFB2;text-shadow:0 0 8px rgba(99,255,178,.2)}
+.stats-trend-gold{color:#FFD54A;text-shadow:0 0 8px rgba(255,213,74,.2)}
 
 /* CMD Hero Badge */
 .cmd-hero-badge{
-  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 80%,#EAB308 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 2px 8px rgba(250,204,21,.2)) drop-shadow(0 0 14px rgba(234,179,8,.08));
+  color:#FFD54A!important;
+  text-shadow:0 0 10px rgba(255,213,74,.2),0 1px 2px rgba(0,0,0,.15);
 }
 
 /* Hero Badge */
 .hero-badge{
-  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 80%,#EAB308 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 2px 8px rgba(250,204,21,.2)) drop-shadow(0 0 14px rgba(234,179,8,.08));
+  color:#FFD54A!important;
+  text-shadow:0 0 10px rgba(255,213,74,.2),0 1px 2px rgba(0,0,0,.15);
 }
 
 /* Section Badge */
 .section-badge{
-  background:linear-gradient(180deg,#FEF9C3 0%,#FFD54A 40%,#FACC15 100%)!important;
-  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
-  filter:drop-shadow(0 1px 4px rgba(250,204,21,.18));
+  color:#FFD54A!important;
+  text-shadow:0 0 8px rgba(255,213,74,.2);
 }
 
 /* Status Badges */
-.status-active{
-  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 30%,#FFD54A 70%,#FACC15 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 1px 4px rgba(250,204,21,.18));
-}
-.status-finished{
-  background:linear-gradient(180deg,#D1FAE5 0%,#6EE7B7 40%,#34D399 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 1px 4px rgba(52,211,153,.18));
-}
+.status-active{color:#FFD54A;text-shadow:0 0 8px rgba(255,213,74,.2)}
+.status-finished{color:#63FFB2;text-shadow:0 0 8px rgba(99,255,178,.2)}
 
 /* Insight Pill */
-.insight-pill{
-  background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.04));
-}
-.insight-pill{
-  background:linear-gradient(180deg,#D1FAE5 0%,#6EE7B7 40%,#34D399 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 1px 4px rgba(52,211,153,.15));
-}
+.insight-pill{color:#63FFB2;text-shadow:0 0 8px rgba(99,255,178,.2)}
 
-/* Stats Toggle Button */
+/* Stats Toggle Button text */
 .stats-toggle-btn{
-  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  color:#DCEBFF;
+  text-shadow:0 0 6px rgba(220,235,255,.06);
 }
 
 /* ═══════════════════════════════════════
