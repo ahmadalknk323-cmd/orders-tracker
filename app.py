@@ -1,9 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import sqlite3
 import os
 from datetime import datetime
+from functools import wraps
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "trss-orders-secret-key-change-in-prod-2025")
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 DB_PATH = os.environ.get("DATABASE_URL", os.path.join(os.path.dirname(os.path.abspath(__file__)), "orders.db"))
 
@@ -29,6 +32,15 @@ def get_db():
 
 def init_db():
     conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT UNIQUE NOT NULL,
+            password_hash TEXT NOT NULL,
+            name TEXT DEFAULT '',
+            created_at TEXT DEFAULT ''
+        )
+    """)
     conn.execute("""
         CREATE TABLE IF NOT EXISTS kingdoms (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,7 +90,77 @@ def get_stats(conn, kingdom_id):
     return {"all": safe(all_rows), "finished": safe(fin_rows), "active": safe(act_rows)}
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if "user_id" not in session:
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return decorated
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if "user_id" in session:
+        return redirect(url_for("index"))
+    if request.method == "POST":
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+        conn = get_db()
+        user = conn.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+        conn.close()
+        if user and check_password_hash(user["password_hash"], password):
+            session["user_id"] = user["id"]
+            session["user_name"] = user["name"]
+            session["user_email"] = user["email"]
+            return redirect(url_for("index"))
+        flash("البريد الإلكتروني أو كلمة المرور غير صحيحة", "error")
+    return render_template("login.html")
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if "user_id" in session:
+        return redirect(url_for("index"))
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+        confirm = request.form.get("confirm_password", "")
+        if not name or not email or not password:
+            flash("جميع الحقول مطلوبة", "error")
+        elif len(password) < 6:
+            flash("كلمة المرور يجب أن تكون 6 أحرف على الأقل", "error")
+        elif password != confirm:
+            flash("كلمتا المرور غير متطابقتين", "error")
+        else:
+            conn = get_db()
+            existing = conn.execute("SELECT id FROM users WHERE email=?", (email,)).fetchone()
+            if existing:
+                flash("البريد الإلكتروني مستخدم بالفعل", "error")
+                conn.close()
+            else:
+                now = datetime.now().strftime("%Y-%m-%d %H:%M")
+                conn.execute("INSERT INTO users (email, password_hash, name, created_at) VALUES (?, ?, ?, ?)",
+                             (email, generate_password_hash(password), name, now))
+                conn.commit()
+                user = conn.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+                conn.close()
+                session["user_id"] = user["id"]
+                session["user_name"] = user["name"]
+                session["user_email"] = user["email"]
+                return redirect(url_for("index"))
+    return render_template("register.html")
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+
 @app.route("/")
+@login_required
 def index():
     conn = get_db()
     kingdoms = conn.execute("SELECT * FROM kingdoms ORDER BY id DESC").fetchall()
@@ -104,6 +186,7 @@ def index():
 
 
 @app.route("/kingdom/new", methods=["POST"])
+@login_required
 def new_kingdom():
     name = request.form.get("name", "").strip()
     if not name:
@@ -117,6 +200,7 @@ def new_kingdom():
 
 
 @app.route("/kingdom/<int:kingdom_id>")
+@login_required
 def kingdom_page(kingdom_id):
     conn = get_db()
     kingdom = conn.execute("SELECT * FROM kingdoms WHERE id=?", (kingdom_id,)).fetchone()
@@ -130,6 +214,7 @@ def kingdom_page(kingdom_id):
 
 
 @app.route("/kingdom/<int:kingdom_id>/add", methods=["POST"])
+@login_required
 def add_order(kingdom_id):
     customer = request.form.get("customer_name", "").strip()
     food = request.form.get("food", 0)
@@ -165,6 +250,7 @@ def add_order(kingdom_id):
 
 
 @app.route("/kingdom/<int:kingdom_id>/edit/<int:order_id>", methods=["POST"])
+@login_required
 def edit_order(kingdom_id, order_id):
     customer = request.form.get("customer_name", "").strip()
     food = request.form.get("food", 0)
@@ -195,6 +281,7 @@ def edit_order(kingdom_id, order_id):
 
 
 @app.route("/kingdom/<int:kingdom_id>/toggle/<int:order_id>", methods=["POST"])
+@login_required
 def toggle_status(kingdom_id, order_id):
     conn = get_db()
     order = conn.execute("SELECT status FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id)).fetchone()
@@ -207,6 +294,7 @@ def toggle_status(kingdom_id, order_id):
 
 
 @app.route("/kingdom/<int:kingdom_id>/copy/<int:order_id>", methods=["POST"])
+@login_required
 def copy_order(kingdom_id, order_id):
     conn = get_db()
     order = conn.execute("SELECT * FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id)).fetchone()
@@ -222,6 +310,7 @@ def copy_order(kingdom_id, order_id):
 
 
 @app.route("/kingdom/<int:kingdom_id>/delete/<int:order_id>", methods=["POST"])
+@login_required
 def delete_order(kingdom_id, order_id):
     conn = get_db()
     conn.execute("DELETE FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id))
@@ -231,6 +320,7 @@ def delete_order(kingdom_id, order_id):
 
 
 @app.route("/kingdom/<int:kingdom_id>/delete", methods=["POST"])
+@login_required
 def delete_kingdom(kingdom_id):
     conn = get_db()
     conn.execute("DELETE FROM orders WHERE kingdom_id=?", (kingdom_id,))

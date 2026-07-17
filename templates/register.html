@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TRSS - إنشاء حساب</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0F172A,#172554,#1E293B);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--text);overflow:hidden}
+    .auth-bg{position:fixed;inset:0;z-index:0;background:url("/static/images/background.webp") center/cover;opacity:.12}
+    .auth-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(15,23,42,.95),rgba(23,37,84,.92),rgba(30,41,59,.96))}
+    .auth-glow{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(100px)}
+    .auth-glow-1{top:-15%;right:10%;width:400px;height:400px;background:rgba(250,204,21,.06)}
+    .auth-glow-2{bottom:-15%;left:10%;width:350px;height:350px;background:rgba(99,102,241,.05)}
+    .auth-container{position:relative;z-index:1;width:100%;max-width:420px;padding:20px}
+    .auth-card{
+      background:rgba(36,52,73,.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+      border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px 32px;
+      box-shadow:0 24px 64px rgba(15,23,42,.5),0 0 80px rgba(59,130,246,.04),0 0 60px rgba(250,204,21,.03);
+      position:relative;overflow:hidden;
+    }
+    .auth-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);pointer-events:none}
+    .auth-card::after{content:'';position:absolute;top:-40%;right:-30%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.06),transparent 70%);pointer-events:none}
+    .auth-logo{text-align:center;margin-bottom:24px}
+    .auth-logo-icon{
+      width:56px;height:56px;display:inline-grid;place-items:center;
+      background:linear-gradient(140deg,#FACC15,#D97706,#B45309);border-radius:16px;
+      color:#0F172A;margin-bottom:12px;
+      box-shadow:0 8px 32px rgba(250,204,21,.25),0 0 60px rgba(250,204,21,.1);
+    }
+    .auth-logo-icon svg{width:28px;height:28px}
+    .auth-logo h1{font-size:22px;font-weight:900;color:var(--text-bright);margin:0;letter-spacing:-.02em;text-shadow:0 0 15px rgba(255,255,255,.06)}
+    .auth-logo p{font-size:12px;color:var(--muted);margin:4px 0 0;font-weight:400}
+    .auth-field{margin-bottom:16px}
+    .auth-field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:.04em}
+    .auth-field input{
+      width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);color:var(--text-bright);font-size:14px;font-family:inherit;
+      backdrop-filter:blur(8px);box-sizing:border-box;transition:all .25s ease;outline:none;
+    }
+    .auth-field input:focus{border-color:rgba(250,204,21,.35);box-shadow:0 0 0 3px rgba(250,204,21,.08);background:rgba(255,255,255,.07)}
+    .auth-field input::placeholder{color:var(--muted-dim)}
+    .auth-submit{
+      width:100%;padding:13px;border:none;border-radius:12px;font-size:14px;font-weight:800;
+      font-family:inherit;cursor:pointer;margin-top:4px;
+      background:linear-gradient(140deg,#FACC15,#D97706);color:#0F1720;
+      box-shadow:0 4px 20px rgba(250,204,21,.2),0 0 40px rgba(250,204,21,.06);
+      transition:all .3s cubic-bezier(.4,0,.2,1);letter-spacing:.02em;
+    }
+    .auth-submit:hover{box-shadow:0 8px 32px rgba(250,204,21,.3),0 0 60px rgba(250,204,21,.1);filter:brightness(1.08);transform:translateY(-1px)}
+    .auth-submit:active{transform:translateY(0) scale(.98)}
+    .auth-footer{text-align:center;margin-top:18px;font-size:13px;color:var(--muted)}
+    .auth-footer a{color:#FACC15;text-decoration:none;font-weight:700;transition:color .2s}
+    .auth-footer a:hover{color:#FDE68A}
+    .flash-msg{
+      background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2);color:#FCA5A5;
+      padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;text-align:center;margin-bottom:16px;
+    }
+    .auth-particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+  </style>
+</head>
+<body>
+  <div class="auth-bg"></div>
+  <canvas class="auth-particles" id="authCanvas"></canvas>
+  <div class="auth-glow auth-glow-1"></div>
+  <div class="auth-glow auth-glow-2"></div>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M4.22 12.496l2.14 7.94a1 1 0 0 0 .97.756h9.38a1 1 0 0 0 .97-.756l2.14-7.94"/></svg>
+        </div>
+        <h1>TRSS Kingdom</h1>
+        <p>إنشاء حساب جديد</p>
+      </div>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for msg in messages %}
+            <div class="flash-msg">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" action="{{ url_for('register') }}">
+        <div class="auth-field">
+          <label>الاسم</label>
+          <input type="text" name="name" placeholder="اسمك هنا" required autocomplete="name">
+        </div>
+        <div class="auth-field">
+          <label>البريد الإلكتروني</label>
+          <input type="email" name="email" placeholder="example@email.com" required autocomplete="email">
+        </div>
+        <div class="auth-field">
+          <label>كلمة المرور</label>
+          <input type="password" name="password" placeholder="6 أحرف على الأقل" required minlength="6" autocomplete="new-password">
+        </div>
+        <div class="auth-field">
+          <label>تأكيد كلمة المرور</label>
+          <input type="password" name="confirm_password" placeholder="أعد إدخال كلمة المرور" required minlength="6" autocomplete="new-password">
+        </div>
+        <button type="submit" class="auth-submit">إنشاء حساب</button>
+      </form>
+
+      <div class="auth-footer">
+        عندك حساب بالفعل؟ <a href="{{ url_for('login') }}">سجّل الدخول</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas=document.getElementById('authCanvas'),ctx=canvas.getContext('2d');
+    let particles=[];
+    function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+    window.addEventListener('resize',resize);resize();
+    class Particle{
+      constructor(){this.reset()}
+      reset(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*1.5+.5;this.speedX=(Math.random()-.5)*.3;this.speedY=(Math.random()-.5)*.3;this.opacity=Math.random()*.4+.1;this.color=Math.random()>.5?'250,204,21':'99,102,241'}
+      update(){this.x+=this.speedX;this.y+=this.speedY;if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height)this.reset()}
+      draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=`rgba(${this.color},${this.opacity})`;ctx.fill()}
+    }
+    for(let i=0;i<50;i++)particles.push(new Particle());
+    function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{p.update();p.draw()});requestAnimationFrame(animate)}
+    animate();
+  </script>
+</body>
+</html>
