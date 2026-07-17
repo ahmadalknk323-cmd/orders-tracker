@@ -85,7 +85,7 @@
         <div class="cmd-hero-stat-info">
           <div class="cmd-hero-stat-num cmd-active-num">{{ stats.active[5] }}</div>
           <div class="cmd-hero-stat-label">Active Orders</div>
-          <span class="stats-trend stats-trend-warn">Live</span>
+          <span class="stats-trend stats-trend-warn bubble-glass-v2">Live</span>
         </div>
       </div>
       <div class="cmd-hero-stat-card">
@@ -93,7 +93,7 @@
         <div class="cmd-hero-stat-info">
           <div class="cmd-hero-stat-num cmd-finished-num">{{ stats.finished[5] }}</div>
           <div class="cmd-hero-stat-label">Finished</div>
-          <span class="stats-trend stats-trend-success">Stable</span>
+          <span class="stats-trend stats-trend-success bubble-glass-v2">Stable</span>
         </div>
       </div>
       <div class="cmd-hero-stat-card">
@@ -101,12 +101,12 @@
         <div class="cmd-hero-stat-info">
           <div class="cmd-hero-stat-num cmd-total-num">{{ orders|length }}</div>
           <div class="cmd-hero-stat-label">Total</div>
-          <span class="stats-trend stats-trend-gold">Updated</span>
+          <span class="stats-trend stats-trend-gold bubble-glass-v2">Updated</span>
         </div>
       </div>
     </div>
     <div class="cmd-hero-actions">
-      <a href="#dashboard" class="cmd-hero-btn cmd-hero-btn-gold">
+      <a href="#dashboard" class="cmd-hero-btn cmd-hero-btn-gold bubble-glass-v2">
         <i data-lucide="plus-circle"></i> اضافة طلبية
       </a>
       <a href="#stats" class="cmd-hero-btn cmd-hero-btn-outline">
@@ -273,7 +273,7 @@
           <td class="stone">{{ order.stone|number_format }}</td>
           <td class="gold">{{ order.gold|number_format }}</td>
           <td class="price">{{ "%.2f"|format(order.price) }} $</td>
-          <td class="payment"><span class="payment-badge {% if order.payment_type|upper == 'USDT' %}payment-usdt{% elif order.payment_type|upper == 'CASH' %}payment-cash{% elif order.payment_type|upper == 'BANK' %}payment-bank{% else %}payment-default{% endif %}">{{ order.payment_type }}</span></td>
+          <td class="payment"><span class="payment-badge bubble-glass-v2 {% if order.payment_type|upper == 'USDT' %}payment-usdt{% elif order.payment_type|upper == 'CASH' %}payment-cash{% elif order.payment_type|upper == 'BANK' %}payment-bank{% else %}payment-default{% endif %}">{{ order.payment_type }}</span></td>
           <td class="notes-cell">{{ order.notes }}</td>
           <td class="date">{{ order.created_at }}</td>
           <td class="actions">

@@ -1303,3 +1303,16 @@ img{display:block;max-width:100%}
 ::-webkit-scrollbar-thumb{background:rgba(250,204,21,.15);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:rgba(250,204,21,.25)}
 ::selection{background:var(--gold);color:#0F1720}
+
+/* ── Bubble Glass V2 ── */
+.bubble-glass-v2 {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    padding: 10px 25px;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    transition: transform 0.2s;
+}
