@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
-<body>
+<body data-kingdom-id="{{ kingdom.id }}">
 <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle" hidden/>
 <div class="layout">
 
@@ -81,6 +81,7 @@
         <div class="cmd-hero-stat-info">
           <div class="cmd-hero-stat-num cmd-active-num">{{ stats.active[5] }}</div>
           <div class="cmd-hero-stat-label">Active Orders</div>
+          <span class="stats-trend stats-trend-warn">Live</span>
         </div>
       </div>
       <div class="cmd-hero-stat-card">
@@ -88,6 +89,7 @@
         <div class="cmd-hero-stat-info">
           <div class="cmd-hero-stat-num cmd-finished-num">{{ stats.finished[5] }}</div>
           <div class="cmd-hero-stat-label">Finished</div>
+          <span class="stats-trend stats-trend-success">Stable</span>
         </div>
       </div>
       <div class="cmd-hero-stat-card">
@@ -95,6 +97,7 @@
         <div class="cmd-hero-stat-info">
           <div class="cmd-hero-stat-num cmd-total-num">{{ orders|length }}</div>
           <div class="cmd-hero-stat-label">Total</div>
+          <span class="stats-trend stats-trend-gold">Updated</span>
         </div>
       </div>
     </div>
@@ -119,43 +122,81 @@
       </div>
       <div class="card-header-icon"><i data-lucide="file-plus"></i></div>
     </div>
-    <form action="/kingdom/{{ kingdom.id }}/add" method="POST">
-      <div class="fg">
-        <input type="text" name="customer_name" required placeholder=" "/>
-        <label>اسم الزبون</label>
-      </div>
-      <div class="fg-grid-4">
-        <div class="fg">
-          <input type="number" name="food" value="0" min="0" placeholder=" "/>
-          <label><i data-lucide="wheat" class="fg-icon food"></i> ذره</label>
+    <form action="/kingdom/{{ kingdom.id }}/add" method="POST" class="order-form">
+      <div class="form-section">
+        <div class="form-section-head">
+          <div class="section-badge">01</div>
+          <div>
+            <h3>معلومات العميل</h3>
+            <p>ابدأ الطلب بتحديد العميل بوضوح.</p>
+          </div>
         </div>
-        <div class="fg">
-          <input type="number" name="wood" value="0" min="0" placeholder=" "/>
-          <label><i data-lucide="tree-pine" class="fg-icon wood"></i> خشب</label>
-        </div>
-        <div class="fg">
-          <input type="number" name="stone" value="0" min="0" placeholder=" "/>
-          <label><i data-lucide="mountain" class="fg-icon stone"></i> حجر</label>
-        </div>
-        <div class="fg">
-          <input type="number" name="gold" value="0" min="0" placeholder=" "/>
-          <label><i data-lucide="coins" class="fg-icon gold"></i> ذهب</label>
+        <div class="field">
+          <span class="field-icon"><i data-lucide="user-round"></i></span>
+          <input type="text" name="customer_name" required placeholder="مثال: أحمد" />
+          <label>اسم الزبون</label>
         </div>
       </div>
-      <div class="fg-grid-2">
-        <div class="fg">
-          <input type="number" name="price" value="0" step="0.01" min="0" placeholder=" "/>
-          <label>ثمن الاوردر ($)</label>
+
+      <div class="form-section">
+        <div class="form-section-head">
+          <div class="section-badge">02</div>
+          <div>
+            <h3>الموارد</h3>
+            <p>اختر الكميات بدقة مع ألوان مميزة لكل مورد.</p>
+          </div>
         </div>
-        <div class="fg">
-          <input type="text" name="payment_type" placeholder=" "/>
-          <label>نوعية الدفع</label>
+        <div class="resource-grid">
+          <div class="field resource-field food-field">
+            <span class="field-icon"><i data-lucide="wheat"></i></span>
+            <input type="number" name="food" value="0" min="0" placeholder="0" />
+            <label>ذره</label>
+          </div>
+          <div class="field resource-field wood-field">
+            <span class="field-icon"><i data-lucide="tree-pine"></i></span>
+            <input type="number" name="wood" value="0" min="0" placeholder="0" />
+            <label>خشب</label>
+          </div>
+          <div class="field resource-field stone-field">
+            <span class="field-icon"><i data-lucide="mountain"></i></span>
+            <input type="number" name="stone" value="0" min="0" placeholder="0" />
+            <label>حجر</label>
+          </div>
+          <div class="field resource-field gold-field">
+            <span class="field-icon"><i data-lucide="coins"></i></span>
+            <input type="number" name="gold" value="0" min="0" placeholder="0" />
+            <label>ذهب</label>
+          </div>
         </div>
       </div>
-      <div class="fg">
-        <input type="text" name="notes" placeholder=" "/>
-        <label>ملاحظات (اختياري)</label>
+
+      <div class="form-section">
+        <div class="form-section-head">
+          <div class="section-badge">03</div>
+          <div>
+            <h3>التفاصيل المالية</h3>
+            <p>أضف السعر وطريقة الدفع والملاحظات بسهولة.</p>
+          </div>
+        </div>
+        <div class="double-grid">
+          <div class="field">
+            <span class="field-icon"><i data-lucide="banknote"></i></span>
+            <input type="number" name="price" value="0" step="0.01" min="0" placeholder="مثال: 120" />
+            <label>ثمن الاوردر ($)</label>
+          </div>
+          <div class="field">
+            <span class="field-icon"><i data-lucide="credit-card"></i></span>
+            <input type="text" name="payment_type" placeholder="مثال: كاش أو تحويل" />
+            <label>نوعية الدفع</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-icon"><i data-lucide="message-square-text"></i></span>
+          <input type="text" name="notes" placeholder="مثال: سريع التوصيل" />
+          <label>ملاحظات (اختياري)</label>
+        </div>
       </div>
+
       <button type="submit" class="form-submit">
         <i data-lucide="plus" style="width:16px;height:16px"></i> اضافة طلبية
       </button>
@@ -206,28 +247,50 @@
         {% for order in orders %}
         <tr class="{{ 'finished' if order.status == 'finished' else '' }}">
           <td class="row-num">{{ loop.index }}</td>
-          <td class="customer">{{ order.customer_name }}</td>
+          <td class="customer"><span class="customer-pill">{{ order.customer_name }}</span></td>
           <td class="food">{{ order.food|number_format }}</td>
           <td class="wood">{{ order.wood|number_format }}</td>
           <td class="stone">{{ order.stone|number_format }}</td>
           <td class="gold">{{ order.gold|number_format }}</td>
           <td class="price">{{ "%.2f"|format(order.price) }} $</td>
-          <td class="payment">{{ order.payment_type }}</td>
+          <td class="payment"><span class="payment-badge">{{ order.payment_type }}</span></td>
           <td class="notes-cell">{{ order.notes }}</td>
           <td class="date">{{ order.created_at }}</td>
           <td class="actions">
             <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
               {% if order.status == 'finished' %}
-              <button type="submit" class="btn btn-green-ghost btn-sm">منتهي</button>
+              <button type="submit" class="status-badge status-finished">منتهي</button>
               {% else %}
-              <button type="submit" class="btn btn-gold-ghost btn-sm">انتهت</button>
+              <button type="submit" class="status-badge status-active">انتهت</button>
               {% endif %}
             </form>
-            <button class="btn btn-ghost btn-sm" onclick="copyOrder({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')"><i data-lucide="copy" class="icon"></i></button>
-            <button class="btn btn-ghost btn-sm" onclick="openEdit({{ order.id }}, '{{ order.customer_name }}', {{ order.food }}, {{ order.wood }}, {{ order.stone }}, {{ order.gold }}, {{ order.price }}, '{{ order.payment_type }}', '{{ order.notes }}')"><i data-lucide="pencil" class="icon"></i></button>
-            <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
-              <button type="submit" class="btn btn-danger-ghost btn-sm"><i data-lucide="trash-2" class="icon"></i></button>
-            </form>
+            <div class="action-group">
+              <button class="icon-btn icon-btn-copy" type="button"
+                data-order-id="{{ order.id }}"
+                data-customer="{{ order.customer_name }}"
+                data-food="{{ order.food }}"
+                data-wood="{{ order.wood }}"
+                data-stone="{{ order.stone }}"
+                data-gold="{{ order.gold }}"
+                data-price="{{ order.price }}"
+                data-payment="{{ order.payment_type }}"
+                data-notes="{{ order.notes }}"
+                onclick="copyOrder(this)"><i data-lucide="copy" class="icon"></i></button>
+              <button class="icon-btn icon-btn-edit" type="button"
+                data-order-id="{{ order.id }}"
+                data-customer="{{ order.customer_name }}"
+                data-food="{{ order.food }}"
+                data-wood="{{ order.wood }}"
+                data-stone="{{ order.stone }}"
+                data-gold="{{ order.gold }}"
+                data-price="{{ order.price }}"
+                data-payment="{{ order.payment_type }}"
+                data-notes="{{ order.notes }}"
+                onclick="openEdit(this)"><i data-lucide="pencil" class="icon"></i></button>
+              <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
+                <button type="submit" class="icon-btn icon-btn-delete"><i data-lucide="trash-2" class="icon"></i></button>
+              </form>
+            </div>
           </td>
         </tr>
         {% endfor %}
@@ -235,7 +298,7 @@
     </table>
   </div>
   {% else %}
-  <div class="empty-state">
+  <div class="empty-state premium-empty">
     <div class="empty-state-icon"><i data-lucide="inbox"></i></div>
     <h3>ما في طلبيات بعد</h3>
     <p>ابدأ بإضافة طلبية جديدة لبدء تتبع الأداء.</p>
@@ -243,8 +306,17 @@
   {% endif %}
 </div>
 
+<!-- Statistics Toggle -->
+<div class="stats-toggle-wrap" id="stats">
+  <button class="stats-toggle-btn" id="statsToggleBtn" onclick="toggleStats()">
+    <i data-lucide="bar-chart-3" style="width:16px;height:16px"></i>
+    <span>الاحصائيات الشاملة</span>
+    <i data-lucide="chevron-down" class="stats-toggle-icon" id="statsChevron" style="width:14px;height:14px"></i>
+  </button>
+</div>
+
 <!-- Statistics -->
-<div class="card" id="stats">
+<div class="card stats-collapse" id="statsPanel">
   <div class="card-header">
     <div>
       <h2><i data-lucide="bar-chart-3" style="width:18px;height:18px;vertical-align:middle;opacity:.8"></i> الاحصائيات الشاملة</h2>
@@ -257,6 +329,7 @@
       <div class="stat-header">
         <i data-lucide="layers" class="green"></i>
         <div class="stat-label">الكل ( {{ stats.all[5] }} طلبية )</div>
+        <span class="stat-trend">Live</span>
       </div>
       <div class="stat-row">
         <span class="stat-food"><i data-lucide="wheat" class="icon-stat-sm"></i> {{ stats.all[0]|number_format }} ذره</span>
@@ -270,6 +343,7 @@
       <div class="stat-header">
         <i data-lucide="check-circle-2" class="green"></i>
         <div class="stat-label">منتهية ( {{ stats.finished[5] }} طلبية )</div>
+        <span class="stat-trend">Done</span>
       </div>
       <div class="stat-row">
         <span class="stat-food">{{ stats.finished[0]|number_format }} ذره</span>
@@ -283,6 +357,7 @@
       <div class="stat-header">
         <i data-lucide="loader" class="amber"></i>
         <div class="stat-label">قيد التنفيذ ( {{ stats.active[5] }} طلبية )</div>
+        <span class="stat-trend">Now</span>
       </div>
       <div class="stat-row">
         <span class="stat-food">{{ stats.active[0]|number_format }} ذره</span>
@@ -409,18 +484,37 @@
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 <script>
 lucide.createIcons();
-var kid = {{ kingdom.id }};
 
-function openEdit(id, name, food, wood, stone, gold, price, payment, notes) {
-  document.getElementById('editForm').action = '/kingdom/' + kid + '/edit/' + id;
-  document.getElementById('edit_customer').value = name;
-  document.getElementById('edit_food').value = food;
-  document.getElementById('edit_wood').value = wood;
-  document.getElementById('edit_stone').value = stone;
-  document.getElementById('edit_gold').value = gold;
-  document.getElementById('edit_price').value = price;
-  document.getElementById('edit_payment').value = payment;
-  document.getElementById('edit_notes').value = notes;
+function toggleStats(){
+  var panel=document.getElementById('statsPanel');
+  var chevron=document.getElementById('statsChevron');
+  var open=panel.classList.toggle('open');
+  chevron.style.transform=open?'rotate(180deg)':'';
+  try{sessionStorage.setItem('statsOpen',open)}catch(e){}
+}
+(function(){
+  var panel=document.getElementById('statsPanel');
+  var chevron=document.getElementById('statsChevron');
+  try{var v=sessionStorage.getItem('statsOpen')}catch(e){}
+  if(v==='true'){
+    panel.classList.add('open');
+    chevron.style.transform='rotate(180deg)';
+  }
+})();
+
+var kid = document.body.dataset.kingdomId;
+
+function openEdit(button) {
+  var data = button.dataset;
+  document.getElementById('editForm').action = '/kingdom/' + kid + '/edit/' + data.orderId;
+  document.getElementById('edit_customer').value = data.customer || '';
+  document.getElementById('edit_food').value = data.food || 0;
+  document.getElementById('edit_wood').value = data.wood || 0;
+  document.getElementById('edit_stone').value = data.stone || 0;
+  document.getElementById('edit_gold').value = data.gold || 0;
+  document.getElementById('edit_price').value = data.price || 0;
+  document.getElementById('edit_payment').value = data.payment || '';
+  document.getElementById('edit_notes').value = data.notes || '';
   document.getElementById('editModal').style.display = 'flex';
 }
 
@@ -428,16 +522,17 @@ function closeEdit() {
   document.getElementById('editModal').style.display = 'none';
 }
 
-function copyOrder(id, name, food, wood, stone, gold, price, payment, notes) {
-  document.getElementById('copyForm').action = '/kingdom/' + kid + '/copy/' + id;
+function copyOrder(button) {
+  var data = button.dataset;
+  document.getElementById('copyForm').action = '/kingdom/' + kid + '/copy/' + data.orderId;
   document.getElementById('copy_customer').value = '';
-  document.getElementById('copy_food').value = food;
-  document.getElementById('copy_wood').value = wood;
-  document.getElementById('copy_stone').value = stone;
-  document.getElementById('copy_gold').value = gold;
-  document.getElementById('copy_price').value = price;
-  document.getElementById('copy_payment').value = payment;
-  document.getElementById('copy_notes').value = notes;
+  document.getElementById('copy_food').value = data.food || 0;
+  document.getElementById('copy_wood').value = data.wood || 0;
+  document.getElementById('copy_stone').value = data.stone || 0;
+  document.getElementById('copy_gold').value = data.gold || 0;
+  document.getElementById('copy_price').value = data.price || 0;
+  document.getElementById('copy_payment').value = data.payment || '';
+  document.getElementById('copy_notes').value = data.notes || '';
   document.getElementById('copyModal').style.display = 'flex';
 }
 
