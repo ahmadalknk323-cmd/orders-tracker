@@ -273,15 +273,15 @@
           <td class="notes-cell">{{ order.notes }}</td>
           <td class="date">{{ order.created_at }}</td>
           <td class="actions">
-            <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
-              {% if order.status == 'finished' %}
-              <button type="submit" class="status-badge status-finished">منتهي</button>
-              {% else %}
-              <button type="submit" class="status-badge status-active">انتهت</button>
-              {% endif %}
-            </form>
             <div class="action-group">
-              <button class="icon-btn icon-btn-copy" type="button"
+              <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
+                {% if order.status == 'finished' %}
+                <button type="submit" class="action-btn action-btn-complete" title="Mark Completed"><i data-lucide="check-circle"></i></button>
+                {% else %}
+                <button type="submit" class="action-btn action-btn-complete" title="Mark Completed"><i data-lucide="check-circle"></i></button>
+                {% endif %}
+              </form>
+              <button class="action-btn action-btn-edit" type="button" title="Edit Order"
                 data-order-id="{{ order.id }}"
                 data-customer="{{ order.customer_name }}"
                 data-food="{{ order.food }}"
@@ -291,8 +291,8 @@
                 data-price="{{ order.price }}"
                 data-payment="{{ order.payment_type }}"
                 data-notes="{{ order.notes }}"
-                onclick="copyOrder(this)"><i data-lucide="copy" class="icon"></i></button>
-              <button class="icon-btn icon-btn-edit" type="button"
+                onclick="openEdit(this)"><i data-lucide="pencil"></i></button>
+              <button class="action-btn action-btn-copy" type="button" title="Duplicate Order"
                 data-order-id="{{ order.id }}"
                 data-customer="{{ order.customer_name }}"
                 data-food="{{ order.food }}"
@@ -302,9 +302,9 @@
                 data-price="{{ order.price }}"
                 data-payment="{{ order.payment_type }}"
                 data-notes="{{ order.notes }}"
-                onclick="openEdit(this)"><i data-lucide="pencil" class="icon"></i></button>
+                onclick="copyOrder(this)"><i data-lucide="copy"></i></button>
               <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
-                <button type="submit" class="icon-btn icon-btn-delete"><i data-lucide="trash-2" class="icon"></i></button>
+                <button type="submit" class="action-btn action-btn-delete" title="Delete Order"><i data-lucide="trash-2"></i></button>
               </form>
             </div>
           </td>
