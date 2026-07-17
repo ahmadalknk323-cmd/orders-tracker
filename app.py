@@ -44,8 +44,10 @@ def init_db():
     conn.execute("""
         CREATE TABLE IF NOT EXISTS kingdoms (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER DEFAULT 0,
             name TEXT NOT NULL,
-            created_at TEXT DEFAULT ''
+            created_at TEXT DEFAULT '',
+            FOREIGN KEY (user_id) REFERENCES users(id)
         )
     """)
     conn.execute("""
@@ -65,22 +67,16 @@ def init_db():
             FOREIGN KEY (kingdom_id) REFERENCES kingdoms(id)
         )
     """)
+    for col, default in [("kingdom_id", 0), ("status", "'active'")]:
+        try:
+            conn.execute(f"ALTER TABLE orders ADD COLUMN {col} INTEGER DEFAULT {default}")
+        except sqlite3.OperationalError:
+            pass
     try:
-        conn.execute("ALTER TABLE orders ADD COLUMN kingdom_id INTEGER DEFAULT 0")
-    except sqlite3.OperationalError:
-        pass
-    try:
-        conn.execute("ALTER TABLE orders ADD COLUMN status TEXT DEFAULT 'active'")
+        conn.execute("ALTER TABLE kingdoms ADD COLUMN user_id INTEGER DEFAULT 0")
     except sqlite3.OperationalError:
         pass
     conn.commit()
-    admin_email = "ahmadalknk323@gmail.com"
-    existing = conn.execute("SELECT id FROM users WHERE email=?", (admin_email,)).fetchone()
-    if not existing:
-        now = datetime.now().strftime("%Y-%m-%d %H:%M")
-        conn.execute("INSERT INTO users (email, password_hash, name, created_at) VALUES (?, ?, ?, ?)",
-                     (admin_email, generate_password_hash("0567543987"), "Ahmad", now))
-        conn.commit()
     conn.close()
 
 
@@ -104,6 +100,13 @@ def login_required(f):
             return redirect(url_for("login"))
         return f(*args, **kwargs)
     return decorated
+
+
+def own_kingdom(kingdom_id):
+    conn = get_db()
+    k = conn.execute("SELECT id FROM kingdoms WHERE id=? AND user_id=?", (kingdom_id, session["user_id"])).fetchone()
+    conn.close()
+    return k is not None
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -170,20 +173,27 @@ def logout():
 @login_required
 def index():
     conn = get_db()
-    kingdoms = conn.execute("SELECT * FROM kingdoms ORDER BY id DESC").fetchall()
+    uid = session["user_id"]
+    kingdoms = conn.execute("SELECT * FROM kingdoms WHERE user_id=? ORDER BY id DESC", (uid,)).fetchall()
     kingdom_stats = []
+    kid_list = []
     for k in kingdoms:
         rows = conn.execute("SELECT COUNT(*), SUM(price) FROM orders WHERE kingdom_id=?", (k["id"],)).fetchone()
         count = rows[0] or 0
         total_price = int(rows[1] or 0)
         kingdom_stats.append({"id": k["id"], "name": k["name"], "count": count, "total_price": total_price, "created_at": k["created_at"]})
+        kid_list.append(k["id"])
 
+    placeholders = ",".join("?" * len(kid_list)) if kid_list else "0"
     today = datetime.now().strftime("%Y-%m-%d")
-    orders_today = conn.execute("SELECT COUNT(*) FROM orders WHERE created_at LIKE ?", (today + "%",)).fetchone()[0] or 0
-    total_revenue = conn.execute("SELECT COALESCE(SUM(price), 0) FROM orders").fetchone()[0] or 0
-    total_customers = conn.execute("SELECT COUNT(DISTINCT customer_name) FROM orders").fetchone()[0] or 0
-    pending_orders = conn.execute("SELECT COUNT(*) FROM orders WHERE status='active'").fetchone()[0] or 0
-    total_orders = conn.execute("SELECT COUNT(*) FROM orders").fetchone()[0] or 0
+    if kid_list:
+        orders_today = conn.execute(f"SELECT COUNT(*) FROM orders WHERE kingdom_id IN ({placeholders}) AND created_at LIKE ?", kid_list + [today + "%"]).fetchone()[0] or 0
+        total_revenue = conn.execute(f"SELECT COALESCE(SUM(price), 0) FROM orders WHERE kingdom_id IN ({placeholders})", kid_list).fetchone()[0] or 0
+        total_customers = conn.execute(f"SELECT COUNT(DISTINCT customer_name) FROM orders WHERE kingdom_id IN ({placeholders})", kid_list).fetchone()[0] or 0
+        pending_orders = conn.execute(f"SELECT COUNT(*) FROM orders WHERE kingdom_id IN ({placeholders}) AND status='active'", kid_list).fetchone()[0] or 0
+        total_orders = conn.execute(f"SELECT COUNT(*) FROM orders WHERE kingdom_id IN ({placeholders})", kid_list).fetchone()[0] or 0
+    else:
+        orders_today = total_revenue = total_customers = pending_orders = total_orders = 0
 
     conn.close()
     return render_template("kingdoms.html", kingdoms=kingdom_stats,
@@ -200,7 +210,8 @@ def new_kingdom():
         return redirect(url_for("index"))
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
     conn = get_db()
-    conn.execute("INSERT INTO kingdoms (name, created_at) VALUES (?, ?)", (name, now))
+    conn.execute("INSERT INTO kingdoms (user_id, name, created_at) VALUES (?, ?, ?)",
+                 (session["user_id"], name, now))
     conn.commit()
     conn.close()
     return redirect(url_for("index"))
@@ -209,6 +220,8 @@ def new_kingdom():
 @app.route("/kingdom/<int:kingdom_id>")
 @login_required
 def kingdom_page(kingdom_id):
+    if not own_kingdom(kingdom_id):
+        return redirect(url_for("index"))
     conn = get_db()
     kingdom = conn.execute("SELECT * FROM kingdoms WHERE id=?", (kingdom_id,)).fetchone()
     if not kingdom:
@@ -223,6 +236,8 @@ def kingdom_page(kingdom_id):
 @app.route("/kingdom/<int:kingdom_id>/add", methods=["POST"])
 @login_required
 def add_order(kingdom_id):
+    if not own_kingdom(kingdom_id):
+        return redirect(url_for("index"))
     customer = request.form.get("customer_name", "").strip()
     food = request.form.get("food", 0)
     wood = request.form.get("wood", 0)
@@ -259,6 +274,8 @@ def add_order(kingdom_id):
 @app.route("/kingdom/<int:kingdom_id>/edit/<int:order_id>", methods=["POST"])
 @login_required
 def edit_order(kingdom_id, order_id):
+    if not own_kingdom(kingdom_id):
+        return redirect(url_for("index"))
     customer = request.form.get("customer_name", "").strip()
     food = request.form.get("food", 0)
     wood = request.form.get("wood", 0)
@@ -290,6 +307,8 @@ def edit_order(kingdom_id, order_id):
 @app.route("/kingdom/<int:kingdom_id>/toggle/<int:order_id>", methods=["POST"])
 @login_required
 def toggle_status(kingdom_id, order_id):
+    if not own_kingdom(kingdom_id):
+        return redirect(url_for("index"))
     conn = get_db()
     order = conn.execute("SELECT status FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id)).fetchone()
     if order:
@@ -303,6 +322,8 @@ def toggle_status(kingdom_id, order_id):
 @app.route("/kingdom/<int:kingdom_id>/copy/<int:order_id>", methods=["POST"])
 @login_required
 def copy_order(kingdom_id, order_id):
+    if not own_kingdom(kingdom_id):
+        return redirect(url_for("index"))
     conn = get_db()
     order = conn.execute("SELECT * FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id)).fetchone()
     if order:
@@ -319,6 +340,8 @@ def copy_order(kingdom_id, order_id):
 @app.route("/kingdom/<int:kingdom_id>/delete/<int:order_id>", methods=["POST"])
 @login_required
 def delete_order(kingdom_id, order_id):
+    if not own_kingdom(kingdom_id):
+        return redirect(url_for("index"))
     conn = get_db()
     conn.execute("DELETE FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id))
     conn.commit()
@@ -329,6 +352,8 @@ def delete_order(kingdom_id, order_id):
 @app.route("/kingdom/<int:kingdom_id>/delete", methods=["POST"])
 @login_required
 def delete_kingdom(kingdom_id):
+    if not own_kingdom(kingdom_id):
+        return redirect(url_for("index"))
     conn = get_db()
     conn.execute("DELETE FROM orders WHERE kingdom_id=?", (kingdom_id,))
     conn.execute("DELETE FROM kingdoms WHERE id=?", (kingdom_id,))
