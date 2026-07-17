@@ -84,6 +84,7 @@
       {% endwith %}
 
       <form method="POST" action="{{ url_for('login') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="auth-field">
           <label>البريد الإلكتروني</label>
           <input type="email" name="email" placeholder="example@email.com" required autocomplete="email">

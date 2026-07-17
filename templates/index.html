@@ -127,6 +127,7 @@
       <div class="card-header-icon"><i data-lucide="file-plus"></i></div>
     </div>
     <form action="/kingdom/{{ kingdom.id }}/add" method="POST" class="order-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="form-section">
         <div class="form-section-head">
           <div class="section-badge">01</div>
@@ -240,6 +241,7 @@
       <p>تابع حالة كل طلبية وأدارتها بسهولة.</p>
     </div>
     <form action="/kingdom/{{ kingdom.id }}/delete" method="POST" onsubmit="return confirm('حذف المملكه وكل طلبياتها؟')">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <button type="submit" class="btn btn-danger-ghost">
         <i data-lucide="trash-2" class="icon"></i> حذف المملكه
       </button>
@@ -279,6 +281,7 @@
           <td class="actions">
             <div class="action-group">
               <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 {% if order.status == 'finished' %}
                 <button type="submit" class="action-btn action-btn-complete" title="Mark Completed"><i data-lucide="check-circle"></i></button>
                 {% else %}
@@ -308,6 +311,7 @@
                 data-notes="{{ order.notes }}"
                 onclick="copyOrder(this)"><i data-lucide="copy"></i></button>
               <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit" class="action-btn action-btn-delete" title="Delete Order"><i data-lucide="trash-2"></i></button>
               </form>
             </div>
@@ -400,6 +404,7 @@
     <span class="close" onclick="closeEdit()"><i data-lucide="x"></i></span>
     <h2>تعديل الطلبيه</h2>
     <form id="editForm" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="form-row">
         <div class="form-group full">
           <label>اسم الزبون</label>
@@ -453,6 +458,7 @@
     <span class="close" onclick="closeCopy()"><i data-lucide="x"></i></span>
     <h2>نسخ الطلبيه</h2>
     <form id="copyForm" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="form-row">
         <div class="form-group full">
           <label>اسم الزبون الجديد</label>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TRSS - خطأ {{ code }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0F172A,#172554,#1E293B);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#DCEBFF;overflow:hidden}
+    .auth-bg{position:fixed;inset:0;z-index:0;background:url("/static/images/background.webp") center/cover;opacity:.12}
+    .auth-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(15,23,42,.95),rgba(23,37,84,.92),rgba(30,41,59,.96))}
+    .auth-glow{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(100px)}
+    .auth-glow-1{top:-15%;right:10%;width:400px;height:400px;background:rgba(250,204,21,.06)}
+    .auth-glow-2{bottom:-15%;left:10%;width:350px;height:350px;background:rgba(99,102,241,.05)}
+    .auth-container{position:relative;z-index:1;width:100%;max-width:420px;padding:20px}
+    .auth-card{
+      background:rgba(36,52,73,.88);backdrop-filter:blur(24px);
+      border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px 32px;
+      box-shadow:0 24px 64px rgba(15,23,42,.5);text-align:center;
+    }
+    .error-code{font-size:72px;font-weight:900;background:linear-gradient(180deg,#FACC15,#D97706);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+    .error-msg{font-size:16px;color:#94A3B8;margin-bottom:24px}
+    .error-link{display:inline-block;padding:10px 24px;border-radius:12px;background:linear-gradient(140deg,#FACC15,#D97706);color:#0F1720;font-weight:800;text-decoration:none;font-size:14px;transition:all .3s}
+    .error-link:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  </style>
+</head>
+<body>
+  <div class="auth-bg"></div>
+  <div class="auth-glow auth-glow-1"></div>
+  <div class="auth-glow auth-glow-2"></div>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="error-code">{{ code }}</div>
+      <div class="error-msg">{{ message }}</div>
+      <a href="{{ url_for('login') }}" class="error-link">العودة للرئيسية</a>
+    </div>
+  </div>
+</body>
+</html>

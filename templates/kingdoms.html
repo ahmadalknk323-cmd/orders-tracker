@@ -229,6 +229,7 @@
         <div class="card-header-icon"><i data-lucide="rocket"></i></div>
       </div>
       <form method="POST" action="{{ url_for('new_kingdom') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="form-group">
           <label>اسم المملكة</label>
           <input type="text" name="name" required placeholder="مثال: مملكة 4127"/>

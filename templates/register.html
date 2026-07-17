@@ -84,6 +84,7 @@
       {% endwith %}
 
       <form method="POST" action="{{ url_for('register') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="auth-field">
           <label>الاسم</label>
           <input type="text" name="name" placeholder="اسمك هنا" required autocomplete="name">

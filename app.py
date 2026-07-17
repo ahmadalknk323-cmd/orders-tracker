@@ -1,14 +1,57 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
+from flask_wtf.csrf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import sqlite3
 import os
+import re
+import logging
 from datetime import datetime
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "trss-orders-secret-key-change-in-prod-2025")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger("trss")
+
+app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32).hex()
+if not os.environ.get("SECRET_KEY") and not os.environ.get("RENDER"):
+    logger.warning("SECRET_KEY not set — using random key (sessions will not persist across restarts)")
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["PERMANENT_SESSION_LIFETIME"] = 1800
+app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024
+
+if os.environ.get("RENDER"):
+    app.config["SESSION_COOKIE_SECURE"] = True
+
+csrf = CSRFProtect(app)
+limiter = Limiter(get_remote_address, app=app, default_limits=["200 per minute"], storage_uri="memory://")
+
 DB_PATH = os.environ.get("DATABASE_URL", os.path.join(os.path.dirname(os.path.abspath(__file__)), "orders.db"))
+
+
+def sanitize(value):
+    if not isinstance(value, str):
+        return value
+    return re.sub(r'[<>"\'`;(){}]', '', value).strip()
+
+
+def validate_int(value, default=0, minimum=0, maximum=999999999):
+    try:
+        v = int(float(value))
+        return max(minimum, min(maximum, v))
+    except (ValueError, TypeError):
+        return default
+
+
+def validate_float(value, default=0.0, minimum=0.0, maximum=999999999.0):
+    try:
+        v = float(value)
+        return max(minimum, min(maximum, v))
+    except (ValueError, TypeError):
+        return default
 
 
 @app.template_filter("number_format")
@@ -27,6 +70,8 @@ def number_format(value):
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA foreign_keys=ON")
     return conn
 
 
@@ -97,6 +142,7 @@ def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if "user_id" not in session:
+            logger.info("Unauthenticated access attempt to %s from %s", request.path, request.remote_addr)
             return redirect(url_for("login"))
         return f(*args, **kwargs)
     return decorated
@@ -109,62 +155,146 @@ def own_kingdom(kingdom_id):
     return k is not None
 
 
+def validate_password(password):
+    if len(password) < 8:
+        return "كلمة المرور يجب أن تكون 8 أحرف على الأقل"
+    if not re.search(r'[A-Z]', password):
+        return "كلمة المرور يجب أن تحتوي حرف كبير واحد على الأقل"
+    if not re.search(r'[a-z]', password):
+        return "كلمة المرور يجب أن تحتوي حرف صغير واحد على الأقل"
+    if not re.search(r'[0-9]', password):
+        return "كلمة المرور يجب أن تحتوي رقم واحد على الأقل"
+    return None
+
+
+@app.after_request
+def set_security_headers(response):
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://unpkg.com; "
+        "style-src 'self' 'unsafe-inline'; "
+        "img-src 'self' data:; "
+        "font-src 'self'; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none'"
+    )
+    if request.is_secure:
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    return response
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("error.html", code=404, message="الصفحة غير موجودة"), 404
+
+
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template("error.html", code=403, message="وصول مرفوض"), 403
+
+
+@app.errorhandler(429)
+def rate_limited(e):
+    return render_template("error.html", code=429, message="طلبات كثيرة جداً، حاول مرة أخرى لاحقاً"), 429
+
+
+@app.errorhandler(500)
+def server_error(e):
+    logger.error("Internal server error: %s", e)
+    return render_template("error.html", code=500, message="خطأ داخلي في الخادوم"), 500
+
+
+@app.errorhandler(413)
+def too_large(e):
+    return render_template("error.html", code=413, message="الملف أكبر من الحجم المسموح"), 413
+
+
 @app.route("/login", methods=["GET", "POST"])
+@limiter.limit("10 per minute")
 def login():
     if "user_id" in session:
         return redirect(url_for("index"))
     if request.method == "POST":
-        email = request.form.get("email", "").strip().lower()
+        email = sanitize(request.form.get("email", "")).lower()
         password = request.form.get("password", "")
-        conn = get_db()
-        user = conn.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
-        conn.close()
-        if user and check_password_hash(user["password_hash"], password):
-            session["user_id"] = user["id"]
-            session["user_name"] = user["name"]
-            session["user_email"] = user["email"]
-            return redirect(url_for("index"))
-        flash("البريد الإلكتروني أو كلمة المرور غير صحيحة", "error")
+        if not email or not password:
+            flash("جميع الحقول مطلوبة", "error")
+        elif len(email) > 254 or not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
+            flash("البريد الإلكتروني غير صحيح", "error")
+        else:
+            conn = get_db()
+            user = conn.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+            conn.close()
+            if user and check_password_hash(user["password_hash"], password):
+                session.clear()
+                session.permanent = True
+                session["user_id"] = user["id"]
+                session["user_name"] = user["name"]
+                session["user_email"] = user["email"]
+                session["login_time"] = datetime.now().isoformat()
+                logger.info("Successful login: %s from %s", email, request.remote_addr)
+                return redirect(url_for("index"))
+            logger.warning("Failed login attempt for %s from %s", email, request.remote_addr)
+            flash("البريد الإلكتروني أو كلمة المرور غير صحيحة", "error")
     return render_template("login.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
+@limiter.limit("5 per minute")
 def register():
     if "user_id" in session:
         return redirect(url_for("index"))
     if request.method == "POST":
-        name = request.form.get("name", "").strip()
-        email = request.form.get("email", "").strip().lower()
+        name = sanitize(request.form.get("name", ""))
+        email = sanitize(request.form.get("email", "")).lower()
         password = request.form.get("password", "")
         confirm = request.form.get("confirm_password", "")
         if not name or not email or not password:
             flash("جميع الحقول مطلوبة", "error")
-        elif len(password) < 6:
-            flash("كلمة المرور يجب أن تكون 6 أحرف على الأقل", "error")
-        elif password != confirm:
-            flash("كلمتا المرور غير متطابقتين", "error")
+        elif len(name) > 100:
+            flash("الاسم طويل جداً", "error")
+        elif len(email) > 254 or not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
+            flash("البريد الإلكتروني غير صحيح", "error")
         else:
-            conn = get_db()
-            existing = conn.execute("SELECT id FROM users WHERE email=?", (email,)).fetchone()
-            if existing:
-                flash("البريد الإلكتروني مستخدم بالفعل", "error")
-                conn.close()
+            pw_error = validate_password(password)
+            if pw_error:
+                flash(pw_error, "error")
+            elif password != confirm:
+                flash("كلمتا المرور غير متطابقتين", "error")
             else:
-                now = datetime.now().strftime("%Y-%m-%d %H:%M")
-                conn.execute("INSERT INTO users (email, password_hash, name, created_at) VALUES (?, ?, ?, ?)",
-                             (email, generate_password_hash(password), name, now))
-                conn.commit()
-                user = conn.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
-                conn.close()
-                session["user_id"] = user["id"]
-                session["user_name"] = user["name"]
-                session["user_email"] = user["email"]
-                return redirect(url_for("index"))
+                conn = get_db()
+                existing = conn.execute("SELECT id FROM users WHERE email=?", (email,)).fetchone()
+                if existing:
+                    flash("البريد الإلكتروني مستخدم بالفعل", "error")
+                    conn.close()
+                else:
+                    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+                    conn.execute("INSERT INTO users (email, password_hash, name, created_at) VALUES (?, ?, ?, ?)",
+                                 (email, generate_password_hash(password), name, now))
+                    conn.commit()
+                    user = conn.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+                    conn.close()
+                    session.clear()
+                    session.permanent = True
+                    session["user_id"] = user["id"]
+                    session["user_name"] = user["name"]
+                    session["user_email"] = user["email"]
+                    session["login_time"] = datetime.now().isoformat()
+                    logger.info("New user registered: %s from %s", email, request.remote_addr)
+                    return redirect(url_for("index"))
     return render_template("register.html")
 
 
 @app.route("/logout")
 def logout():
+    uid = session.get("user_id")
+    if uid:
+        logger.info("User %s logged out", uid)
     session.clear()
     return redirect(url_for("login"))
 
@@ -181,7 +311,7 @@ def index():
         rows = conn.execute("SELECT COUNT(*), SUM(price) FROM orders WHERE kingdom_id=?", (k["id"],)).fetchone()
         count = rows[0] or 0
         total_price = int(rows[1] or 0)
-        kingdom_stats.append({"id": k["id"], "name": k["name"], "count": count, "total_price": total_price, "created_at": k["created_at"]})
+        kingdom_stats.append({"id": k["id"], "name": sanitize(k["name"]), "count": count, "total_price": total_price, "created_at": k["created_at"]})
         kid_list.append(k["id"])
 
     placeholders = ",".join("?" * len(kid_list)) if kid_list else "0"
@@ -205,8 +335,8 @@ def index():
 @app.route("/kingdom/new", methods=["POST"])
 @login_required
 def new_kingdom():
-    name = request.form.get("name", "").strip()
-    if not name:
+    name = sanitize(request.form.get("name", ""))
+    if not name or len(name) > 200:
         return redirect(url_for("index"))
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
     conn = get_db()
@@ -214,6 +344,7 @@ def new_kingdom():
                  (session["user_id"], name, now))
     conn.commit()
     conn.close()
+    logger.info("Kingdom '%s' created by user %s", name, session["user_id"])
     return redirect(url_for("index"))
 
 
@@ -221,46 +352,46 @@ def new_kingdom():
 @login_required
 def kingdom_page(kingdom_id):
     if not own_kingdom(kingdom_id):
-        return redirect(url_for("index"))
+        abort(403)
     conn = get_db()
     kingdom = conn.execute("SELECT * FROM kingdoms WHERE id=?", (kingdom_id,)).fetchone()
     if not kingdom:
         conn.close()
-        return redirect(url_for("index"))
+        abort(404)
     orders = conn.execute("SELECT * FROM orders WHERE kingdom_id=? ORDER BY id ASC", (kingdom_id,)).fetchall()
     stats = get_stats(conn, kingdom_id)
     conn.close()
-    return render_template("index.html", orders=orders, stats=stats, kingdom=kingdom)
+    safe_orders = []
+    for o in orders:
+        safe_orders.append({
+            "id": o["id"], "kingdom_id": o["kingdom_id"],
+            "customer_name": sanitize(o["customer_name"]),
+            "food": o["food"], "wood": o["wood"], "stone": o["stone"], "gold": o["gold"],
+            "price": o["price"],
+            "payment_type": sanitize(o["payment_type"]),
+            "notes": sanitize(o["notes"]),
+            "status": o["status"], "created_at": o["created_at"]
+        })
+    return render_template("index.html", orders=safe_orders, stats=stats, kingdom={"id": kingdom["id"], "name": sanitize(kingdom["name"]), "created_at": kingdom["created_at"]})
 
 
 @app.route("/kingdom/<int:kingdom_id>/add", methods=["POST"])
 @login_required
 def add_order(kingdom_id):
     if not own_kingdom(kingdom_id):
-        return redirect(url_for("index"))
-    customer = request.form.get("customer_name", "").strip()
-    food = request.form.get("food", 0)
-    wood = request.form.get("wood", 0)
-    stone = request.form.get("stone", 0)
-    gold = request.form.get("gold", 0)
-    price = request.form.get("price", 0)
-    payment = request.form.get("payment_type", "")
-    notes = request.form.get("notes", "")
-
-    if not customer:
+        abort(403)
+    customer = sanitize(request.form.get("customer_name", ""))
+    if not customer or len(customer) > 200:
         return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
-
-    try:
-        food = int(float(food)) if food else 0
-        wood = int(float(wood)) if wood else 0
-        stone = int(float(stone)) if stone else 0
-        gold = int(float(gold)) if gold else 0
-        price = float(price) if price else 0
-    except ValueError:
-        pass
+    food = validate_int(request.form.get("food", 0))
+    wood = validate_int(request.form.get("wood", 0))
+    stone = validate_int(request.form.get("stone", 0))
+    gold = validate_int(request.form.get("gold", 0))
+    price = validate_float(request.form.get("price", 0))
+    payment = sanitize(request.form.get("payment_type", ""))[:50]
+    notes = sanitize(request.form.get("notes", ""))[:500]
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
     conn = get_db()
     conn.execute(
         "INSERT INTO orders (kingdom_id, customer_name, food, wood, stone, gold, price, payment_type, notes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -275,24 +406,17 @@ def add_order(kingdom_id):
 @login_required
 def edit_order(kingdom_id, order_id):
     if not own_kingdom(kingdom_id):
-        return redirect(url_for("index"))
-    customer = request.form.get("customer_name", "").strip()
-    food = request.form.get("food", 0)
-    wood = request.form.get("wood", 0)
-    stone = request.form.get("stone", 0)
-    gold = request.form.get("gold", 0)
-    price = request.form.get("price", 0)
-    payment = request.form.get("payment_type", "")
-    notes = request.form.get("notes", "")
-
-    try:
-        food = int(float(food)) if food else 0
-        wood = int(float(wood)) if wood else 0
-        stone = int(float(stone)) if stone else 0
-        gold = int(float(gold)) if gold else 0
-        price = float(price) if price else 0
-    except ValueError:
-        pass
+        abort(403)
+    customer = sanitize(request.form.get("customer_name", ""))
+    if not customer or len(customer) > 200:
+        return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
+    food = validate_int(request.form.get("food", 0))
+    wood = validate_int(request.form.get("wood", 0))
+    stone = validate_int(request.form.get("stone", 0))
+    gold = validate_int(request.form.get("gold", 0))
+    price = validate_float(request.form.get("price", 0))
+    payment = sanitize(request.form.get("payment_type", ""))[:50]
+    notes = sanitize(request.form.get("notes", ""))[:500]
 
     conn = get_db()
     conn.execute(
@@ -308,7 +432,7 @@ def edit_order(kingdom_id, order_id):
 @login_required
 def toggle_status(kingdom_id, order_id):
     if not own_kingdom(kingdom_id):
-        return redirect(url_for("index"))
+        abort(403)
     conn = get_db()
     order = conn.execute("SELECT status FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id)).fetchone()
     if order:
@@ -323,7 +447,7 @@ def toggle_status(kingdom_id, order_id):
 @login_required
 def copy_order(kingdom_id, order_id):
     if not own_kingdom(kingdom_id):
-        return redirect(url_for("index"))
+        abort(403)
     conn = get_db()
     order = conn.execute("SELECT * FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id)).fetchone()
     if order:
@@ -341,7 +465,7 @@ def copy_order(kingdom_id, order_id):
 @login_required
 def delete_order(kingdom_id, order_id):
     if not own_kingdom(kingdom_id):
-        return redirect(url_for("index"))
+        abort(403)
     conn = get_db()
     conn.execute("DELETE FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id))
     conn.commit()
@@ -353,12 +477,13 @@ def delete_order(kingdom_id, order_id):
 @login_required
 def delete_kingdom(kingdom_id):
     if not own_kingdom(kingdom_id):
-        return redirect(url_for("index"))
+        abort(403)
     conn = get_db()
     conn.execute("DELETE FROM orders WHERE kingdom_id=?", (kingdom_id,))
     conn.execute("DELETE FROM kingdoms WHERE id=?", (kingdom_id,))
     conn.commit()
     conn.close()
+    logger.info("Kingdom %s deleted by user %s", kingdom_id, session["user_id"])
     return redirect(url_for("index"))
 
 
