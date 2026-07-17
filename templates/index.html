@@ -269,7 +269,7 @@
           <td class="stone">{{ order.stone|number_format }}</td>
           <td class="gold">{{ order.gold|number_format }}</td>
           <td class="price">{{ "%.2f"|format(order.price) }} $</td>
-          <td class="payment"><span class="payment-badge">{{ order.payment_type }}</span></td>
+          <td class="payment"><span class="payment-badge {% if order.payment_type|upper == 'USDT' %}payment-usdt{% elif order.payment_type|upper == 'CASH' %}payment-cash{% elif order.payment_type|upper == 'BANK' %}payment-bank{% else %}payment-default{% endif %}">{{ order.payment_type }}</span></td>
           <td class="notes-cell">{{ order.notes }}</td>
           <td class="date">{{ order.created_at }}</td>
           <td class="actions">
