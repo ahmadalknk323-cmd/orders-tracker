@@ -753,6 +753,10 @@ img{display:block;max-width:100%}
   text-shadow:0 1px 2px rgba(15,23,42,.2);
 }
 .table-shell thead th:last-child{text-align:center}
+.th-food{color:#22C55E!important;text-shadow:0 0 10px rgba(34,197,94,.25)}
+.th-wood{color:#C08457!important;text-shadow:0 0 10px rgba(192,132,87,.25)}
+.th-stone{color:#CBD5E1!important;text-shadow:0 0 10px rgba(203,213,225,.18)}
+.th-gold{color:#FBBF24!important;text-shadow:0 0 10px rgba(251,191,36,.25)}
 
 .table-shell tbody tr{
   transition:all .3s cubic-bezier(.4,0,.2,1);
