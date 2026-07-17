@@ -74,6 +74,13 @@ def init_db():
     except sqlite3.OperationalError:
         pass
     conn.commit()
+    admin_email = "ahmadalknk323@gmail.com"
+    existing = conn.execute("SELECT id FROM users WHERE email=?", (admin_email,)).fetchone()
+    if not existing:
+        now = datetime.now().strftime("%Y-%m-%d %H:%M")
+        conn.execute("INSERT INTO users (email, password_hash, name, created_at) VALUES (?, ?, ?, ?)",
+                     (admin_email, generate_password_hash("0567543987"), "Ahmad", now))
+        conn.commit()
     conn.close()
 
 
