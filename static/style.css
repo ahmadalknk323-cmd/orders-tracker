@@ -230,9 +230,9 @@ img{display:block;max-width:100%}
 .card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-md),0 0 60px rgba(59,130,246,.03);transform:translateY(-3px)}
 @keyframes cardReveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-.card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
-.card-header h2{font-size:16px;font-weight:800;color:var(--text-bright);letter-spacing:-.01em;text-shadow:0 0 12px rgba(255,255,255,.08)}
-.card-header p{font-size:11px;color:var(--muted);margin-top:2px;font-weight:400}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+.card-header h2{font-size:22px;font-weight:700;color:var(--text-bright);letter-spacing:-.01em;text-shadow:0 0 12px rgba(255,255,255,.08);text-align:right}
+.card-header p{font-size:13px;color:var(--muted);margin-top:4px;font-weight:400;line-height:1.5}
 
 .card-header-icon{
   width:36px;height:36px;display:grid;place-items:center;
