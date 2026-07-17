@@ -1725,3 +1725,924 @@ img{display:block;max-width:100%}
     0 4px 6px rgba(0,0,0,0.25),
     var(--shadow-lg);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   GLASS TYPOGRAPHY SYSTEM — Apple Vision Pro Style
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Master Glass Text — Applied to ALL visible text ── */
+html,body,
+.sidebar,.sidebar-nav,.sidebar-brand,.sidebar-footer,
+.topbar,.main-wrap,.content,.card,.modal,.form-section,
+.table-shell,.form-card,.table-card,.stat-card,.qs-card,
+.kingdom-tile,.insight-card,.cmd-hero,.hero-banner,.empty-state,
+.modal-content,.auth-card,.stats-toggle-wrap{
+  color:#E0EAFF;
+  text-shadow:
+    0 0 1px rgba(255,255,255,.15),
+    0 1px 2px rgba(0,0,0,.2);
+}
+
+/* ══════════════════════════════════════
+   GLASS COLOR PALETTE (gradient defs)
+   ══════════════════════════════════════ */
+
+/* Main Titles — Glass White */
+.glass-title-main{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E8F0FE 30%,#CBD5E1 70%,#94A3B8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(255,255,255,.12)) drop-shadow(0 0 20px rgba(220,235,255,.06));
+  text-shadow:none;
+}
+
+/* Section Titles — Ice Blue Glass */
+.glass-title-section{
+  background:linear-gradient(180deg,#D7F1FF 0%,#B8D4FF 40%,#93C5FD 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(147,197,253,.18)) drop-shadow(0 0 14px rgba(184,212,255,.08));
+  text-shadow:none;
+}
+
+/* Button Text — Gold Glass */
+.glass-text-gold{
+  background:linear-gradient(180deg,#FFEC8A 0%,#FFD54A 30%,#FFC83D 60%,#F59E0B 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(250,204,21,.25)) drop-shadow(0 0 12px rgba(255,213,74,.12));
+  text-shadow:none;
+}
+
+/* Statistics — Blue Glass */
+.glass-text-blue{
+  background:linear-gradient(180deg,#D7F1FF 0%,#93C5FD 40%,#60A5FA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(96,165,250,.2)) drop-shadow(0 0 16px rgba(59,130,246,.08));
+  text-shadow:none;
+}
+
+/* Money — Bright Emerald */
+.glass-text-money{
+  background:linear-gradient(180deg,#A7F3D0 0%,#6EE7B7 30%,#34D399 70%,#10B981 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(52,211,153,.2)) drop-shadow(0 0 14px rgba(16,185,129,.1));
+  text-shadow:none;
+}
+
+/* Food — Orange Glass */
+.glass-text-food{
+  background:linear-gradient(180deg,#FFEDD5 0%,#FDBA74 30%,#FB923C 70%,#F97316 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(251,146,60,.2)) drop-shadow(0 0 14px rgba(249,115,22,.1));
+  text-shadow:none;
+}
+
+/* Wood — Amber Glass */
+.glass-text-wood{
+  background:linear-gradient(180deg,#FEF3C7 0%,#FCD34D 30%,#FBBF24 70%,#F59E0B 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(251,191,36,.2)) drop-shadow(0 0 14px rgba(245,158,11,.1));
+  text-shadow:none;
+}
+
+/* Stone — Crystal Blue */
+.glass-text-stone{
+  background:linear-gradient(180deg,#DBEAFE 0%,#BFDBFE 30%,#93C5FD 70%,#60A5FA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(147,197,253,.2)) drop-shadow(0 0 14px rgba(96,165,250,.1));
+  text-shadow:none;
+}
+
+/* Gold Resource — Luxury Gold */
+.glass-text-goldres{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 80%,#EAB308 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 10px rgba(250,204,21,.28)) drop-shadow(0 0 18px rgba(234,179,8,.12));
+  text-shadow:none;
+}
+
+/* Success — Emerald */
+.glass-text-success{
+  background:linear-gradient(180deg,#D1FAE5 0%,#6EE7B7 40%,#34D399 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(52,211,153,.22)) drop-shadow(0 0 14px rgba(16,185,129,.1));
+  text-shadow:none;
+}
+
+/* Danger — Red Glass */
+.glass-text-danger{
+  background:linear-gradient(180deg,#FEE2E2 0%,#FCA5A5 30%,#F87171 70%,#EF4444 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(248,113,113,.22)) drop-shadow(0 0 14px rgba(239,68,68,.1));
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — TITLES & HEADINGS
+   ═══════════════════════════════════════ */
+
+/* Main Page Titles (h1) */
+.cmd-hero-title,
+.hero-title{
+  background:linear-gradient(180deg,#FFFFFF 0%,#F0F4FF 20%,#D7F1FF 45%,#B8D4FF 65%,#93C5FD 85%,#7DB8FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 4px 20px rgba(147,197,253,.3)) drop-shadow(0 0 40px rgba(184,212,255,.12)) drop-shadow(0 2px 4px rgba(255,255,255,.08));
+  text-shadow:none;
+}
+
+/* Card Headers (h2) */
+.card-header h2,
+.table-header h2,
+.modal-content h2{
+  background:linear-gradient(180deg,#FFFFFF 0%,#EEF2FF 25%,#D7F1FF 55%,#BFDBFE 80%,#93C5FD 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 12px rgba(147,197,253,.2)) drop-shadow(0 0 20px rgba(184,212,255,.08));
+  text-shadow:none;
+  letter-spacing:-.01em;
+}
+
+/* Section Headings (h3) */
+.form-section-head h3{
+  background:linear-gradient(180deg,#E0EAFF 0%,#B8D4FF 40%,#93C5FD 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 10px rgba(147,197,253,.18)) drop-shadow(0 0 16px rgba(184,212,255,.08));
+  text-shadow:none;
+}
+
+/* Auth Page Titles */
+.auth-logo h1{
+  background:linear-gradient(180deg,#FFFFFF 0%,#EEF2FF 30%,#D7F1FF 60%,#B8D4FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 10px rgba(147,197,253,.2)) drop-shadow(0 0 16px rgba(184,212,255,.1));
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — SUBTITLES & DESC
+   ═══════════════════════════════════════ */
+
+/* Card descriptions (p under h2) */
+.card-header p,
+.table-header p{
+  background:linear-gradient(180deg,#BFDBFE 0%,#93C5FD 40%,#7BB8E8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(147,197,255,.14));
+  text-shadow:none;
+}
+
+/* Section descriptions */
+.form-section-head p{
+  background:linear-gradient(180deg,#BFDBFE 0%,#93C5FD 50%,#7BB8E8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(147,197,255,.12));
+  text-shadow:none;
+}
+
+/* Hero subtitles */
+.cmd-hero-sub,
+.hero-subtitle{
+  background:linear-gradient(180deg,#C2D9FF 0%,#93C5FD 50%,#7BB8E8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(147,197,255,.15));
+  text-shadow:none;
+}
+
+/* Auth subtitles */
+.auth-logo p{
+  background:linear-gradient(180deg,#CBD5E1 0%,#94A3B8 50%,#7B8DA6 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(148,163,184,.12));
+  text-shadow:none;
+}
+
+/* Sidebar footer text */
+.sidebar-footer-card p{
+  background:linear-gradient(180deg,#CBD5E1 0%,#94A3B8 50%,#8497AD 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(148,163,184,.1));
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — BUTTONS
+   ═══════════════════════════════════════ */
+
+/* Gold Button Text */
+.form-submit,
+.btn-primary,
+.cmd-hero-btn-gold,
+.hero-btn-gold,
+.auth-submit,
+.kingdoms-create .btn-primary{
+  background-image:none;
+  color:transparent;
+  background-color:linear-gradient(140deg,#F59E0B,#D97706);
+  background:linear-gradient(140deg,#F59E0B,#D97706);
+}
+
+.form-submit,
+.btn-primary,
+.cmd-hero-btn-gold,
+.hero-btn-gold,
+.auth-submit{
+  position:relative;
+}
+
+.form-submit > i, .form-submit > span,
+.btn-primary > i, .btn-primary > span{
+  filter:drop-shadow(0 1px 1px rgba(15,23,42,.2));
+}
+
+/* Ghost Button Text */
+.btn-ghost,
+.btn-danger-ghost,
+.btn-gold-ghost,
+.btn-green-ghost,
+.btn-amber-ghost{
+  position:relative;
+}
+
+.btn-ghost{
+  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+}
+.btn-ghost:hover{
+  background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.04));
+}
+
+/* Hero Outline Button */
+.cmd-hero-btn-outline,
+.hero-btn-outline{
+  background:rgba(255,255,255,.04);
+}
+.cmd-hero-btn-outline:hover,
+.hero-btn-outline:hover{
+  background:rgba(255,255,255,.08);
+}
+
+/* Button Text Glow on Hover */
+.btn:hover,
+.form-submit:hover,
+.cmd-hero-btn:hover,
+.hero-btn:hover,
+.auth-submit:hover{
+  filter:brightness(1.06);
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — FORM LABELS
+   ═══════════════════════════════════════ */
+
+/* Main Field Labels */
+.field label{
+  background:linear-gradient(180deg,#E8F0FE 0%,#D7F1FF 40%,#B8D4FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(184,212,255,.14));
+  text-shadow:none;
+}
+
+/* Resource Labels — Colored Glass */
+.resource-field.food-field label{
+  background:linear-gradient(180deg,#FFEDD5 0%,#FDBA74 40%,#FB923C 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(251,146,60,.2));
+  text-shadow:none;
+}
+.resource-field.wood-field label{
+  background:linear-gradient(180deg,#FEF3C7 0%,#FCD34D 40%,#FBBF24 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(251,191,36,.2));
+  text-shadow:none;
+}
+.resource-field.stone-field label{
+  background:linear-gradient(180deg,#DBEAFE 0%,#BFDBFE 40%,#93C5FD 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(147,197,253,.18));
+  text-shadow:none;
+}
+.resource-field.gold-field label{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 30%,#FFD54A 70%,#FACC15 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 10px rgba(250,204,21,.25));
+  text-shadow:none;
+}
+
+/* Modal & Form Group Labels */
+.form-group label{
+  background:linear-gradient(180deg,#E8F0FE 0%,#D7F1FF 40%,#B8D4FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(184,212,255,.12));
+  text-shadow:none;
+}
+
+/* Auth Field Labels */
+.auth-field label{
+  background:linear-gradient(180deg,#CBD5E1 0%,#94A3B8 50%,#7B8DA6 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(148,163,184,.1));
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — INPUT VALUES
+   ═══════════════════════════════════════ */
+
+/* Input text — Bright White Glass */
+.field-input-wrap input,
+.form-group input,
+.form-group select,
+.form-group textarea{
+  color:#F0F4FF;
+  text-shadow:0 0 2px rgba(255,255,255,.1);
+}
+.field-input-wrap input:focus,
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  color:#FFFFFF;
+  text-shadow:0 0 3px rgba(255,255,255,.15),0 0 8px rgba(255,255,255,.05);
+}
+
+/* Placeholder — Silver Glass */
+.field-input-wrap input::placeholder,
+.form-group input::placeholder,
+.form-group textarea::placeholder{
+  background:linear-gradient(180deg,rgba(148,163,184,.6),rgba(100,116,139,.5));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  text-shadow:none;
+}
+
+/* Auth Input */
+.auth-field input{
+  color:#F0F4FF;
+  text-shadow:0 0 2px rgba(255,255,255,.1);
+}
+.auth-field input:focus{
+  color:#FFFFFF;
+  text-shadow:0 0 3px rgba(255,255,255,.15);
+}
+.auth-field input::placeholder{
+  background:linear-gradient(180deg,rgba(148,163,184,.5),rgba(100,116,139,.4));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — SIDEBAR
+   ═══════════════════════════════════════ */
+
+/* Sidebar Brand */
+.sidebar-brand-text h3{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E0EAFF 30%,#CBD5E1 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(255,255,255,.1)) drop-shadow(0 0 12px rgba(220,235,255,.06));
+  text-shadow:none;
+}
+.sidebar-brand-text span{
+  background:linear-gradient(180deg,#94A3B8 0%,#7B8DA6 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(148,163,184,.08));
+  text-shadow:none;
+}
+
+/* Sidebar Section Title */
+.sidebar-section-title{
+  background:linear-gradient(90deg,#93C5FD 0%,#7BB8E8 50%,#60A5FA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(147,197,253,.12));
+  text-shadow:none;
+}
+
+/* Sidebar Nav Links */
+.sidebar-link span{
+  background:linear-gradient(180deg,#CBD5E1 0%,#94A3B8 50%,#8497AD 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 3px rgba(148,163,184,.06));
+  text-shadow:none;
+  transition:all .25s;
+}
+.sidebar-link:hover span{
+  background:linear-gradient(180deg,#E8F0FE 0%,#D7F1FF 50%,#B8D4FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(184,212,255,.15));
+}
+.sidebar-link.active span{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 30%,#FFD54A 70%,#FACC15 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 10px rgba(250,204,21,.25)) drop-shadow(0 0 18px rgba(255,213,74,.12));
+}
+
+/* Sidebar Footer Card */
+.sidebar-footer-card h4{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E8F0FE 30%,#CBD5E1 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(255,255,255,.08));
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — TOPBAR
+   ═══════════════════════════════════════ */
+
+.topbar-title{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E0EAFF 30%,#CBD5E1 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(255,255,255,.1)) drop-shadow(0 0 12px rgba(220,235,255,.06));
+  text-shadow:none;
+}
+
+.topbar-pill{
+  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+}
+.topbar-pill span{
+  background:linear-gradient(180deg,#DBEAFE 0%,#93C5FD 50%,#7BB8E8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(147,197,253,.12));
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — STATISTICS & NUMBERS
+   ═══════════════════════════════════════ */
+
+/* Hero Stat Numbers */
+.cmd-active-num{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 15%,#FFD54A 40%,#FACC15 70%,#EAB308 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 3px 12px rgba(250,204,21,.3)) drop-shadow(0 0 24px rgba(255,213,74,.12));
+  text-shadow:none;
+}
+.cmd-finished-num{
+  background:linear-gradient(180deg,#D1FAE5 0%,#A7F3D0 15%,#6EE7B7 40%,#34D399 70%,#10B981 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 3px 12px rgba(52,211,153,.3)) drop-shadow(0 0 24px rgba(16,185,129,.12));
+  text-shadow:none;
+}
+.cmd-total-num{
+  background:linear-gradient(180deg,#DBEAFE 0%,#BFDBFE 15%,#93C5FD 40%,#60A5FA 70%,#3B82F6 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 3px 12px rgba(96,165,250,.3)) drop-shadow(0 0 24px rgba(59,130,246,.12));
+  text-shadow:none;
+}
+
+/* Hero Stat Labels */
+.cmd-hero-stat-label{
+  background:linear-gradient(180deg,#BFDBFE 0%,#93C5FD 50%,#7BB8E8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(147,197,253,.1));
+  text-shadow:none;
+}
+
+/* Hero Fstat Numbers */
+.hero-fstat-num{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E0EAFF 25%,#D7F1FF 55%,#B8D4FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 10px rgba(184,212,255,.2)) drop-shadow(0 0 18px rgba(147,197,253,.08));
+  text-shadow:none;
+}
+.hero-fstat-label{
+  background:linear-gradient(180deg,#BFDBFE 0%,#93C5FD 50%,#7BB8E8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(147,197,253,.08));
+  text-shadow:none;
+}
+
+/* Kingdom Count */
+.hero-kingdom-num{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 80%,#EAB308 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 3px 14px rgba(250,204,21,.3)) drop-shadow(0 0 24px rgba(255,213,74,.12));
+  text-shadow:none;
+}
+.hero-kingdom-label{
+  background:linear-gradient(180deg,#94A3B8 0%,#7B8DA6 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 3px rgba(148,163,184,.08));
+  text-shadow:none;
+}
+
+/* Quick Stat Numbers */
+.qs-num{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E8F0FE 30%,#D7F1FF 60%,#B8D4FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(184,212,255,.15)) drop-shadow(0 0 14px rgba(147,197,253,.06));
+  text-shadow:none;
+}
+.qs-label{
+  background:linear-gradient(180deg,#BFDBFE 0%,#93C5FD 50%,#7BB8E8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(147,197,253,.08));
+  text-shadow:none;
+}
+.qs-trend{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FFD54A 50%,#FACC15 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(250,204,21,.15));
+  text-shadow:none;
+}
+
+/* Stats Panel Numbers */
+.stat-label{
+  background:linear-gradient(180deg,#E8F0FE 0%,#D7F1FF 40%,#B8D4FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(184,212,255,.12));
+  text-shadow:none;
+}
+.stat-all .stat-label{
+  background:linear-gradient(180deg,#DBEAFE 0%,#93C5FD 40%,#60A5FA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(96,165,250,.15));
+}
+.stat-finished .stat-label{
+  background:linear-gradient(180deg,#D1FAE5 0%,#6EE7B7 40%,#34D399 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(52,211,153,.15));
+}
+.stat-active .stat-label{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 30%,#FFD54A 70%,#FACC15 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(250,204,21,.15));
+}
+
+/* Stat Row Values */
+.stat-food{
+  background:linear-gradient(180deg,#FFEDD5 0%,#FDBA74 40%,#FB923C 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(251,146,60,.15));
+  text-shadow:none;
+}
+.stat-wood{
+  background:linear-gradient(180deg,#FEF3C7 0%,#FCD34D 40%,#FBBF24 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(251,191,36,.15));
+  text-shadow:none;
+}
+.stat-stone{
+  background:linear-gradient(180deg,#DBEAFE 0%,#BFDBFE 40%,#93C5FD 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(147,197,253,.12));
+  text-shadow:none;
+}
+.stat-gold{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 30%,#FFD54A 70%,#FACC15 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(250,204,21,.18));
+  text-shadow:none;
+}
+.stat-price{
+  background:linear-gradient(180deg,#D1FAE5 0%,#A7F3D0 30%,#6EE7B7 70%,#34D399 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(52,211,153,.12));
+  text-shadow:none;
+}
+
+/* Insight Number */
+.insight-number{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 15%,#FFD54A 40%,#FACC15 70%,#EAB308 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 4px 20px rgba(250,204,21,.3)) drop-shadow(0 0 30px rgba(255,213,74,.12));
+  text-shadow:none;
+}
+.insight-label{
+  background:linear-gradient(180deg,#DBEAFE 0%,#93C5FD 50%,#60A5FA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(96,165,250,.12));
+  text-shadow:none;
+}
+.insight-copy{
+  background:linear-gradient(180deg,#BFDBFE 0%,#93C5FD 50%,#7BB8E8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(147,197,253,.08));
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — TABLE
+   ═══════════════════════════════════════ */
+
+/* Table Header Text — Glowing Glass */
+.table-shell thead th{
+  background:linear-gradient(180deg,rgba(30,41,59,.95),rgba(30,41,59,.95))!important;
+  color:transparent;
+  background-clip:padding-box;
+}
+.th-food{
+  background:linear-gradient(180deg,#C6FFC0 0%,#7CFF71 40%,#4ADE80 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(124,255,113,.25)) drop-shadow(0 0 16px rgba(74,222,128,.1));
+}
+.th-wood{
+  background:linear-gradient(180deg,#FFD4B0 0%,#FF9A52 40%,#FB923C 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(255,154,82,.25)) drop-shadow(0 0 16px rgba(251,146,60,.1));
+}
+.th-stone{
+  background:linear-gradient(180deg,#E0EAFF 0%,#B8D4FF 40%,#93C5FD 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(184,212,255,.2)) drop-shadow(0 0 16px rgba(147,197,253,.08));
+}
+.th-gold{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 80%,#EAB308 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 10px rgba(250,204,21,.28)) drop-shadow(0 0 18px rgba(234,179,8,.1));
+}
+.th-price{
+  background:linear-gradient(180deg,#D1FAE5 0%,#A7F3D0 30%,#6EE7B7 70%,#34D399 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(52,211,153,.2)) drop-shadow(0 0 14px rgba(16,185,129,.1));
+}
+.th-payment{
+  background:linear-gradient(180deg,#EDE9FE 0%,#C4B5FD 40%,#A78BFA 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(167,139,250,.2)) drop-shadow(0 0 14px rgba(139,92,246,.1));
+}
+.th-notes{
+  background:linear-gradient(180deg,#E0EAFF 0%,#BFDBFE 40%,#93C5FD 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 1px 5px rgba(147,197,253,.12));
+}
+.th-date{
+  background:linear-gradient(180deg,#DBEAFE 0%,#93C5FD 40%,#60A5FA 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(96,165,250,.2));
+}
+.th-num,.th-actions{
+  background:rgba(255,255,255,.06)!important;
+  color:#D7F1FF!important;
+  text-shadow:0 0 6px rgba(184,212,255,.12);
+}
+
+/* Table Row Number */
+.table-shell .row-num{
+  background:linear-gradient(180deg,#DBEAFE 0%,#93C5FD 40%,#60A5FA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(96,165,250,.2)) drop-shadow(0 0 12px rgba(59,130,246,.08));
+  text-shadow:none;
+}
+
+/* Table Customer Name */
+.table-shell .customer{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E8F0FE 40%,#D7F1FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 6px rgba(255,255,255,.08));
+  text-shadow:none;
+}
+
+/* Table Resource Values — Colored Glass */
+.table-shell .food{
+  background:linear-gradient(180deg,#C6FFC0 0%,#7CFF71 40%,#4ADE80 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(124,255,113,.22)) drop-shadow(0 0 14px rgba(74,222,128,.08))!important;
+  text-shadow:none!important;
+}
+.table-shell .wood{
+  background:linear-gradient(180deg,#FFD4B0 0%,#FF9A52 40%,#FB923C 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(255,154,82,.22)) drop-shadow(0 0 14px rgba(251,146,60,.08))!important;
+  text-shadow:none!important;
+}
+.table-shell .stone{
+  background:linear-gradient(180deg,#E0EAFF 0%,#B8D4FF 40%,#93C5FD 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(184,212,255,.18)) drop-shadow(0 0 14px rgba(147,197,253,.06))!important;
+  text-shadow:none!important;
+}
+.table-shell .gold{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 80%,#EAB308 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 10px rgba(250,204,21,.25)) drop-shadow(0 0 18px rgba(234,179,8,.1))!important;
+  text-shadow:none!important;
+}
+.table-shell .price{
+  background:linear-gradient(180deg,#D1FAE5 0%,#A7F3D0 25%,#6EE7B7 55%,#34D399 85%,#10B981 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 10px rgba(52,211,153,.2)) drop-shadow(0 0 16px rgba(16,185,129,.08))!important;
+  text-shadow:none!important;
+}
+
+/* Table Notes */
+.table-shell .notes-cell{
+  background:linear-gradient(180deg,#DBEAFE 0%,#BFDBFE 40%,#93C5FD 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(147,197,253,.08));
+  text-shadow:none;
+}
+
+/* Table Date */
+.table-shell .date{
+  background:linear-gradient(180deg,#DBEAFE 0%,#93C5FD 40%,#60A5FA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(96,165,250,.12));
+  text-shadow:none;
+}
+
+/* Table Row Hover Glow */
+.table-shell tbody tr:hover .food{
+  filter:drop-shadow(0 2px 10px rgba(124,255,113,.3)) drop-shadow(0 0 20px rgba(74,222,128,.12))!important;
+}
+.table-shell tbody tr:hover .wood{
+  filter:drop-shadow(0 2px 10px rgba(255,154,82,.3)) drop-shadow(0 0 20px rgba(251,146,60,.12))!important;
+}
+.table-shell tbody tr:hover .stone{
+  filter:drop-shadow(0 2px 10px rgba(184,212,255,.25)) drop-shadow(0 0 20px rgba(147,197,253,.1))!important;
+}
+.table-shell tbody tr:hover .gold{
+  filter:drop-shadow(0 2px 12px rgba(250,204,21,.35)) drop-shadow(0 0 24px rgba(234,179,8,.14))!important;
+}
+.table-shell tbody tr:hover .price{
+  filter:drop-shadow(0 2px 12px rgba(52,211,153,.3)) drop-shadow(0 0 20px rgba(16,185,129,.12))!important;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — BADGES & CAPSULES
+   ═══════════════════════════════════════ */
+
+/* Customer Pill */
+.customer-pill{
+  background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.04));
+  color:transparent;
+}
+.customer-pill{
+  background:linear-gradient(180deg,#E8F0FE 0%,#D7F1FF 30%,#B8D4FF 70%,#93C5FD 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(184,212,255,.12));
+  text-shadow:none;
+}
+
+/* Payment Badges */
+.payment-usdt{
+  background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(139,92,246,.08));
+}
+.payment-usdt span{
+  background:linear-gradient(180deg,#EDE9FE 0%,#C4B5FD 40%,#A78BFA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.payment-cash{
+  background:linear-gradient(135deg,rgba(16,185,129,.2),rgba(16,185,129,.08));
+}
+.payment-cash span{
+  background:linear-gradient(180deg,#D1FAE5 0%,#6EE7B7 40%,#34D399 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.payment-bank{
+  background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(59,130,246,.08));
+}
+.payment-bank span{
+  background:linear-gradient(180deg,#DBEAFE 0%,#93C5FD 40%,#60A5FA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.payment-default{
+  background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.08));
+}
+
+/* Table Count Badge */
+.table-count{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 6px rgba(250,204,21,.2));
+}
+
+/* Stats Trend Badges */
+.stats-trend-warn{
+  background:linear-gradient(135deg,rgba(250,204,21,.12),rgba(250,204,21,.06));
+}
+.stats-trend-warn{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FFD54A 50%,#FACC15 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(250,204,21,.18));
+}
+.stats-trend-success{
+  background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.06));
+}
+.stats-trend-success{
+  background:linear-gradient(180deg,#D1FAE5 0%,#6EE7B7 50%,#34D399 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(52,211,153,.18));
+}
+.stats-trend-gold{
+  background:linear-gradient(135deg,rgba(250,204,21,.12),rgba(250,204,21,.06));
+}
+.stats-trend-gold{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 30%,#FFD54A 70%,#FACC15 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 5px rgba(250,204,21,.2));
+}
+
+/* CMD Hero Badge */
+.cmd-hero-badge{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 80%,#EAB308 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(250,204,21,.2)) drop-shadow(0 0 14px rgba(234,179,8,.08));
+}
+
+/* Hero Badge */
+.hero-badge{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 20%,#FFD54A 50%,#FACC15 80%,#EAB308 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 2px 8px rgba(250,204,21,.2)) drop-shadow(0 0 14px rgba(234,179,8,.08));
+}
+
+/* Section Badge */
+.section-badge{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FFD54A 40%,#FACC15 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:drop-shadow(0 1px 4px rgba(250,204,21,.18));
+}
+
+/* Status Badges */
+.status-active{
+  background:linear-gradient(180deg,#FEF9C3 0%,#FDE68A 30%,#FFD54A 70%,#FACC15 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(250,204,21,.18));
+}
+.status-finished{
+  background:linear-gradient(180deg,#D1FAE5 0%,#6EE7B7 40%,#34D399 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(52,211,153,.18));
+}
+
+/* Insight Pill */
+.insight-pill{
+  background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.04));
+}
+.insight-pill{
+  background:linear-gradient(180deg,#D1FAE5 0%,#6EE7B7 40%,#34D399 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(52,211,153,.15));
+}
+
+/* Stats Toggle Button */
+.stats-toggle-btn{
+  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — KINGDOMS PAGE
+   ═══════════════════════════════════════ */
+
+.kingdom-tile-name{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E8F0FE 30%,#D7F1FF 60%,#B8D4FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 10px rgba(184,212,255,.18)) drop-shadow(0 0 16px rgba(147,197,253,.06));
+  text-shadow:none;
+}
+.kingdom-tile-stat strong{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E0EAFF 30%,#D7F1FF 70%,#B8D4FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px rgba(184,212,255,.15));
+  text-shadow:none;
+}
+.kingdom-tile-stat span{
+  background:linear-gradient(180deg,#BFDBFE 0%,#93C5FD 50%,#7BB8E8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 3px rgba(147,197,253,.08));
+  text-shadow:none;
+}
+.kingdom-tile-date{
+  background:linear-gradient(180deg,#94A3B8 0%,#7B8DA6 50%,#6B7A92 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 3px rgba(148,163,184,.06));
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — EMPTY STATE
+   ═══════════════════════════════════════ */
+
+.empty-state h3{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E8F0FE 30%,#D7F1FF 60%,#B8D4FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 10px rgba(184,212,255,.18));
+  text-shadow:none;
+}
+.empty-state p{
+  background:linear-gradient(180deg,#BFDBFE 0%,#93C5FD 50%,#7BB8E8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 1px 4px rgba(147,197,253,.08));
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — MODAL
+   ═══════════════════════════════════════ */
+
+.modal-content h2{
+  background:linear-gradient(180deg,#FFFFFF 0%,#EEF2FF 25%,#D7F1FF 55%,#BFDBFE 80%,#93C5FD 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 12px rgba(147,197,253,.2)) drop-shadow(0 0 20px rgba(184,212,255,.08));
+  text-shadow:none;
+}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — SCROLLBAR
+   ═══════════════════════════════════════ */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(250,204,21,.2),rgba(250,204,21,.08));border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,rgba(250,204,21,.3),rgba(250,204,21,.12))}
+
+/* ═══════════════════════════════════════
+   GLASS TYPOGRAPHY — SELECTION
+   ═══════════════════════════════════════ */
+::selection{
+  background:linear-gradient(135deg,rgba(250,204,21,.3),rgba(250,204,21,.15));
+  color:#FFFFFF;
+  text-shadow:none;
+}
