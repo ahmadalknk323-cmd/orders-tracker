@@ -122,6 +122,17 @@ def init_db():
     except sqlite3.OperationalError:
         pass
     conn.commit()
+    admin_email = os.environ.get("ADMIN_EMAIL")
+    admin_password = os.environ.get("ADMIN_PASSWORD")
+    if admin_email and admin_password:
+        admin_email = admin_email.strip().lower()
+        existing = conn.execute("SELECT id FROM users WHERE email=?", (admin_email,)).fetchone()
+        if not existing:
+            now = datetime.now().strftime("%Y-%m-%d %H:%M")
+            conn.execute("INSERT INTO users (email, password_hash, name, created_at) VALUES (?, ?, ?, ?)",
+                         (admin_email, generate_password_hash(admin_password), "Admin", now))
+            conn.commit()
+            logger.info("Admin account auto-created: %s", admin_email)
     conn.close()
 
 
