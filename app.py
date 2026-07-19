@@ -1,20 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
+from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import os
 import re
 import logging
+import sqlite3
 from datetime import datetime
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-
-USE_PG = bool(os.environ.get("DATABASE_URL", "").startswith("postgres"))
-if USE_PG:
-    import psycopg2
-    import psycopg2.extras
-else:
-    import sqlite3
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -35,7 +30,70 @@ if os.environ.get("RENDER"):
 csrf = CSRFProtect(app)
 limiter = Limiter(get_remote_address, app=app, default_limits=["200 per minute"], storage_uri="memory://")
 
-DB_URL = os.environ.get("DATABASE_URL", "")
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+if DATABASE_URL:
+    app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
+    logger.info("Using PostgreSQL database")
+else:
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "orders.db")
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
+    if os.environ.get("RENDER"):
+        logger.error("DATABASE_URL not set on Render! Data will be lost on restart. Set DATABASE_URL to a PostgreSQL connection string.")
+    else:
+        logger.info("Using local SQLite database: %s", db_path)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_size": 5,
+    "pool_recycle": 300,
+    "pool_pre_ping": True,
+    "max_overflow": 2,
+}
+
+db = SQLAlchemy(app)
+
+
+class User(db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.Text, unique=True, nullable=False)
+    password_hash = db.Column(db.Text, nullable=False)
+    name = db.Column(db.Text, default="")
+    created_at = db.Column(db.Text, default="")
+    kingdoms = db.relationship("Kingdom", backref="owner", lazy=True)
+
+
+class Kingdom(db.Model):
+    __tablename__ = "kingdoms"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), default=0)
+    name = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.Text, default="")
+    orders = db.relationship("Order", backref="kingdom", lazy=True, cascade="all, delete-orphan")
+
+
+class Order(db.Model):
+    __tablename__ = "orders"
+    id = db.Column(db.Integer, primary_key=True)
+    kingdom_id = db.Column(db.Integer, db.ForeignKey("kingdoms.id"), nullable=False)
+    customer_name = db.Column(db.Text, nullable=False)
+    food = db.Column(db.Integer, default=0)
+    wood = db.Column(db.Integer, default=0)
+    stone = db.Column(db.Integer, default=0)
+    gold = db.Column(db.Integer, default=0)
+    price = db.Column(db.Float, default=0.0)
+    payment_type = db.Column(db.Text, default="")
+    notes = db.Column(db.Text, default="")
+    status = db.Column(db.Text, default="active")
+    created_at = db.Column(db.Text, default="")
+
+
+db.Index("ix_orders_kingdom_id", Order.kingdom_id)
+db.Index("ix_orders_status", Order.status)
+db.Index("ix_orders_kingdom_status", Order.kingdom_id, Order.status)
+db.Index("ix_kingdoms_user_id", Kingdom.user_id)
 
 
 def sanitize(value):
@@ -73,175 +131,134 @@ def number_format(value):
         return value
 
 
-def ph(sql):
-    return sql.replace("?", "%s") if USE_PG else sql
+def migrate_sqlite_data():
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "orders.db")
+    if not os.path.exists(db_path):
+        return
 
-
-def get_db():
-    if USE_PG:
-        conn = psycopg2.connect(DB_URL)
-        conn.autocommit = False
-        return conn
-    else:
-        db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "orders.db")
-        conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
-        conn.execute("PRAGMA journal_mode=WAL")
-        conn.execute("PRAGMA foreign_keys=ON")
-        return conn
-
-
-def db_execute(conn, sql, params=None):
-    params = params or ()
-    if USE_PG:
-        cur = conn.cursor()
-        cur.execute(ph(sql), params)
-        return cur
-    else:
-        return conn.execute(sql, params)
-
-
-def db_fetchone(conn, sql, params=None):
-    params = params or ()
-    if USE_PG:
-        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute(ph(sql), params)
-        return cur.fetchone()
-    else:
-        return conn.execute(sql, params).fetchone()
-
-
-def db_fetchall(conn, sql, params=None):
-    params = params or ()
-    if USE_PG:
-        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute(ph(sql), params)
-        return cur.fetchall()
-    else:
-        return conn.execute(sql, params).fetchall()
-
-
-def db_commit(conn):
-    if USE_PG:
-        conn.commit()
-    else:
-        conn.commit()
-
-
-def init_db():
-    conn = get_db()
+    logger.info("SQLite database found. Migrating data to PostgreSQL...")
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
     cur = conn.cursor()
-    if USE_PG:
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
-                email TEXT UNIQUE NOT NULL,
-                password_hash TEXT NOT NULL,
-                name TEXT DEFAULT '',
-                created_at TEXT DEFAULT ''
-            )
-        """)
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS kingdoms (
-                id SERIAL PRIMARY KEY,
-                user_id INTEGER DEFAULT 0,
-                name TEXT NOT NULL,
-                created_at TEXT DEFAULT ''
-            )
-        """)
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS orders (
-                id SERIAL PRIMARY KEY,
-                kingdom_id INTEGER NOT NULL,
-                customer_name TEXT NOT NULL,
-                food INTEGER DEFAULT 0,
-                wood INTEGER DEFAULT 0,
-                stone INTEGER DEFAULT 0,
-                gold INTEGER DEFAULT 0,
-                price REAL DEFAULT 0,
-                payment_type TEXT DEFAULT '',
-                notes TEXT DEFAULT '',
-                status TEXT DEFAULT 'active',
-                created_at TEXT DEFAULT '',
-                FOREIGN KEY (kingdom_id) REFERENCES kingdoms(id)
-            )
-        """)
-    else:
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT UNIQUE NOT NULL,
-                password_hash TEXT NOT NULL,
-                name TEXT DEFAULT '',
-                created_at TEXT DEFAULT ''
-            )
-        """)
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS kingdoms (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER DEFAULT 0,
-                name TEXT NOT NULL,
-                created_at TEXT DEFAULT '',
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )
-        """)
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS orders (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                kingdom_id INTEGER NOT NULL,
-                customer_name TEXT NOT NULL,
-                food INTEGER DEFAULT 0,
-                wood INTEGER DEFAULT 0,
-                stone INTEGER DEFAULT 0,
-                gold INTEGER DEFAULT 0,
-                price REAL DEFAULT 0,
-                payment_type TEXT DEFAULT '',
-                notes TEXT DEFAULT '',
-                status TEXT DEFAULT 'active',
-                created_at TEXT DEFAULT '',
-                FOREIGN KEY (kingdom_id) REFERENCES kingdoms(id)
-            )
-        """)
-        for col, default in [("kingdom_id", 0), ("status", "'active'")]:
-            try:
-                cur.execute(f"ALTER TABLE orders ADD COLUMN {col} INTEGER DEFAULT {default}")
-            except sqlite3.OperationalError:
-                pass
-        try:
-            cur.execute("ALTER TABLE kingdoms ADD COLUMN user_id INTEGER DEFAULT 0")
-        except sqlite3.OperationalError:
-            pass
 
-    db_commit(conn)
-    admin_email = os.environ.get("ADMIN_EMAIL")
-    admin_password = os.environ.get("ADMIN_PASSWORD")
-    if admin_email and admin_password:
-        admin_email = admin_email.strip().lower()
-        existing = db_fetchone(conn, "SELECT id FROM users WHERE email=?", (admin_email,))
-        if not existing:
-            now = datetime.now().strftime("%Y-%m-%d %H:%M")
-            db_execute(conn, "INSERT INTO users (email, password_hash, name, created_at) VALUES (?, ?, ?, ?)",
-                       (admin_email, generate_password_hash(admin_password), "Admin", now))
-            db_commit(conn)
-            logger.info("Admin account auto-created: %s", admin_email)
-    conn.close()
+    try:
+        cur.execute("SELECT id, email, password_hash, name, created_at FROM users")
+        users = cur.fetchall()
+        uid_map = {}
+        for u in users:
+            existing = User.query.filter_by(email=u["email"]).first()
+            if existing:
+                uid_map[u["id"]] = existing.id
+            else:
+                new_user = User(
+                    email=u["email"],
+                    password_hash=u["password_hash"],
+                    name=u["name"] or "",
+                    created_at=u["created_at"] or "",
+                )
+                db.session.add(new_user)
+                db.session.flush()
+                uid_map[u["id"]] = new_user.id
+
+        cur.execute("SELECT id, user_id, name, created_at FROM kingdoms")
+        kingdoms = cur.fetchall()
+        kid_map = {}
+        for k in kingdoms:
+            mapped_uid = uid_map.get(k["user_id"], 0)
+            new_kingdom = Kingdom(
+                user_id=mapped_uid,
+                name=k["name"],
+                created_at=k["created_at"] or "",
+            )
+            db.session.add(new_kingdom)
+            db.session.flush()
+            kid_map[k["id"]] = new_kingdom.id
+
+        cur.execute("SELECT * FROM orders")
+        orders = cur.fetchall()
+        for o in orders:
+            mapped_kid = kid_map.get(o["kingdom_id"])
+            if mapped_kid is None:
+                continue
+            new_order = Order(
+                kingdom_id=mapped_kid,
+                customer_name=o["customer_name"] or "",
+                food=o["food"] or 0,
+                wood=o["wood"] or 0,
+                stone=o["stone"] or 0,
+                gold=o["gold"] or 0,
+                price=o["price"] or 0.0,
+                payment_type=o["payment_type"] or "",
+                notes=o["notes"] or "",
+                status=o["status"] or "active",
+                created_at=o["created_at"] or "",
+            )
+            db.session.add(new_order)
+
+        db.session.commit()
+        logger.info("Migration complete: %d users, %d kingdoms, %d orders", len(users), len(kingdoms), len(orders))
+
+        os.rename(db_path, db_path + ".migrated")
+        logger.info("SQLite file renamed to orders.db.migrated")
+    except Exception as e:
+        db.session.rollback()
+        logger.error("Migration failed: %s", e)
+    finally:
+        conn.close()
 
 
-def get_stats(conn, kingdom_id):
-    all_rows = db_fetchone(conn, "SELECT SUM(food), SUM(wood), SUM(stone), SUM(gold), SUM(price), COUNT(*) FROM orders WHERE kingdom_id=?", (kingdom_id,))
-    fin_rows = db_fetchone(conn, "SELECT SUM(food), SUM(wood), SUM(stone), SUM(gold), SUM(price), COUNT(*) FROM orders WHERE kingdom_id=? AND status='finished'", (kingdom_id,))
-    act_rows = db_fetchone(conn, "SELECT SUM(food), SUM(wood), SUM(stone), SUM(gold), SUM(price), COUNT(*) FROM orders WHERE kingdom_id=? AND status='active'", (kingdom_id,))
+def init_app():
+    with app.app_context():
+        db.create_all()
+        if DATABASE_URL:
+            migrate_sqlite_data()
+        admin_email = os.environ.get("ADMIN_EMAIL")
+        admin_password = os.environ.get("ADMIN_PASSWORD")
+        if admin_email and admin_password:
+            admin_email = admin_email.strip().lower()
+            existing = User.query.filter_by(email=admin_email).first()
+            if not existing:
+                now = datetime.now().strftime("%Y-%m-%d %H:%M")
+                admin = User(
+                    email=admin_email,
+                    password_hash=generate_password_hash(admin_password),
+                    name="Admin",
+                    created_at=now,
+                )
+                db.session.add(admin)
+                db.session.commit()
+                logger.info("Admin account auto-created: %s", admin_email)
+        logger.info("Database initialized successfully")
 
-    def safe(row):
+
+def get_stats(kingdom_id):
+    def safe(q):
+        row = q.first()
         if not row:
             return [0, 0, 0, 0, 0, 0]
-        if USE_PG:
-            vals = list(row.values())
-        else:
-            vals = [row[i] for i in range(6)]
-        return [int(v or 0) for v in vals]
+        if isinstance(row, tuple):
+            return [int(v or 0) for v in row]
+        return [int(v or 0) for v in row]
 
-    return {"all": safe(all_rows), "finished": safe(fin_rows), "active": safe(act_rows)}
+    all_q = db.session.query(
+        db.func.sum(Order.food), db.func.sum(Order.wood),
+        db.func.sum(Order.stone), db.func.sum(Order.gold),
+        db.func.sum(Order.price), db.func.count(Order.id)
+    ).filter(Order.kingdom_id == kingdom_id)
+
+    fin_q = db.session.query(
+        db.func.sum(Order.food), db.func.sum(Order.wood),
+        db.func.sum(Order.stone), db.func.sum(Order.gold),
+        db.func.sum(Order.price), db.func.count(Order.id)
+    ).filter(Order.kingdom_id == kingdom_id, Order.status == "finished")
+
+    act_q = db.session.query(
+        db.func.sum(Order.food), db.func.sum(Order.wood),
+        db.func.sum(Order.stone), db.func.sum(Order.gold),
+        db.func.sum(Order.price), db.func.count(Order.id)
+    ).filter(Order.kingdom_id == kingdom_id, Order.status == "active")
+
+    return {"all": safe(all_q), "finished": safe(fin_q), "active": safe(act_q)}
 
 
 def login_required(f):
@@ -255,10 +272,7 @@ def login_required(f):
 
 
 def own_kingdom(kingdom_id):
-    conn = get_db()
-    k = db_fetchone(conn, "SELECT id FROM kingdoms WHERE id=? AND user_id=?", (kingdom_id, session["user_id"]))
-    conn.close()
-    return k is not None
+    return Kingdom.query.filter_by(id=kingdom_id, user_id=session.get("user_id")).first() is not None
 
 
 def validate_password(password):
@@ -333,15 +347,13 @@ def login():
         elif len(email) > 254 or not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
             flash("البريد الإلكتروني غير صحيح", "error")
         else:
-            conn = get_db()
-            user = db_fetchone(conn, "SELECT * FROM users WHERE email=?", (email,))
-            conn.close()
-            if user and check_password_hash(user["password_hash"], password):
+            user = User.query.filter_by(email=email).first()
+            if user and check_password_hash(user.password_hash, password):
                 session.clear()
                 session.permanent = True
-                session["user_id"] = user["id"]
-                session["user_name"] = user["name"]
-                session["user_email"] = user["email"]
+                session["user_id"] = user.id
+                session["user_name"] = user.name
+                session["user_email"] = user.email
                 session["login_time"] = datetime.now().isoformat()
                 logger.info("Successful login: %s from %s", email, request.remote_addr)
                 return redirect(url_for("index"))
@@ -373,23 +385,24 @@ def register():
             elif password != confirm:
                 flash("كلمتا المرور غير متطابقتين", "error")
             else:
-                conn = get_db()
-                existing = db_fetchone(conn, "SELECT id FROM users WHERE email=?", (email,))
+                existing = User.query.filter_by(email=email).first()
                 if existing:
                     flash("البريد الإلكتروني مستخدم بالفعل", "error")
-                    conn.close()
                 else:
                     now = datetime.now().strftime("%Y-%m-%d %H:%M")
-                    db_execute(conn, "INSERT INTO users (email, password_hash, name, created_at) VALUES (?, ?, ?, ?)",
-                               (email, generate_password_hash(password), name, now))
-                    db_commit(conn)
-                    user = db_fetchone(conn, "SELECT * FROM users WHERE email=?", (email,))
-                    conn.close()
+                    user = User(
+                        email=email,
+                        password_hash=generate_password_hash(password),
+                        name=name,
+                        created_at=now,
+                    )
+                    db.session.add(user)
+                    db.session.commit()
                     session.clear()
                     session.permanent = True
-                    session["user_id"] = user["id"]
-                    session["user_name"] = user["name"]
-                    session["user_email"] = user["email"]
+                    session["user_id"] = user.id
+                    session["user_name"] = user.name
+                    session["user_email"] = user.email
                     session["login_time"] = datetime.now().isoformat()
                     logger.info("New user registered: %s from %s", email, request.remote_addr)
                     return redirect(url_for("index"))
@@ -408,46 +421,30 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    conn = get_db()
     uid = session["user_id"]
-    kingdoms = db_fetchall(conn, "SELECT * FROM kingdoms WHERE user_id=? ORDER BY id DESC", (uid,))
+    kingdoms = Kingdom.query.filter_by(user_id=uid).order_by(Kingdom.id.desc()).all()
     kingdom_stats = []
     kid_list = []
     for k in kingdoms:
-        rows = db_fetchone(conn, "SELECT COUNT(*), SUM(price) FROM orders WHERE kingdom_id=?", (k["id"],))
-        if USE_PG:
-            count = rows["count"] or 0
-            total_price = int(rows["sum"] or 0)
-        else:
-            count = rows[0] or 0
-            total_price = int(rows[1] or 0)
-        kingdom_stats.append({"id": k["id"], "name": sanitize(k["name"]), "count": count, "total_price": total_price, "created_at": k["created_at"]})
-        kid_list.append(k["id"])
+        count = Order.query.filter_by(kingdom_id=k.id).count()
+        total_price = db.session.query(db.func.coalesce(db.func.sum(Order.price), 0)).filter(Order.kingdom_id == k.id).scalar()
+        kingdom_stats.append({
+            "id": k.id, "name": sanitize(k.name), "count": count,
+            "total_price": int(total_price or 0), "created_at": k.created_at,
+        })
+        kid_list.append(k.id)
 
     today = datetime.now().strftime("%Y-%m-%d")
     if kid_list:
-        placeholders = ",".join(["%s"] * len(kid_list)) if USE_PG else ",".join("?" * len(kid_list))
-        like_pattern = today + "%"
-        orders_today = db_fetchone(conn, f"SELECT COUNT(*) FROM orders WHERE kingdom_id IN ({placeholders}) AND created_at LIKE ?", kid_list + [like_pattern])
-        total_revenue = db_fetchone(conn, f"SELECT COALESCE(SUM(price), 0) FROM orders WHERE kingdom_id IN ({placeholders})", kid_list)
-        total_customers = db_fetchone(conn, f"SELECT COUNT(DISTINCT customer_name) FROM orders WHERE kingdom_id IN ({placeholders})", kid_list)
-        pending_orders = db_fetchone(conn, f"SELECT COUNT(*) FROM orders WHERE kingdom_id IN ({placeholders}) AND status='active'", kid_list)
-        total_orders = db_fetchone(conn, f"SELECT COUNT(*) FROM orders WHERE kingdom_id IN ({placeholders})", kid_list)
-
-        def gv(row):
-            if USE_PG:
-                return list(row.values())[0] if row else 0
-            return row[0] if row else 0
-
-        orders_today = gv(orders_today) or 0
-        total_revenue = int(gv(total_revenue) or 0)
-        total_customers = gv(total_customers) or 0
-        pending_orders = gv(pending_orders) or 0
-        total_orders = gv(total_orders) or 0
+        base = Order.query.filter(Order.kingdom_id.in_(kid_list))
+        orders_today = base.filter(Order.created_at.like(f"{today}%")).count()
+        total_revenue = int(db.session.query(db.func.coalesce(db.func.sum(Order.price), 0)).filter(Order.kingdom_id.in_(kid_list)).scalar() or 0)
+        total_customers = db.session.query(db.func.count(db.distinct(Order.customer_name))).filter(Order.kingdom_id.in_(kid_list)).scalar() or 0
+        pending_orders = base.filter_by(status="active").count()
+        total_orders = Order.query.filter(Order.kingdom_id.in_(kid_list)).count()
     else:
         orders_today = total_revenue = total_customers = pending_orders = total_orders = 0
 
-    conn.close()
     return render_template("kingdoms.html", kingdoms=kingdom_stats,
                            orders_today=orders_today, total_revenue=total_revenue,
                            total_customers=total_customers, pending_orders=pending_orders,
@@ -461,11 +458,9 @@ def new_kingdom():
     if not name or len(name) > 200:
         return redirect(url_for("index"))
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    conn = get_db()
-    db_execute(conn, "INSERT INTO kingdoms (user_id, name, created_at) VALUES (?, ?, ?)",
-               (session["user_id"], name, now))
-    db_commit(conn)
-    conn.close()
+    kingdom = Kingdom(user_id=session["user_id"], name=name, created_at=now)
+    db.session.add(kingdom)
+    db.session.commit()
     logger.info("Kingdom '%s' created by user %s", name, session["user_id"])
     return redirect(url_for("index"))
 
@@ -475,26 +470,24 @@ def new_kingdom():
 def kingdom_page(kingdom_id):
     if not own_kingdom(kingdom_id):
         abort(403)
-    conn = get_db()
-    kingdom = db_fetchone(conn, "SELECT * FROM kingdoms WHERE id=?", (kingdom_id,))
+    kingdom = Kingdom.query.get(kingdom_id)
     if not kingdom:
-        conn.close()
         abort(404)
-    orders = db_fetchall(conn, "SELECT * FROM orders WHERE kingdom_id=? ORDER BY id ASC", (kingdom_id,))
-    stats = get_stats(conn, kingdom_id)
-    conn.close()
+    orders = Order.query.filter_by(kingdom_id=kingdom_id).order_by(Order.id.asc()).all()
+    stats = get_stats(kingdom_id)
     safe_orders = []
     for o in orders:
         safe_orders.append({
-            "id": o["id"], "kingdom_id": o["kingdom_id"],
-            "customer_name": sanitize(o["customer_name"]),
-            "food": o["food"], "wood": o["wood"], "stone": o["stone"], "gold": o["gold"],
-            "price": o["price"],
-            "payment_type": sanitize(o["payment_type"]),
-            "notes": sanitize(o["notes"]),
-            "status": o["status"], "created_at": o["created_at"]
+            "id": o.id, "kingdom_id": o.kingdom_id,
+            "customer_name": sanitize(o.customer_name),
+            "food": o.food, "wood": o.wood, "stone": o.stone, "gold": o.gold,
+            "price": o.price,
+            "payment_type": sanitize(o.payment_type or ""),
+            "notes": sanitize(o.notes or ""),
+            "status": o.status, "created_at": o.created_at,
         })
-    return render_template("index.html", orders=safe_orders, stats=stats, kingdom={"id": kingdom["id"], "name": sanitize(kingdom["name"]), "created_at": kingdom["created_at"]})
+    return render_template("index.html", orders=safe_orders, stats=stats,
+                           kingdom={"id": kingdom.id, "name": sanitize(kingdom.name), "created_at": kingdom.created_at})
 
 
 @app.route("/kingdom/<int:kingdom_id>/add", methods=["POST"])
@@ -505,20 +498,21 @@ def add_order(kingdom_id):
     customer = sanitize(request.form.get("customer_name", ""))
     if not customer or len(customer) > 200:
         return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
-    food = validate_int(request.form.get("food", 0))
-    wood = validate_int(request.form.get("wood", 0))
-    stone = validate_int(request.form.get("stone", 0))
-    gold = validate_int(request.form.get("gold", 0))
-    price = validate_float(request.form.get("price", 0))
-    payment = sanitize(request.form.get("payment_type", ""))[:50]
-    notes = sanitize(request.form.get("notes", ""))[:500]
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    conn = get_db()
-    db_execute(conn,
-        "INSERT INTO orders (kingdom_id, customer_name, food, wood, stone, gold, price, payment_type, notes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        (kingdom_id, customer, food, wood, stone, gold, price, payment, notes, now))
-    db_commit(conn)
-    conn.close()
+    order = Order(
+        kingdom_id=kingdom_id,
+        customer_name=customer,
+        food=validate_int(request.form.get("food", 0)),
+        wood=validate_int(request.form.get("wood", 0)),
+        stone=validate_int(request.form.get("stone", 0)),
+        gold=validate_int(request.form.get("gold", 0)),
+        price=validate_float(request.form.get("price", 0)),
+        payment_type=sanitize(request.form.get("payment_type", ""))[:50],
+        notes=sanitize(request.form.get("notes", ""))[:500],
+        created_at=now,
+    )
+    db.session.add(order)
+    db.session.commit()
     return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
 
 
@@ -530,19 +524,18 @@ def edit_order(kingdom_id, order_id):
     customer = sanitize(request.form.get("customer_name", ""))
     if not customer or len(customer) > 200:
         return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
-    food = validate_int(request.form.get("food", 0))
-    wood = validate_int(request.form.get("wood", 0))
-    stone = validate_int(request.form.get("stone", 0))
-    gold = validate_int(request.form.get("gold", 0))
-    price = validate_float(request.form.get("price", 0))
-    payment = sanitize(request.form.get("payment_type", ""))[:50]
-    notes = sanitize(request.form.get("notes", ""))[:500]
-    conn = get_db()
-    db_execute(conn,
-        "UPDATE orders SET customer_name=?, food=?, wood=?, stone=?, gold=?, price=?, payment_type=?, notes=? WHERE id=? AND kingdom_id=?",
-        (customer, food, wood, stone, gold, price, payment, notes, order_id, kingdom_id))
-    db_commit(conn)
-    conn.close()
+    order = Order.query.filter_by(id=order_id, kingdom_id=kingdom_id).first()
+    if not order:
+        return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
+    order.customer_name = customer
+    order.food = validate_int(request.form.get("food", 0))
+    order.wood = validate_int(request.form.get("wood", 0))
+    order.stone = validate_int(request.form.get("stone", 0))
+    order.gold = validate_int(request.form.get("gold", 0))
+    order.price = validate_float(request.form.get("price", 0))
+    order.payment_type = sanitize(request.form.get("payment_type", ""))[:50]
+    order.notes = sanitize(request.form.get("notes", ""))[:500]
+    db.session.commit()
     return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
 
 
@@ -551,13 +544,10 @@ def edit_order(kingdom_id, order_id):
 def toggle_status(kingdom_id, order_id):
     if not own_kingdom(kingdom_id):
         abort(403)
-    conn = get_db()
-    order = db_fetchone(conn, "SELECT status FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id))
+    order = Order.query.filter_by(id=order_id, kingdom_id=kingdom_id).first()
     if order:
-        new_status = "finished" if order["status"] == "active" else "active"
-        db_execute(conn, "UPDATE orders SET status=? WHERE id=? AND kingdom_id=?", (new_status, order_id, kingdom_id))
-        db_commit(conn)
-    conn.close()
+        order.status = "finished" if order.status == "active" else "active"
+        db.session.commit()
     return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
 
 
@@ -566,15 +556,18 @@ def toggle_status(kingdom_id, order_id):
 def copy_order(kingdom_id, order_id):
     if not own_kingdom(kingdom_id):
         abort(403)
-    conn = get_db()
-    order = db_fetchone(conn, "SELECT * FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id))
+    order = Order.query.filter_by(id=order_id, kingdom_id=kingdom_id).first()
     if order:
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
-        db_execute(conn,
-            "INSERT INTO orders (kingdom_id, customer_name, food, wood, stone, gold, price, payment_type, notes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (kingdom_id, order["customer_name"], order["food"], order["wood"], order["stone"], order["gold"], order["price"], order["payment_type"], order["notes"], now))
-        db_commit(conn)
-    conn.close()
+        new_order = Order(
+            kingdom_id=kingdom_id,
+            customer_name=order.customer_name,
+            food=order.food, wood=order.wood, stone=order.stone, gold=order.gold,
+            price=order.price, payment_type=order.payment_type, notes=order.notes,
+            created_at=now,
+        )
+        db.session.add(new_order)
+        db.session.commit()
     return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
 
 
@@ -583,10 +576,10 @@ def copy_order(kingdom_id, order_id):
 def delete_order(kingdom_id, order_id):
     if not own_kingdom(kingdom_id):
         abort(403)
-    conn = get_db()
-    db_execute(conn, "DELETE FROM orders WHERE id=? AND kingdom_id=?", (order_id, kingdom_id))
-    db_commit(conn)
-    conn.close()
+    order = Order.query.filter_by(id=order_id, kingdom_id=kingdom_id).first()
+    if order:
+        db.session.delete(order)
+        db.session.commit()
     return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
 
 
@@ -595,17 +588,15 @@ def delete_order(kingdom_id, order_id):
 def delete_kingdom(kingdom_id):
     if not own_kingdom(kingdom_id):
         abort(403)
-    conn = get_db()
-    db_execute(conn, "DELETE FROM orders WHERE kingdom_id=?", (kingdom_id,))
-    db_execute(conn, "DELETE FROM kingdoms WHERE id=?", (kingdom_id,))
-    db_commit(conn)
-    conn.close()
+    kingdom = Kingdom.query.get(kingdom_id)
+    if kingdom:
+        db.session.delete(kingdom)
+        db.session.commit()
     logger.info("Kingdom %s deleted by user %s", kingdom_id, session["user_id"])
     return redirect(url_for("index"))
 
 
+init_app()
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=False, host="0.0.0.0", port=8081)
-else:
-    init_db()
