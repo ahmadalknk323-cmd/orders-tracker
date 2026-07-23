@@ -825,6 +825,31 @@ img{display:block;max-width:100%}
 }
 @keyframes completedPop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
 
+.table-shell tbody tr.in-progress{
+  background:rgba(59,130,246,.1)!important;
+  border-color:rgba(59,130,246,.25);
+  box-shadow:0 0 18px rgba(59,130,246,.08),inset 0 0 0 1px rgba(59,130,246,.15);
+}
+.table-shell tbody tr.in-progress:hover{
+  background:rgba(59,130,246,.16)!important;
+  border-color:rgba(59,130,246,.4);
+  box-shadow:0 4px 24px rgba(59,130,246,.15),inset 0 0 0 1px rgba(59,130,246,.3);
+  transform:translateY(-1px);
+}
+
+.inprogress-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 10px;border-radius:999px;
+  background:linear-gradient(135deg,rgba(59,130,246,.25),rgba(59,130,246,.1));
+  border:1px solid rgba(59,130,246,.35);
+  color:#60A5FA;font-size:10px;font-weight:800;
+  text-shadow:0 0 8px rgba(59,130,246,.3);
+  margin-right:6px;vertical-align:middle;
+  letter-spacing:.04em;
+  box-shadow:0 0 10px rgba(59,130,246,.1);
+  animation:completedPop .35s cubic-bezier(.22,1,.36,1) both;
+}
+
 .table-shell td{
   padding:14px 18px;color:var(--text);font-size:15px;font-weight:500;
   vertical-align:middle;text-align:center;
@@ -900,6 +925,10 @@ img{display:block;max-width:100%}
 
 .action-btn-complete{color:#22C55E}
 .action-btn-complete:hover{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3);box-shadow:0 0 18px rgba(255,196,0,.25),0 4px 14px rgba(34,197,94,.12);color:#4ADE80}
+
+.action-btn-progress{color:#60A5FA}
+.action-btn-progress:hover{background:rgba(59,130,246,.15);border-color:rgba(59,130,246,.3);box-shadow:0 0 18px rgba(59,130,246,.25),0 4px 14px rgba(59,130,246,.12);color:#93C5FD}
+.action-btn-progress.active{background:rgba(59,130,246,.15);border-color:rgba(59,130,246,.35);color:#60A5FA}
 
 .premium-empty{padding:32px 20px;background:rgba(255,255,255,.025);border-radius:18px;border:1px dashed rgba(255,255,255,.08)}
 .premium-empty .empty-state-icon{background:rgba(250,204,21,.08);border-color:rgba(250,204,21,.16)}

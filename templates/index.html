@@ -267,9 +267,9 @@
       </thead>
       <tbody>
         {% for order in orders %}
-        <tr class="{{ 'finished' if order.status == 'finished' else '' }}">
+        <tr class="{{ 'finished' if order.status == 'finished' else 'in-progress' if order.status == 'in_progress' else '' }}">
           <td class="row-num">{{ loop.index }}</td>
-          <td class="customer"><span class="customer-pill">{{ order.customer_name }}</span>{% if order.status == 'finished' %}<span class="completed-badge">Completed</span>{% endif %}</td>
+          <td class="customer"><span class="customer-pill">{{ order.customer_name }}</span>{% if order.status == 'finished' %}<span class="completed-badge">Completed</span>{% elif order.status == 'in_progress' %}<span class="inprogress-badge">In Progress</span>{% endif %}</td>
           <td class="food">{{ order.food|number_format }}</td>
           <td class="wood">{{ order.wood|number_format }}</td>
           <td class="stone">{{ order.stone|number_format }}</td>
@@ -286,6 +286,14 @@
                 <button type="submit" class="action-btn action-btn-complete" title="Mark Completed"><i data-lucide="check-circle"></i></button>
                 {% else %}
                 <button type="submit" class="action-btn action-btn-complete" title="Mark Completed"><i data-lucide="check-circle"></i></button>
+                {% endif %}
+              </form>
+              <form action="/kingdom/{{ kingdom.id }}/progress/{{ order.id }}" method="POST" style="display:inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                {% if order.status == 'in_progress' %}
+                <button type="submit" class="action-btn action-btn-progress active" title="In Progress"><i data-lucide="loader"></i></button>
+                {% else %}
+                <button type="submit" class="action-btn action-btn-progress" title="In Progress"><i data-lucide="loader"></i></button>
                 {% endif %}
               </form>
               <button class="action-btn action-btn-edit" type="button" title="Edit Order"

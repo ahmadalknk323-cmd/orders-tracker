@@ -546,7 +546,19 @@ def toggle_status(kingdom_id, order_id):
         abort(403)
     order = Order.query.filter_by(id=order_id, kingdom_id=kingdom_id).first()
     if order:
-        order.status = "finished" if order.status == "active" else "active"
+        order.status = "finished" if order.status != "finished" else "active"
+        db.session.commit()
+    return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
+
+
+@app.route("/kingdom/<int:kingdom_id>/progress/<int:order_id>", methods=["POST"])
+@login_required
+def set_in_progress(kingdom_id, order_id):
+    if not own_kingdom(kingdom_id):
+        abort(403)
+    order = Order.query.filter_by(id=order_id, kingdom_id=kingdom_id).first()
+    if order:
+        order.status = "in_progress" if order.status != "in_progress" else "active"
         db.session.commit()
     return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
 
