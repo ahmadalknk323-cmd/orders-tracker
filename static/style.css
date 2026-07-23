@@ -800,27 +800,27 @@ img{display:block;max-width:100%}
   transform:translateY(-1px);
 }
 .table-shell tbody tr.finished{
-  background:rgba(255,213,0,.12)!important;
-  border-color:rgba(255,213,0,.35);
-  box-shadow:0 0 18px rgba(255,213,0,.08),inset 0 0 0 1px rgba(255,213,0,.2);
+  background:rgba(220,38,38,.12)!important;
+  border-color:rgba(220,38,38,.35);
+  box-shadow:0 0 18px rgba(220,38,38,.08),inset 0 0 0 1px rgba(220,38,38,.2);
 }
 .table-shell tbody tr.finished:hover{
-  background:rgba(255,213,0,.18)!important;
-  border-color:rgba(255,213,0,.5);
-  box-shadow:0 4px 24px rgba(255,213,0,.18),inset 0 0 0 1px rgba(255,213,0,.35);
+  background:rgba(220,38,38,.18)!important;
+  border-color:rgba(220,38,38,.5);
+  box-shadow:0 4px 24px rgba(220,38,38,.18),inset 0 0 0 1px rgba(220,38,38,.35);
   transform:translateY(-1px);
 }
 
 .completed-badge{
   display:inline-flex;align-items:center;gap:4px;
   padding:3px 10px;border-radius:999px;
-  background:linear-gradient(135deg,rgba(255,213,0,.25),rgba(255,193,0,.12));
-  border:1px solid rgba(255,213,0,.4);
-  color:#FFD500;font-size:10px;font-weight:800;
-  text-shadow:0 0 8px rgba(255,213,0,.3);
+  background:linear-gradient(135deg,rgba(220,38,38,.3),rgba(185,28,28,.15));
+  border:1px solid rgba(220,38,38,.45);
+  color:#FCA5A5;font-size:10px;font-weight:800;
+  text-shadow:0 0 8px rgba(220,38,38,.4);
   margin-right:6px;vertical-align:middle;
   letter-spacing:.04em;
-  box-shadow:0 0 10px rgba(255,213,0,.1);
+  box-shadow:0 0 10px rgba(220,38,38,.12);
   animation:completedPop .35s cubic-bezier(.22,1,.36,1) both;
 }
 @keyframes completedPop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
