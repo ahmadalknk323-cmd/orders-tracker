@@ -269,7 +269,7 @@
         {% for order in orders %}
         <tr class="{{ 'finished' if order.status == 'finished' else '' }}">
           <td class="row-num">{{ loop.index }}</td>
-          <td class="customer"><span class="customer-pill">{{ order.customer_name }}</span></td>
+          <td class="customer"><span class="customer-pill">{{ order.customer_name }}</span>{% if order.status == 'finished' %}<span class="completed-badge">Completed</span>{% endif %}</td>
           <td class="food">{{ order.food|number_format }}</td>
           <td class="wood">{{ order.wood|number_format }}</td>
           <td class="stone">{{ order.stone|number_format }}</td>
