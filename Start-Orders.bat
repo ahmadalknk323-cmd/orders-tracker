@@ -1,13 +1,15 @@
 @echo off
+chcp 65001 >nul
+color F0
 title Orders Tracker Server
 echo ========================================
 echo   Orders Tracker
 echo ========================================
 echo.
-echo   افتح المتصفح وروح على:
+echo   شغّل الخادوم على:
 echo   http://127.0.0.1:8081
 echo.
-echo   لا تغلق هالنافذة!
+echo   لا تقفل هذه النافذة!
 echo ========================================
 echo.
 python "%~dp0app.py"
