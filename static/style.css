@@ -2880,3 +2880,128 @@ html[data-theme="dark"] .resource-field.gold-field label{
   -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
   filter:none!important;text-shadow:none!important;
 }
+
+/* ═══════════════════════════════════════════════════════
+   LARGE TEXT MODE — larger fonts for readability at a distance
+   ═══════════════════════════════════════════════════════ */
+
+html{font-size:18px}
+
+/* Sidebar */
+.sidebar-logo span{font-size:15px}
+.sidebar-brand-text h3{font-size:19px}
+.sidebar-brand-text span{font-size:13px}
+.sidebar-section-title{font-size:13px}
+.sidebar-link{font-size:17px}
+.sidebar-footer-card h4{font-size:17px}
+.sidebar-footer-card p{font-size:15px}
+
+/* Topbar */
+.topbar-title{font-size:19px}
+.topbar-pill{font-size:14px}
+.topbar-avatar{font-size:14px}
+
+/* Card headers & descriptions */
+.card-header h2{font-size:28px}
+.card-header p{font-size:16px}
+.table-header h2{font-size:20px}
+.table-header p{font-size:14px}
+.table-count{font-size:13px}
+
+/* Form labels & inputs */
+.form-group label{font-size:18px}
+.form-group input,.form-group select,.form-group textarea{font-size:17px}
+.form-section-head h3{font-size:18px}
+.form-section-head p{font-size:14px}
+.field label{font-size:16px}
+.field-input-wrap input{font-size:16px}
+.section-badge{font-size:14px}
+
+/* Buttons */
+.form-submit{font-size:17px}
+.btn{font-size:16px}
+.btn-primary{font-size:16px}
+.btn-sm{font-size:14px}
+.hero-btn{font-size:16px}
+.cmd-hero-btn{font-size:15px}
+.stats-toggle-btn{font-size:16px}
+
+/* Hero (kingdoms page) */
+.hero-logo span{font-size:22px}
+.hero-badge{font-size:13px}
+.hero-title{font-size:42px}
+.hero-subtitle{font-size:17px}
+.hero-kingdom-num{font-size:46px}
+.hero-kingdom-label{font-size:13px}
+.hero-fstat-num{font-size:23px}
+.hero-fstat-label{font-size:13px}
+
+/* Quick stats */
+.qs-num{font-size:25px}
+.qs-label{font-size:14px}
+.qs-trend{font-size:13px}
+
+/* Kingdom tiles */
+.kingdom-tile-name{font-size:19px}
+.kingdom-tile-stat strong{font-size:20px}
+.kingdom-tile-stat span{font-size:13px}
+.kingdom-tile-date{font-size:13px}
+
+/* Empty state */
+.empty-state h3{font-size:23px}
+.empty-state p{font-size:15px}
+
+/* Orders table */
+.table-shell thead th{font-size:17px}
+.table-shell td{font-size:17px}
+.table-shell .row-num{font-size:20px}
+.table-shell .row-id{font-size:17px}
+.table-shell .customer{font-size:17px}
+.table-shell .customer-pill{font-size:15px}
+.payment-badge{font-size:15px}
+.food,.wood,.stone,.gold,.price{font-size:20px}
+.table-shell .price{font-size:20px}
+.table-shell .notes-cell{font-size:17px}
+.table-shell .contact-cell{font-size:17px}
+.table-shell .date{font-size:17px}
+.status-badge{font-size:14px}
+.completed-badge{font-size:13px}
+.inprogress-badge{font-size:13px}
+
+/* Command Center hero */
+.cmd-hero-badge{font-size:11px}
+.cmd-hero-title{font-size:30px}
+.cmd-hero-sub{font-size:15px}
+.cmd-hero-stat-num{font-size:20px}
+.cmd-hero-stat-label{font-size:12px}
+.stats-trend{font-size:11px}
+
+/* Insight panel */
+.insight-label{font-size:13px}
+.insight-number{font-size:52px}
+.insight-copy{font-size:14px}
+.insight-pill{font-size:13px}
+
+/* Stats panel */
+.stat-label{font-size:16px}
+.stat-trend{font-size:13px}
+.stat-food,.stat-wood,.stat-stone,.stat-gold,.stat-price{font-size:15px}
+
+/* Modals */
+.modal-content h2{font-size:23px}
+
+@media(max-width:1024px){
+  html{font-size:16px}
+  .hero-title{font-size:34px}
+  .cmd-hero-title{font-size:26px}
+  .table-header h2{font-size:18px}
+  .card-header h2{font-size:24px}
+}
+@media(max-width:640px){
+  html{font-size:15px}
+  .hero-title{font-size:28px}
+  .cmd-hero-title{font-size:22px}
+  .kingdom-tile-name{font-size:17px}
+  .table-shell td{font-size:15px}
+  .food,.wood,.stone,.gold,.price{font-size:17px}
+}
