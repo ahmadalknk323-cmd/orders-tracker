@@ -264,76 +264,88 @@
     </form>
   </div>
   {% if orders %}
-  <div class="order-grid">
-    {% for order in orders %}
-    <div class="order-card {{ 'finished' if order.status == 'finished' else 'in-progress' if order.status == 'in_progress' else '' }}">
-      <div class="order-card-top">
-        <div class="order-card-customer">
-          <span class="customer-pill">{{ order.customer_name }}</span>
-          {% if order.status == 'finished' %}<span class="completed-badge">Completed</span>{% elif order.status == 'in_progress' %}<span class="inprogress-badge">In Progress</span>{% endif %}
-        </div>
-      </div>
-      <div class="order-card-resources">
-        <div class="oc-res oc-food"><i data-lucide="wheat" class="oc-ico"></i><span class="oc-val">{{ order.food|number_format }}</span><span class="oc-lbl">ذره</span></div>
-        <div class="oc-res oc-wood"><i data-lucide="tree-pine" class="oc-ico"></i><span class="oc-val">{{ order.wood|number_format }}</span><span class="oc-lbl">خشب</span></div>
-        <div class="oc-res oc-stone"><i data-lucide="mountain" class="oc-ico"></i><span class="oc-val">{{ order.stone|number_format }}</span><span class="oc-lbl">حجر</span></div>
-        <div class="oc-res oc-gold"><i data-lucide="coins" class="oc-ico"></i><span class="oc-val">{{ order.gold|number_format }}</span><span class="oc-lbl">ذهب</span></div>
-      </div>
-      <div class="order-card-meta">
-        <div class="oc-price">{{ "%.2f"|format(order.price) }} $</div>
-        <span class="payment-badge bubble-glass-v2 {% if order.payment_type|upper == 'USDT' %}payment-usdt{% elif order.payment_type|upper == 'CASH' %}payment-cash{% elif order.payment_type|upper == 'BANK' %}payment-bank{% else %}payment-default{% endif %}">{{ order.payment_type }}</span>
-      </div>
-      <div class="order-card-contact">
-        <div class="oc-line"><i data-lucide="fingerprint" class="oc-ico"></i><span class="oc-ellipsis">{{ order.id }}</span></div>
-        <div class="oc-line"><i data-lucide="message-circle" class="oc-ico"></i><span class="oc-ellipsis">{{ order.discord }}</span></div>
-        <div class="oc-line"><i data-lucide="phone" class="oc-ico"></i><span class="oc-ellipsis">{{ order.whatsapp }}</span></div>
-      </div>
-      <div class="order-card-notes"><i data-lucide="sticky-note" class="oc-ico"></i><span class="oc-ellipsis">{{ order.notes }}</span></div>
-      <div class="order-card-date"><i data-lucide="calendar" class="oc-ico"></i><span>{{ order.created_at }}</span></div>
-      <div class="order-card-actions">
-        <div class="action-group">
-          <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button type="submit" class="action-btn action-btn-complete" title="Mark Completed"><i data-lucide="check-circle"></i></button>
-          </form>
-          <form action="/kingdom/{{ kingdom.id }}/progress/{{ order.id }}" method="POST" style="display:inline">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button type="submit" class="action-btn action-btn-progress {{ 'active' if order.status == 'in_progress' else '' }}" title="In Progress"><i data-lucide="loader"></i></button>
-          </form>
-          <button class="action-btn action-btn-edit" type="button" title="Edit Order"
-            data-order-id="{{ order.id }}"
-            data-customer="{{ order.customer_name }}"
-            data-food="{{ order.food }}"
-            data-wood="{{ order.wood }}"
-            data-stone="{{ order.stone }}"
-            data-gold="{{ order.gold }}"
-            data-price="{{ order.price }}"
-            data-payment="{{ order.payment_type }}"
-            data-notes="{{ order.notes }}"
-            data-discord="{{ order.discord }}"
-            data-whatsapp="{{ order.whatsapp }}"
-            onclick="openEdit(this)"><i data-lucide="pencil"></i></button>
-          <button class="action-btn action-btn-copy" type="button" title="Duplicate Order"
-            data-order-id="{{ order.id }}"
-            data-customer="{{ order.customer_name }}"
-            data-food="{{ order.food }}"
-            data-wood="{{ order.wood }}"
-            data-stone="{{ order.stone }}"
-            data-gold="{{ order.gold }}"
-            data-price="{{ order.price }}"
-            data-payment="{{ order.payment_type }}"
-            data-notes="{{ order.notes }}"
-            data-discord="{{ order.discord }}"
-            data-whatsapp="{{ order.whatsapp }}"
-            onclick="copyOrder(this)"><i data-lucide="copy"></i></button>
-          <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button type="submit" class="action-btn action-btn-delete" title="Delete Order"><i data-lucide="trash-2"></i></button>
-          </form>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
+  <div class="table-shell">
+    <table>
+      <thead>
+        <tr>
+          <th class="th-num">#</th>
+          <th>الزبون</th>
+          <th class="th-food"><i data-lucide="wheat" class="icon-th"></i> ذره</th>
+          <th class="th-wood"><i data-lucide="tree-pine" class="icon-th"></i> خشب</th>
+          <th class="th-stone"><i data-lucide="mountain" class="icon-th"></i> حجر</th>
+          <th class="th-gold"><i data-lucide="coins" class="icon-th"></i> ذهب</th>
+          <th class="th-price"><i data-lucide="banknote" class="icon-th"></i> الثمن</th>
+          <th class="th-payment"><i data-lucide="wallet" class="icon-th"></i> الدفع</th>
+          <th class="th-notes">ملاحظات</th>
+          <th class="th-id"><i data-lucide="fingerprint" class="icon-th"></i> ID</th>
+          <th class="th-discord"><i data-lucide="message-circle" class="icon-th"></i> ديسكورد</th>
+          <th class="th-whatsapp"><i data-lucide="phone" class="icon-th"></i> واتساب</th>
+          <th class="th-date"><i data-lucide="calendar" class="icon-th"></i> التاريخ</th>
+          <th class="th-actions">اجراء</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr class="{{ 'finished' if order.status == 'finished' else 'in-progress' if order.status == 'in_progress' else '' }}">
+          <td class="row-num">{{ loop.index }}</td>
+          <td class="customer"><span class="customer-pill">{{ order.customer_name }}</span>{% if order.status == 'finished' %}<span class="completed-badge">Completed</span>{% elif order.status == 'in_progress' %}<span class="inprogress-badge">In Progress</span>{% endif %}</td>
+          <td class="food">{{ order.food|number_format }}</td>
+          <td class="wood">{{ order.wood|number_format }}</td>
+          <td class="stone">{{ order.stone|number_format }}</td>
+          <td class="gold">{{ order.gold|number_format }}</td>
+          <td class="price">{{ "%.2f"|format(order.price) }} $</td>
+          <td class="payment"><span class="payment-badge bubble-glass-v2 {% if order.payment_type|upper == 'USDT' %}payment-usdt{% elif order.payment_type|upper == 'CASH' %}payment-cash{% elif order.payment_type|upper == 'BANK' %}payment-bank{% else %}payment-default{% endif %}">{{ order.payment_type }}</span></td>
+          <td class="notes-cell">{{ order.notes }}</td>
+          <td class="row-id">{{ order.id }}</td>
+          <td class="contact-cell">{{ order.discord }}</td>
+          <td class="contact-cell">{{ order.whatsapp }}</td>
+          <td class="date">{{ order.created_at }}</td>
+          <td class="actions">
+            <div class="action-group">
+              <form action="/kingdom/{{ kingdom.id }}/toggle/{{ order.id }}" method="POST" style="display:inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="action-btn action-btn-complete" title="Mark Completed"><i data-lucide="check-circle"></i></button>
+              </form>
+              <form action="/kingdom/{{ kingdom.id }}/progress/{{ order.id }}" method="POST" style="display:inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="action-btn action-btn-progress {{ 'active' if order.status == 'in_progress' else '' }}" title="In Progress"><i data-lucide="loader"></i></button>
+              </form>
+              <button class="action-btn action-btn-edit" type="button" title="Edit Order"
+                data-order-id="{{ order.id }}"
+                data-customer="{{ order.customer_name }}"
+                data-food="{{ order.food }}"
+                data-wood="{{ order.wood }}"
+                data-stone="{{ order.stone }}"
+                data-gold="{{ order.gold }}"
+                data-price="{{ order.price }}"
+                data-payment="{{ order.payment_type }}"
+                data-notes="{{ order.notes }}"
+                data-discord="{{ order.discord }}"
+                data-whatsapp="{{ order.whatsapp }}"
+                onclick="openEdit(this)"><i data-lucide="pencil"></i></button>
+              <button class="action-btn action-btn-copy" type="button" title="Duplicate Order"
+                data-order-id="{{ order.id }}"
+                data-customer="{{ order.customer_name }}"
+                data-food="{{ order.food }}"
+                data-wood="{{ order.wood }}"
+                data-stone="{{ order.stone }}"
+                data-gold="{{ order.gold }}"
+                data-price="{{ order.price }}"
+                data-payment="{{ order.payment_type }}"
+                data-notes="{{ order.notes }}"
+                data-discord="{{ order.discord }}"
+                data-whatsapp="{{ order.whatsapp }}"
+                onclick="copyOrder(this)"><i data-lucide="copy"></i></button>
+              <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="action-btn action-btn-delete" title="Delete Order"><i data-lucide="trash-2"></i></button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
   {% else %}
   <div class="empty-state premium-empty">
