@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-color F0
+color 0A
 title Orders Tracker Server
 echo ========================================
 echo   Orders Tracker
