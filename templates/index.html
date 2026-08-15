@@ -269,6 +269,7 @@
       <thead>
         <tr>
           <th class="th-num">#</th>
+          <th class="th-id"><i data-lucide="fingerprint" class="icon-th"></i> ID</th>
           <th>الزبون</th>
           <th class="th-food"><i data-lucide="wheat" class="icon-th"></i> ذره</th>
           <th class="th-wood"><i data-lucide="tree-pine" class="icon-th"></i> خشب</th>
@@ -287,6 +288,7 @@
         {% for order in orders %}
         <tr class="{{ 'finished' if order.status == 'finished' else 'in-progress' if order.status == 'in_progress' else '' }}">
           <td class="row-num">{{ loop.index }}</td>
+          <td class="row-id">{{ order.id }}</td>
           <td class="customer"><span class="customer-pill">{{ order.customer_name }}</span>{% if order.status == 'finished' %}<span class="completed-badge">Completed</span>{% elif order.status == 'in_progress' %}<span class="inprogress-badge">In Progress</span>{% endif %}</td>
           <td class="food">{{ order.food|number_format }}</td>
           <td class="wood">{{ order.wood|number_format }}</td>

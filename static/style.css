@@ -785,6 +785,7 @@ img{display:block;max-width:100%}
   box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 2px 6px rgba(0,0,0,.04);
   text-shadow:none;
 }
+.th-id{color:#A7B6D0!important;-webkit-text-fill-color:#A7B6D0!important;text-shadow:0 0 8px rgba(167,182,208,.2)}
 
 .table-shell tbody tr{
   transition:all .3s cubic-bezier(.4,0,.2,1);
@@ -863,6 +864,7 @@ img{display:block;max-width:100%}
 .table-shell tbody tr td:only-child{border-radius:14px}
 
 .table-shell .row-num{font-size:17px;color:#60A5FA;font-weight:700;letter-spacing:.02em;text-shadow:0 0 12px rgba(96,165,250,.25)}
+.table-shell .row-id{font-size:15px;color:#A7B6D0;font-weight:700;letter-spacing:.02em;text-shadow:0 0 8px rgba(167,182,208,.15)}
 .table-shell .customer{font-weight:600;color:#1E293B;font-size:15px}
 .table-shell .customer-pill{
   display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;
@@ -2371,12 +2373,19 @@ html,body,
   color:#1E293B!important;
   text-shadow:none;
 }
+.th-id{color:#64748B!important;text-shadow:none!important}
 
 /* Table Row Number */
 .table-shell .row-num{
   background:linear-gradient(180deg,#1E3A8A 0%,#2563EB 40%,#3B82F6 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   filter:none;
+  text-shadow:none;
+}
+
+/* Table Row ID */
+.table-shell .row-id{
+  color:#64748B!important;
   text-shadow:none;
 }
 
