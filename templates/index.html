@@ -268,7 +268,6 @@
     {% for order in orders %}
     <div class="order-card {{ 'finished' if order.status == 'finished' else 'in-progress' if order.status == 'in_progress' else '' }}">
       <div class="order-card-top">
-        <div class="order-card-id">#{{ order.id }}</div>
         <div class="order-card-customer">
           <span class="customer-pill">{{ order.customer_name }}</span>
           {% if order.status == 'finished' %}<span class="completed-badge">Completed</span>{% elif order.status == 'in_progress' %}<span class="inprogress-badge">In Progress</span>{% endif %}
@@ -285,6 +284,7 @@
         <span class="payment-badge bubble-glass-v2 {% if order.payment_type|upper == 'USDT' %}payment-usdt{% elif order.payment_type|upper == 'CASH' %}payment-cash{% elif order.payment_type|upper == 'BANK' %}payment-bank{% else %}payment-default{% endif %}">{{ order.payment_type }}</span>
       </div>
       <div class="order-card-contact">
+        <div class="oc-line"><i data-lucide="fingerprint" class="oc-ico"></i><span class="oc-ellipsis">{{ order.id }}</span></div>
         <div class="oc-line"><i data-lucide="message-circle" class="oc-ico"></i><span class="oc-ellipsis">{{ order.discord }}</span></div>
         <div class="oc-line"><i data-lucide="phone" class="oc-ico"></i><span class="oc-ellipsis">{{ order.whatsapp }}</span></div>
       </div>
