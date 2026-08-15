@@ -209,6 +209,22 @@
             </div>
           </div>
         </div>
+        <div class="double-grid">
+          <div class="field">
+            <label>ديسكورد (اختياري)</label>
+            <div class="field-input-wrap">
+              <span class="field-icon"><i data-lucide="message-circle"></i></span>
+              <input type="text" name="discord" placeholder="مثال: user123" />
+            </div>
+          </div>
+          <div class="field">
+            <label>واتساب (اختياري)</label>
+            <div class="field-input-wrap">
+              <span class="field-icon"><i data-lucide="phone"></i></span>
+              <input type="text" name="whatsapp" placeholder="مثال: 01000000000" />
+            </div>
+          </div>
+        </div>
         <div class="field">
           <label>ملاحظات (اختياري)</label>
           <div class="field-input-wrap">
@@ -261,6 +277,8 @@
           <th class="th-price"><i data-lucide="banknote" class="icon-th"></i> الثمن</th>
           <th class="th-payment"><i data-lucide="wallet" class="icon-th"></i> الدفع</th>
           <th class="th-notes">ملاحظات</th>
+          <th class="th-discord"><i data-lucide="message-circle" class="icon-th"></i> ديسكورد</th>
+          <th class="th-whatsapp"><i data-lucide="phone" class="icon-th"></i> واتساب</th>
           <th class="th-date"><i data-lucide="calendar" class="icon-th"></i> التاريخ</th>
           <th class="th-actions">اجراء</th>
         </tr>
@@ -277,6 +295,8 @@
           <td class="price">{{ "%.2f"|format(order.price) }} $</td>
           <td class="payment"><span class="payment-badge bubble-glass-v2 {% if order.payment_type|upper == 'USDT' %}payment-usdt{% elif order.payment_type|upper == 'CASH' %}payment-cash{% elif order.payment_type|upper == 'BANK' %}payment-bank{% else %}payment-default{% endif %}">{{ order.payment_type }}</span></td>
           <td class="notes-cell">{{ order.notes }}</td>
+          <td class="contact-cell">{{ order.discord }}</td>
+          <td class="contact-cell">{{ order.whatsapp }}</td>
           <td class="date">{{ order.created_at }}</td>
           <td class="actions">
             <div class="action-group">
@@ -306,6 +326,8 @@
                 data-price="{{ order.price }}"
                 data-payment="{{ order.payment_type }}"
                 data-notes="{{ order.notes }}"
+                data-discord="{{ order.discord }}"
+                data-whatsapp="{{ order.whatsapp }}"
                 onclick="openEdit(this)"><i data-lucide="pencil"></i></button>
               <button class="action-btn action-btn-copy" type="button" title="Duplicate Order"
                 data-order-id="{{ order.id }}"
@@ -317,6 +339,8 @@
                 data-price="{{ order.price }}"
                 data-payment="{{ order.payment_type }}"
                 data-notes="{{ order.notes }}"
+                data-discord="{{ order.discord }}"
+                data-whatsapp="{{ order.whatsapp }}"
                 onclick="copyOrder(this)"><i data-lucide="copy"></i></button>
               <form action="/kingdom/{{ kingdom.id }}/delete/{{ order.id }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطلبيه؟')">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -448,6 +472,16 @@
         </div>
       </div>
       <div class="form-row">
+        <div class="form-group">
+          <label>ديسكورد</label>
+          <input type="text" name="discord" id="edit_discord"/>
+        </div>
+        <div class="form-group">
+          <label>واتساب</label>
+          <input type="text" name="whatsapp" id="edit_whatsapp"/>
+        </div>
+      </div>
+      <div class="form-row">
         <div class="form-group full">
           <label>ملاحظات</label>
           <input type="text" name="notes" id="edit_notes"/>
@@ -502,6 +536,16 @@
         </div>
       </div>
       <div class="form-row">
+        <div class="form-group">
+          <label>ديسكورد</label>
+          <input type="text" name="discord" id="copy_discord"/>
+        </div>
+        <div class="form-group">
+          <label>واتساب</label>
+          <input type="text" name="whatsapp" id="copy_whatsapp"/>
+        </div>
+      </div>
+      <div class="form-row">
         <div class="form-group full">
           <label>ملاحظات</label>
           <input type="text" name="notes" id="copy_notes"/>
@@ -549,6 +593,8 @@ function openEdit(button) {
   document.getElementById('edit_price').value = data.price || 0;
   document.getElementById('edit_payment').value = data.payment || '';
   document.getElementById('edit_notes').value = data.notes || '';
+  document.getElementById('edit_discord').value = data.discord || '';
+  document.getElementById('edit_whatsapp').value = data.whatsapp || '';
   document.getElementById('editModal').style.display = 'flex';
 }
 
@@ -567,6 +613,8 @@ function copyOrder(button) {
   document.getElementById('copy_price').value = data.price || 0;
   document.getElementById('copy_payment').value = data.payment || '';
   document.getElementById('copy_notes').value = data.notes || '';
+  document.getElementById('copy_discord').value = data.discord || '';
+  document.getElementById('copy_whatsapp').value = data.whatsapp || '';
   document.getElementById('copyModal').style.display = 'flex';
 }
 

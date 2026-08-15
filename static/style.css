@@ -775,6 +775,8 @@ img{display:block;max-width:100%}
 .th-price{color:#79FF8D!important;-webkit-text-fill-color:#79FF8D!important;text-shadow:0 0 12px rgba(121,255,141,.3)}
 .th-payment{color:#C4B5FD!important;-webkit-text-fill-color:#C4B5FD!important;text-shadow:0 0 12px rgba(196,181,253,.25)}
 .th-notes{color:#9DDCFF!important;-webkit-text-fill-color:#9DDCFF!important;text-shadow:0 0 8px rgba(157,220,255,.18)}
+.th-discord{color:#8B9CFF!important;-webkit-text-fill-color:#8B9CFF!important;text-shadow:0 0 10px rgba(139,156,255,.25)}
+.th-whatsapp{color:#7EE787!important;-webkit-text-fill-color:#7EE787!important;text-shadow:0 0 10px rgba(126,231,135,.25)}
 .th-date{color:#93C5FD!important;-webkit-text-fill-color:#93C5FD!important;text-shadow:0 0 12px rgba(147,197,253,.25)}
 .th-num,.th-actions{
   background:rgba(0,0,0,.04)!important;border:1px solid rgba(0,0,0,.08)!important;
@@ -885,6 +887,7 @@ img{display:block;max-width:100%}
 .table-shell .price{color:#79FF8D;font-size:17px;font-weight:800;text-shadow:0 0 12px rgba(121,255,141,.15)}
 
 .table-shell .notes-cell{max-width:140px;color:#9DDCFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px;font-weight:500;font-style:italic;text-shadow:0 0 8px rgba(157,220,255,.08)}
+.table-shell .contact-cell{max-width:150px;color:#A5B4FC;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px;font-weight:500;text-shadow:0 0 8px rgba(165,180,252,.1)}
 .table-shell .date{color:#93C5FD;font-size:15px;font-weight:600;text-shadow:0 0 10px rgba(147,197,253,.15)}
 
 .actions{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:nowrap}
@@ -2360,6 +2363,8 @@ html,body,
 .th-price{color:#059669!important;text-shadow:none!important}
 .th-payment{color:#7C3AED!important;text-shadow:none!important}
 .th-notes{color:#475569!important;text-shadow:none!important}
+.th-discord{color:#4F46E5!important;text-shadow:none!important}
+.th-whatsapp{color:#15803D!important;text-shadow:none!important}
 .th-date{color:#2563EB!important;text-shadow:none!important}
 .th-num,.th-actions{
   background:rgba(0,0,0,.04)!important;
@@ -2415,6 +2420,14 @@ html,body,
 /* Table Notes */
 .table-shell .notes-cell{
   background:linear-gradient(180deg,#475569 0%,#64748B 40%,#94A3B8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:none;
+  text-shadow:none;
+}
+
+/* Table Contact Cells */
+.table-shell .contact-cell{
+  background:linear-gradient(180deg,#4F46E5 0%,#6366F1 40%,#818CF8 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   filter:none;
   text-shadow:none;

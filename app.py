@@ -86,6 +86,8 @@ class Order(db.Model):
     price = db.Column(db.Float, default=0.0)
     payment_type = db.Column(db.Text, default="")
     notes = db.Column(db.Text, default="")
+    discord = db.Column(db.Text, default="")
+    whatsapp = db.Column(db.Text, default="")
     status = db.Column(db.Text, default="active")
     created_at = db.Column(db.Text, default="")
 
@@ -190,6 +192,8 @@ def migrate_sqlite_data():
                 price=o["price"] or 0.0,
                 payment_type=o["payment_type"] or "",
                 notes=o["notes"] or "",
+                discord=o["discord"] or "" if "discord" in o.keys() else "",
+                whatsapp=o["whatsapp"] or "" if "whatsapp" in o.keys() else "",
                 status=o["status"] or "active",
                 created_at=o["created_at"] or "",
             )
@@ -207,9 +211,39 @@ def migrate_sqlite_data():
         conn.close()
 
 
+def migrate_schema():
+    """Add newly introduced columns to existing databases."""
+    if DATABASE_URL:
+        try:
+            db.session.execute(db.text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS discord TEXT DEFAULT ''"))
+            db.session.execute(db.text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS whatsapp TEXT DEFAULT ''"))
+            db.session.commit()
+            logger.info("PostgreSQL schema up to date")
+        except Exception as e:
+            db.session.rollback()
+            logger.warning("PostgreSQL schema migration skipped: %s", e)
+    else:
+        db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "orders.db")
+        if os.path.exists(db_path):
+            try:
+                conn = sqlite3.connect(db_path)
+                cur = conn.cursor()
+                cols = {row[1] for row in cur.execute("PRAGMA table_info(orders)").fetchall()}
+                if "discord" not in cols:
+                    cur.execute("ALTER TABLE orders ADD COLUMN discord TEXT DEFAULT ''")
+                if "whatsapp" not in cols:
+                    cur.execute("ALTER TABLE orders ADD COLUMN whatsapp TEXT DEFAULT ''")
+                conn.commit()
+                conn.close()
+                logger.info("SQLite schema up to date")
+            except Exception as e:
+                logger.warning("SQLite schema migration failed: %s", e)
+
+
 def init_app():
     with app.app_context():
         db.create_all()
+        migrate_schema()
         if DATABASE_URL:
             migrate_sqlite_data()
         admin_email = os.environ.get("ADMIN_EMAIL")
@@ -484,6 +518,8 @@ def kingdom_page(kingdom_id):
             "price": o.price,
             "payment_type": sanitize(o.payment_type or ""),
             "notes": sanitize(o.notes or ""),
+            "discord": sanitize(o.discord or ""),
+            "whatsapp": sanitize(o.whatsapp or ""),
             "status": o.status, "created_at": o.created_at,
         })
     return render_template("index.html", orders=safe_orders, stats=stats,
@@ -509,6 +545,8 @@ def add_order(kingdom_id):
         price=validate_float(request.form.get("price", 0)),
         payment_type=sanitize(request.form.get("payment_type", ""))[:50],
         notes=sanitize(request.form.get("notes", ""))[:500],
+        discord=sanitize(request.form.get("discord", ""))[:200],
+        whatsapp=sanitize(request.form.get("whatsapp", ""))[:200],
         created_at=now,
     )
     db.session.add(order)
@@ -535,6 +573,8 @@ def edit_order(kingdom_id, order_id):
     order.price = validate_float(request.form.get("price", 0))
     order.payment_type = sanitize(request.form.get("payment_type", ""))[:50]
     order.notes = sanitize(request.form.get("notes", ""))[:500]
+    order.discord = sanitize(request.form.get("discord", ""))[:200]
+    order.whatsapp = sanitize(request.form.get("whatsapp", ""))[:200]
     db.session.commit()
     return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
 
@@ -576,6 +616,7 @@ def copy_order(kingdom_id, order_id):
             customer_name=order.customer_name,
             food=order.food, wood=order.wood, stone=order.stone, gold=order.gold,
             price=order.price, payment_type=order.payment_type, notes=order.notes,
+            discord=order.discord, whatsapp=order.whatsapp,
             created_at=now,
         )
         db.session.add(new_order)

@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
 orders.db
+orders.db-shm
+orders.db-wal
 *.log
 cloudflared.exe
 tunnel*.txt
