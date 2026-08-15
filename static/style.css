@@ -202,6 +202,20 @@ img{display:block;max-width:100%}
 .status-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 8px rgba(34,197,94,.4);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
+.theme-toggle-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:rgba(0,0,0,.02);
+  color:var(--muted);cursor:pointer;transition:all var(--t);
+}
+.theme-toggle-btn:hover{color:var(--text);background:rgba(0,0,0,.04)}
+.theme-toggle-btn svg{width:16px;height:16px}
+.theme-icon-sun{display:none}
+.theme-icon-moon{display:block}
+html[data-theme="dark"] .theme-icon-sun{display:block}
+html[data-theme="dark"] .theme-icon-moon{display:none}
+html[data-theme="dark"] .theme-toggle-btn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:#E2E8F0}
+
 .topbar-avatar{
   width:34px;height:34px;display:grid;place-items:center;
   border-radius:var(--radius-sm);
@@ -2602,3 +2616,152 @@ html,body,
   color:#92400E;
   text-shadow:none;
 }
+
+/* ═══════════════════════════════════════
+   DARK THEME
+   ═══════════════════════════════════════ */
+html[data-theme="dark"]{
+  --bg:#0B1220;
+  --bg-body:#0B1220;
+  --surface:rgba(15,23,42,.94);
+  --surface-solid:#0F172A;
+  --surface-raised:rgba(30,41,59,.9);
+  --surface-overlay:rgba(15,23,42,.92);
+  --border:rgba(255,255,255,.1);
+  --border-hover:rgba(255,255,255,.18);
+  --border-gold:rgba(251,191,36,.3);
+  --blue-glow:rgba(59,130,246,.14);
+  --blue-soft:rgba(99,102,241,.14);
+  --gold:#FBBF24;
+  --gold-dim:#D97706;
+  --gold-glow:rgba(251,191,36,.18);
+  --success:#22C55E;
+  --success-dim:#16A34A;
+  --warning:#FBBF24;
+  --danger:#F87171;
+  --danger-glow:rgba(248,113,113,.12);
+  --text:#E2E8F0;
+  --text-bright:#F8FAFC;
+  --muted:#94A3B8;
+  --muted-dim:#64748B;
+  --glass-title:linear-gradient(180deg,#F8FAFC 0%,#CBD5E1 100%);
+  --glass-section:linear-gradient(180deg,#F8FAFC 0%,#CBD5E1 100%);
+  --glass-money:#4ADE80;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.45);
+  --shadow:0 2px 8px rgba(0,0,0,.45),0 4px 14px rgba(0,0,0,.4);
+  --shadow-md:0 8px 24px rgba(0,0,0,.55),0 12px 36px rgba(0,0,0,.45);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.6),0 24px 64px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+html[data-theme="dark"] body{background:#0B1220}
+html[data-theme="dark"] body::before{
+  background:
+    radial-gradient(ellipse 50% 50% at 15% 15%,rgba(217,119,6,.08),transparent 60%),
+    radial-gradient(ellipse 45% 45% at 85% 10%,rgba(59,130,246,.08),transparent 55%),
+    radial-gradient(ellipse 40% 40% at 50% 80%,rgba(139,92,246,.06),transparent 55%);
+}
+
+/* Sidebar & Topbar */
+html[data-theme="dark"] .sidebar{background:linear-gradient(180deg,#0F172A,#111827);border-right-color:rgba(255,255,255,.07);box-shadow:4px 0 32px rgba(0,0,0,.5)}
+html[data-theme="dark"] .sidebar-footer-card{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+html[data-theme="dark"] .sidebar-link:hover{color:#F8FAFC;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.09)}
+html[data-theme="dark"] .topbar{background:rgba(11,18,32,.85);border-bottom-color:rgba(255,255,255,.07)}
+html[data-theme="dark"] .topbar-pill{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:#CBD5E1;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+
+/* Cards */
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .form-card{
+  background:var(--surface);border-color:rgba(255,255,255,.09);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.03);
+}
+html[data-theme="dark"] .card:hover{border-color:rgba(255,255,255,.15)}
+html[data-theme="dark"] .card-header{border-bottom-color:rgba(255,255,255,.07)}
+html[data-theme="dark"] .card-header p{color:#94A3B8}
+html[data-theme="dark"] .card-header-icon{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:#94A3B8}
+html[data-theme="dark"] .card::after,html[data-theme="dark"] .form-card::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent)}
+
+/* Form sections & fields */
+html[data-theme="dark"] .form-section{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+html[data-theme="dark"] .field label{color:#E2E8F0}
+html[data-theme="dark"] .field-input-wrap input,
+html[data-theme="dark"] .form-group input,
+html[data-theme="dark"] .form-group select,
+html[data-theme="dark"] .form-group textarea{
+  background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#E2E8F0;box-shadow:inset 0 1px 2px rgba(0,0,0,.3);
+}
+html[data-theme="dark"] .field-input-wrap input:focus{
+  background:rgba(255,255,255,.08);border-color:rgba(59,130,246,.5);
+}
+html[data-theme="dark"] .field-input-wrap input::placeholder,
+html[data-theme="dark"] .form-group input::placeholder,
+html[data-theme="dark"] .form-group textarea::placeholder{
+  color:rgba(148,163,184,.55);-webkit-text-fill-color:rgba(148,163,184,.55);background:none;
+}
+html[data-theme="dark"] .field-icon{background:rgba(255,255,255,.05);color:#94A3B8}
+html[data-theme="dark"] .section-badge{background:linear-gradient(135deg,rgba(251,191,36,.18),rgba(99,102,241,.12));color:#FBBF24;border-color:rgba(251,191,36,.22);box-shadow:0 4px 12px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.06)}
+
+/* Table */
+html[data-theme="dark"] .table-shell tbody tr{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.05);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+html[data-theme="dark"] .table-shell tbody tr:nth-child(even){background:rgba(255,255,255,.03)}
+html[data-theme="dark"] .table-shell tbody tr:hover{background:rgba(59,130,246,.1);border-color:rgba(99,130,246,.2)}
+html[data-theme="dark"] .table-shell tbody tr.finished{background:rgba(22,163,74,.16)!important;border-color:rgba(22,163,74,.35)}
+html[data-theme="dark"] .table-shell tbody tr.in-progress{background:rgba(217,119,6,.16)!important;border-color:rgba(217,119,6,.35)}
+html[data-theme="dark"] .th-num,html[data-theme="dark"] .th-actions{background:rgba(255,255,255,.05)!important;border-color:rgba(255,255,255,.1)!important;color:#E2E8F0!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+html[data-theme="dark"] .table-shell .customer{color:#E2E8F0}
+html[data-theme="dark"] .table-shell .customer-pill{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:#E2E8F0}
+html[data-theme="dark"] .table-shell .row-num{color:#60A5FA}
+html[data-theme="dark"] .table-shell .row-id{color:#94A3B8}
+html[data-theme="dark"] .table-shell .notes-cell,
+html[data-theme="dark"] .table-shell .contact-cell,
+html[data-theme="dark"] .table-shell .date{
+  background:none;-webkit-background-clip:initial;-webkit-text-fill-color:initial;background-clip:initial;
+  filter:none;text-shadow:none;
+}
+html[data-theme="dark"] .table-shell .notes-cell{color:#9DDCFF}
+html[data-theme="dark"] .table-shell .contact-cell{color:#A5B4FC}
+html[data-theme="dark"] .table-shell .date{color:#93C5FD}
+
+/* Modals */
+html[data-theme="dark"] .modal{background:rgba(0,0,0,.6)}
+html[data-theme="dark"] .modal-content{background:rgba(17,25,40,.97);border-color:rgba(255,255,255,.1);box-shadow:0 24px 64px rgba(0,0,0,.6)}
+html[data-theme="dark"] .modal-content h2{background:linear-gradient(180deg,#F8FAFC 0%,#CBD5E1 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:none;text-shadow:none}
+
+/* Stats & Insight */
+html[data-theme="dark"] .stats-toggle-btn{background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border-color:rgba(255,255,255,.08);color:#E2E8F0;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+html[data-theme="dark"] .stats-toggle-btn:hover{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border-color:rgba(255,255,255,.12)}
+html[data-theme="dark"] .stat-card,html[data-theme="dark"] .insight-card{background:var(--surface);border-color:rgba(255,255,255,.08)}
+html[data-theme="dark"] .insight-icon{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1)}
+
+/* Empty state */
+html[data-theme="dark"] .empty-state h3,
+html[data-theme="dark"] .empty-state p{
+  background:none;-webkit-background-clip:initial;-webkit-text-fill-color:initial;background-clip:initial;
+  filter:none;text-shadow:none;
+}
+html[data-theme="dark"] .empty-state h3{color:#E2E8F0}
+html[data-theme="dark"] .empty-state p{color:#94A3B8}
+
+/* Hero */
+html[data-theme="dark"] .cmd-hero-bg{
+  background:linear-gradient(160deg,rgba(15,23,42,.98),rgba(17,25,40,.96),rgba(30,41,59,.96)),url("/static/images/background.webp");
+}
+html[data-theme="dark"] .cmd-hero-glass{background:rgba(10,15,26,.5);border-top-color:rgba(255,255,255,.06)}
+html[data-theme="dark"] .cmd-hero-stat-card{background:linear-gradient(145deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border-color:rgba(255,255,255,.08);box-shadow:0 4px 14px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.05)}
+html[data-theme="dark"] .cmd-hero-stat-card:hover{background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border-color:rgba(255,255,255,.12)}
+
+/* Action buttons */
+html[data-theme="dark"] .action-btn{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);box-shadow:0 2px 8px rgba(0,0,0,.25);color:#94A3B8}
+
+/* Kingdoms page hero */
+html[data-theme="dark"] .hero-banner{border-color:rgba(255,255,255,.1);box-shadow:var(--shadow-lg),0 0 120px rgba(59,130,246,.05),0 0 80px rgba(250,204,21,.03)}
+html[data-theme="dark"] .hero-bg{
+  background:linear-gradient(160deg,rgba(15,23,42,.98),rgba(17,25,40,.96),rgba(30,41,59,.96)),url("/static/images/background.webp");
+}
+html[data-theme="dark"] .hero-vignette{background:radial-gradient(ellipse 70% 65% at 50% 50%,transparent 40%,rgba(11,18,32,.6) 100%)}
+html[data-theme="dark"] .hero-glass{background:rgba(10,15,26,.45)}
+
+/* Kingdoms tiles */
+html[data-theme="dark"] .kingdom-tile{background:var(--surface);border-color:rgba(255,255,255,.08);box-shadow:0 6px 20px rgba(0,0,0,.3),0 0 40px rgba(59,130,246,.02)}
+html[data-theme="dark"] .kingdom-tile::before{background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent)}
+html[data-theme="dark"] .kingdom-tile:hover{border-color:rgba(217,119,6,.35);box-shadow:0 12px 40px rgba(0,0,0,.4),0 0 50px rgba(217,119,6,.06),0 0 80px rgba(59,130,246,.03)}
+html[data-theme="dark"] .kingdom-tile-date{border-top-color:rgba(255,255,255,.08)}

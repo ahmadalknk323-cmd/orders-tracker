@@ -68,6 +68,10 @@
     <span class="topbar-title">الممالك</span>
   </div>
   <div class="topbar-right">
+    <button type="button" class="theme-toggle-btn" id="themeToggle" title="تبديل الوضع" onclick="toggleTheme()">
+      <i data-lucide="moon" class="theme-icon-moon"></i>
+      <i data-lucide="sun" class="theme-icon-sun"></i>
+    </button>
     <span class="topbar-pill"><i data-lucide="shield" style="width:12px;height:12px"></i> {{ kingdoms|length }} مملك{{ 'ة' if kingdoms|length != 1 else 'ات' }}</span>
     <span class="topbar-pill"><span class="status-dot"></span> نشط</span>
     <div class="topbar-avatar">TRSS</div>
@@ -248,6 +252,20 @@
 
 <canvas id="bgCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;pointer-events:none"></canvas>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+(function(){
+  var t = 'light';
+  try { t = localStorage.getItem('trss-theme') || 'light'; } catch(e) {}
+  if (t === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); }
+})();
+function toggleTheme(){
+  var html = document.documentElement;
+  var dark = html.getAttribute('data-theme') === 'dark';
+  if (dark) { html.removeAttribute('data-theme'); try{localStorage.setItem('trss-theme','light')}catch(e){} }
+  else { html.setAttribute('data-theme', 'dark'); try{localStorage.setItem('trss-theme','dark')}catch(e){} }
+  try { lucide.createIcons(); } catch(e) {}
+}
+</script>
 <script>lucide.createIcons();</script>
 <script>
 (function(){
