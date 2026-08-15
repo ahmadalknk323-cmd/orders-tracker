@@ -2765,3 +2765,82 @@ html[data-theme="dark"] .kingdom-tile{background:var(--surface);border-color:rgb
 html[data-theme="dark"] .kingdom-tile::before{background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent)}
 html[data-theme="dark"] .kingdom-tile:hover{border-color:rgba(217,119,6,.35);box-shadow:0 12px 40px rgba(0,0,0,.4),0 0 50px rgba(217,119,6,.06),0 0 80px rgba(59,130,246,.03)}
 html[data-theme="dark"] .kingdom-tile-date{border-top-color:rgba(255,255,255,.08)}
+
+/* Orders table - header & cells */
+html[data-theme="dark"] .table-shell thead th{
+  background:rgba(15,23,42,.85);
+  color:#E2E8F0;
+  border-bottom-color:rgba(255,255,255,.1);
+}
+html[data-theme="dark"] .th-food,html[data-theme="dark"] .th-wood,html[data-theme="dark"] .th-stone,
+html[data-theme="dark"] .th-gold,html[data-theme="dark"] .th-price,html[data-theme="dark"] .th-payment,
+html[data-theme="dark"] .th-notes,html[data-theme="dark"] .th-discord,html[data-theme="dark"] .th-whatsapp,
+html[data-theme="dark"] .th-date,html[data-theme="dark"] .th-id{
+  background:none;-webkit-background-clip:initial;-webkit-text-fill-color:initial;background-clip:initial;
+  filter:none;text-shadow:none;
+}
+html[data-theme="dark"] .th-food{color:#86EFAC!important;-webkit-text-fill-color:#86EFAC!important}
+html[data-theme="dark"] .th-wood{color:#FDBA74!important;-webkit-text-fill-color:#FDBA74!important}
+html[data-theme="dark"] .th-stone{color:#BFDBFE!important;-webkit-text-fill-color:#BFDBFE!important}
+html[data-theme="dark"] .th-gold{color:#FCD34D!important;-webkit-text-fill-color:#FCD34D!important}
+html[data-theme="dark"] .th-price{color:#86EFAC!important;-webkit-text-fill-color:#86EFAC!important}
+html[data-theme="dark"] .th-payment{color:#DDD6FE!important;-webkit-text-fill-color:#DDD6FE!important}
+html[data-theme="dark"] .th-notes{color:#BAE6FD!important;-webkit-text-fill-color:#BAE6FD!important}
+html[data-theme="dark"] .th-discord{color:#C7D2FE!important;-webkit-text-fill-color:#C7D2FE!important}
+html[data-theme="dark"] .th-whatsapp{color:#BBF7D0!important;-webkit-text-fill-color:#BBF7D0!important}
+html[data-theme="dark"] .th-date{color:#BFDBFE!important;-webkit-text-fill-color:#BFDBFE!important}
+html[data-theme="dark"] .th-id{color:#A7B6D0!important;-webkit-text-fill-color:#A7B6D0!important}
+html[data-theme="dark"] .th-num,html[data-theme="dark"] .th-actions{
+  background:rgba(255,255,255,.05)!important;border-color:rgba(255,255,255,.1)!important;color:#E2E8F0!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+/* Resource values - bright gradients for dark rows */
+html[data-theme="dark"] .table-shell .food{
+  background:linear-gradient(180deg,#4ADE80 0%,#34D399 60%,#2DD4BF 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:none!important;text-shadow:none!important;
+}
+html[data-theme="dark"] .table-shell .wood{
+  background:linear-gradient(180deg,#FB923C 0%,#F97316 60%,#FB7185 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:none!important;text-shadow:none!important;
+}
+html[data-theme="dark"] .table-shell .stone{
+  background:linear-gradient(180deg,#93C5FD 0%,#60A5FA 60%,#818CF8 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:none!important;text-shadow:none!important;
+}
+html[data-theme="dark"] .table-shell .gold{
+  background:linear-gradient(180deg,#FDE68A 0%,#FACC15 50%,#F59E0B 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:none!important;text-shadow:none!important;
+}
+html[data-theme="dark"] .table-shell .price{
+  background:linear-gradient(180deg,#6EE7B7 0%,#34D399 55%,#2DD4BF 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:none!important;text-shadow:none!important;
+}
+
+/* Row number & id - solid bright colors */
+html[data-theme="dark"] .table-shell .row-num{
+  background:linear-gradient(180deg,#60A5FA 0%,#3B82F6 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;
+  filter:none!important;text-shadow:none!important;
+}
+html[data-theme="dark"] .table-shell .row-id{color:#A7B6D0!important}
+
+/* Payment badges - bright text on dark chips */
+html[data-theme="dark"] .payment-usdt{color:#C4B5FD;background:linear-gradient(135deg,rgba(139,92,246,.25),rgba(139,92,246,.1));border-color:rgba(139,92,246,.4)}
+html[data-theme="dark"] .payment-cash{color:#6EE7B7;background:linear-gradient(135deg,rgba(16,185,129,.25),rgba(16,185,129,.1));border-color:rgba(16,185,129,.4)}
+html[data-theme="dark"] .payment-bank{color:#93C5FD;background:linear-gradient(135deg,rgba(59,130,246,.25),rgba(59,130,246,.1));border-color:rgba(59,130,246,.4)}
+html[data-theme="dark"] .payment-default{color:#A5B4FC;background:linear-gradient(135deg,rgba(99,102,241,.25),rgba(99,102,241,.1));border-color:rgba(99,102,241,.4)}
+
+/* Table count badge */
+html[data-theme="dark"] .table-count{color:#FBBF24!important}
+
+/* Status badges */
+html[data-theme="dark"] .status-finished{color:#4ADE80;background:rgba(22,163,74,.16);border-color:rgba(22,163,74,.35)}
+html[data-theme="dark"] .status-finished:hover{background:rgba(22,163,74,.24)}
+html[data-theme="dark"] .status-active{color:#FDE047;background:rgba(250,204,21,.18);border-color:rgba(250,204,21,.4)}
+html[data-theme="dark"] .premium-empty{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.12)}
