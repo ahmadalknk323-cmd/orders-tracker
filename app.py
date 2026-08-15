@@ -79,6 +79,7 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     kingdom_id = db.Column(db.Integer, db.ForeignKey("kingdoms.id"), nullable=False)
     customer_name = db.Column(db.Text, nullable=False)
+    customer_id = db.Column(db.Text, default="")
     food = db.Column(db.Integer, default=0)
     wood = db.Column(db.Integer, default=0)
     stone = db.Column(db.Integer, default=0)
@@ -185,6 +186,7 @@ def migrate_sqlite_data():
             new_order = Order(
                 kingdom_id=mapped_kid,
                 customer_name=o["customer_name"] or "",
+                customer_id=o["customer_id"] or "" if "customer_id" in o.keys() else "",
                 food=o["food"] or 0,
                 wood=o["wood"] or 0,
                 stone=o["stone"] or 0,
@@ -215,6 +217,7 @@ def migrate_schema():
     """Add newly introduced columns to existing databases."""
     if DATABASE_URL:
         try:
+            db.session.execute(db.text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS customer_id TEXT DEFAULT ''"))
             db.session.execute(db.text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS discord TEXT DEFAULT ''"))
             db.session.execute(db.text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS whatsapp TEXT DEFAULT ''"))
             db.session.commit()
@@ -229,6 +232,8 @@ def migrate_schema():
                 conn = sqlite3.connect(db_path)
                 cur = conn.cursor()
                 cols = {row[1] for row in cur.execute("PRAGMA table_info(orders)").fetchall()}
+                if "customer_id" not in cols:
+                    cur.execute("ALTER TABLE orders ADD COLUMN customer_id TEXT DEFAULT ''")
                 if "discord" not in cols:
                     cur.execute("ALTER TABLE orders ADD COLUMN discord TEXT DEFAULT ''")
                 if "whatsapp" not in cols:
@@ -514,6 +519,7 @@ def kingdom_page(kingdom_id):
         safe_orders.append({
             "id": o.id, "kingdom_id": o.kingdom_id,
             "customer_name": sanitize(o.customer_name),
+            "customer_id": sanitize(o.customer_id or ""),
             "food": o.food, "wood": o.wood, "stone": o.stone, "gold": o.gold,
             "price": o.price,
             "payment_type": sanitize(o.payment_type or ""),
@@ -538,6 +544,7 @@ def add_order(kingdom_id):
     order = Order(
         kingdom_id=kingdom_id,
         customer_name=customer,
+        customer_id=sanitize(request.form.get("customer_id", ""))[:100],
         food=validate_int(request.form.get("food", 0)),
         wood=validate_int(request.form.get("wood", 0)),
         stone=validate_int(request.form.get("stone", 0)),
@@ -566,6 +573,7 @@ def edit_order(kingdom_id, order_id):
     if not order:
         return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
     order.customer_name = customer
+    order.customer_id = sanitize(request.form.get("customer_id", ""))[:100]
     order.food = validate_int(request.form.get("food", 0))
     order.wood = validate_int(request.form.get("wood", 0))
     order.stone = validate_int(request.form.get("stone", 0))
@@ -614,6 +622,7 @@ def copy_order(kingdom_id, order_id):
         new_order = Order(
             kingdom_id=kingdom_id,
             customer_name=order.customer_name,
+            customer_id=order.customer_id,
             food=order.food, wood=order.wood, stone=order.stone, gold=order.gold,
             price=order.price, payment_type=order.payment_type, notes=order.notes,
             discord=order.discord, whatsapp=order.whatsapp,
