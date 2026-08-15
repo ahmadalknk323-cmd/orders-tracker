@@ -2954,21 +2954,23 @@ html{font-size:18px}
 .empty-state p{font-size:15px}
 
 /* Orders table */
-.table-shell thead th{font-size:17px}
-.table-shell td{font-size:17px}
-.table-shell .row-num{font-size:20px}
-.table-shell .row-id{font-size:17px}
-.table-shell .customer{font-size:17px}
-.table-shell .customer-pill{font-size:15px}
-.payment-badge{font-size:15px}
-.food,.wood,.stone,.gold,.price{font-size:20px}
-.table-shell .price{font-size:20px}
-.table-shell .notes-cell{font-size:17px}
-.table-shell .contact-cell{font-size:17px}
-.table-shell .date{font-size:17px}
-.status-badge{font-size:14px}
-.completed-badge{font-size:13px}
-.inprogress-badge{font-size:13px}
+.table-shell thead th{font-size:15px;padding:10px 12px}
+.table-shell td{font-size:15px;padding:10px 12px}
+.table-shell tbody tr{height:46px}
+.table-shell table{border-spacing:0 4px}
+.table-shell .row-num{font-size:17px}
+.table-shell .row-id{font-size:15px}
+.table-shell .customer{font-size:15px}
+.table-shell .customer-pill{font-size:13px;padding:3px 10px}
+.payment-badge{font-size:13px;padding:3px 10px}
+.food,.wood,.stone,.gold,.price{font-size:17px}
+.table-shell .price{font-size:17px}
+.table-shell .notes-cell{font-size:15px}
+.table-shell .contact-cell{font-size:15px}
+.table-shell .date{font-size:15px}
+.status-badge{font-size:13px}
+.completed-badge{font-size:12px}
+.inprogress-badge{font-size:12px}
 
 /* Command Center hero */
 .cmd-hero-badge{font-size:11px}
@@ -3004,6 +3006,7 @@ html{font-size:18px}
   .hero-title{font-size:28px}
   .cmd-hero-title{font-size:22px}
   .kingdom-tile-name{font-size:17px}
-  .table-shell td{font-size:15px}
-  .food,.wood,.stone,.gold,.price{font-size:17px}
+  .table-shell td{font-size:14px}
+  .table-shell thead th{font-size:13px}
+  .food,.wood,.stone,.gold,.price{font-size:15px}
 }
