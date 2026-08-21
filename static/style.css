@@ -968,8 +968,9 @@ html[data-theme="dark"] .theme-toggle-btn{background:rgba(255,255,255,.06);borde
   box-shadow:0 0 10px rgba(16,185,129,.15),inset 0 1px 0 rgba(255,255,255,.06);
 }
 html[data-theme="dark"] .paid-badge{color:#34D399;background:linear-gradient(135deg,rgba(52,211,153,.2),rgba(52,211,153,.06));border-color:rgba(52,211,153,.3)}
-.table-shell tbody tr.paid-order{background:rgba(16,185,129,.07)!important;border-color:rgba(16,185,129,.25)}
-.table-shell tbody tr.paid-order:hover{background:rgba(16,185,129,.12)!important;border-color:rgba(16,185,129,.35)}
+.table-shell tbody tr.paid-order{background:rgba(56,189,248,.09)!important;border-color:rgba(56,189,248,.35)!important;box-shadow:inset -5px 0 0 0 #38BDF8!important}
+.table-shell tbody tr.paid-order:hover{background:rgba(56,189,248,.16)!important;border-color:rgba(56,189,248,.5)!important;box-shadow:inset -5px 0 0 0 #38BDF8,0 4px 22px rgba(56,189,248,.2)!important}
+html[data-theme="dark"] .table-shell tbody tr.paid-order{background:rgba(56,189,248,.12)!important;border-color:rgba(56,189,248,.35)!important;box-shadow:inset -5px 0 0 0 #38BDF8,0 2px 10px rgba(0,0,0,.25)!important}
 
 .premium-empty{padding:32px 20px;background:rgba(0,0,0,.02);border-radius:18px;border:1px dashed rgba(0,0,0,.08)}
 .premium-empty .empty-state-icon{background:rgba(217,119,6,.04);border-color:rgba(217,119,6,.1)}
