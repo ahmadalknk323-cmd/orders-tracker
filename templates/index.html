@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>{{ kingdom.name }} - TRSS Kingdom Manager</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='2') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='3') }}"/>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body data-kingdom-id="{{ kingdom.id }}">
@@ -297,9 +297,9 @@
       </thead>
       <tbody>
         {% for order in orders %}
-        <tr class="{{ 'finished' if order.status == 'finished' else 'in-progress' if order.status == 'in_progress' else '' }}">
+        <tr class="{{ 'finished' if order.status == 'finished' else 'in-progress' if order.status == 'in_progress' else '' }} {{ 'paid-order' if order.paid else '' }}">
           <td class="row-num">{{ loop.index }}</td>
-          <td class="customer"><span class="customer-pill">{{ order.customer_name }}</span>{% if order.status == 'finished' %}<span class="completed-badge">Completed</span>{% elif order.status == 'in_progress' %}<span class="inprogress-badge">In Progress</span>{% endif %}</td>
+          <td class="customer"><span class="customer-pill">{{ order.customer_name }}</span>{% if order.paid %}<span class="paid-badge">تم الدفع</span>{% endif %}{% if order.status == 'finished' %}<span class="completed-badge">Completed</span>{% elif order.status == 'in_progress' %}<span class="inprogress-badge">In Progress</span>{% endif %}</td>
           <td class="food">{{ order.food|number_format }}</td>
           <td class="wood">{{ order.wood|number_format }}</td>
           <td class="stone">{{ order.stone|number_format }}</td>
@@ -320,6 +320,10 @@
               <form action="/kingdom/{{ kingdom.id }}/progress/{{ order.id }}" method="POST" style="display:inline">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit" class="action-btn action-btn-progress {{ 'active' if order.status == 'in_progress' else '' }}" title="In Progress"><i data-lucide="loader"></i></button>
+              </form>
+              <form action="/kingdom/{{ kingdom.id }}/paid/{{ order.id }}" method="POST" style="display:inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="action-btn action-btn-paid {{ 'active' if order.paid else '' }}" title="تم الدفع"><i data-lucide="{{ 'badge-dollar-sign' if not order.paid else 'circle-check-big' }}"></i></button>
               </form>
               <button class="action-btn action-btn-edit" type="button" title="Edit Order"
                 data-order-id="{{ order.id }}"

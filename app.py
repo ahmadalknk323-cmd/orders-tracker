@@ -90,6 +90,7 @@ class Order(db.Model):
     discord = db.Column(db.Text, default="")
     whatsapp = db.Column(db.Text, default="")
     status = db.Column(db.Text, default="active")
+    paid = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.Text, default="")
 
 
@@ -220,6 +221,7 @@ def migrate_schema():
             db.session.execute(db.text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS customer_id TEXT DEFAULT ''"))
             db.session.execute(db.text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS discord TEXT DEFAULT ''"))
             db.session.execute(db.text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS whatsapp TEXT DEFAULT ''"))
+            db.session.execute(db.text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS paid BOOLEAN DEFAULT FALSE"))
             db.session.commit()
             logger.info("PostgreSQL schema up to date")
         except Exception as e:
@@ -238,6 +240,8 @@ def migrate_schema():
                     cur.execute("ALTER TABLE orders ADD COLUMN discord TEXT DEFAULT ''")
                 if "whatsapp" not in cols:
                     cur.execute("ALTER TABLE orders ADD COLUMN whatsapp TEXT DEFAULT ''")
+                if "paid" not in cols:
+                    cur.execute("ALTER TABLE orders ADD COLUMN paid BOOLEAN DEFAULT 0")
                 conn.commit()
                 conn.close()
                 logger.info("SQLite schema up to date")
@@ -526,7 +530,7 @@ def kingdom_page(kingdom_id):
             "notes": sanitize(o.notes or ""),
             "discord": sanitize(o.discord or ""),
             "whatsapp": sanitize(o.whatsapp or ""),
-            "status": o.status, "created_at": o.created_at,
+            "status": o.status, "paid": bool(o.paid), "created_at": o.created_at,
         })
     return render_template("index.html", orders=safe_orders, stats=stats,
                            kingdom={"id": kingdom.id, "name": sanitize(kingdom.name), "created_at": kingdom.created_at})
@@ -607,6 +611,18 @@ def set_in_progress(kingdom_id, order_id):
     order = Order.query.filter_by(id=order_id, kingdom_id=kingdom_id).first()
     if order:
         order.status = "in_progress" if order.status != "in_progress" else "active"
+        db.session.commit()
+    return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
+
+
+@app.route("/kingdom/<int:kingdom_id>/paid/<int:order_id>", methods=["POST"])
+@login_required
+def toggle_paid(kingdom_id, order_id):
+    if not own_kingdom(kingdom_id):
+        abort(403)
+    order = Order.query.filter_by(id=order_id, kingdom_id=kingdom_id).first()
+    if order:
+        order.paid = not order.paid
         db.session.commit()
     return redirect(url_for("kingdom_page", kingdom_id=kingdom_id))
 

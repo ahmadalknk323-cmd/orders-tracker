@@ -956,6 +956,21 @@ html[data-theme="dark"] .theme-toggle-btn{background:rgba(255,255,255,.06);borde
 .action-btn-progress:hover{background:rgba(234,179,8,.1);border-color:rgba(234,179,8,.2);box-shadow:0 0 18px rgba(234,179,8,.15),0 4px 14px rgba(234,179,8,.06);color:#EAB308}
 .action-btn-progress.active{background:rgba(234,179,8,.1);border-color:rgba(234,179,8,.25);color:#CA8A04}
 
+.action-btn-paid{color:#059669}
+.action-btn-paid:hover{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.2);box-shadow:0 0 18px rgba(16,185,129,.15),0 4px 14px rgba(16,185,129,.06);color:#10B981}
+.action-btn-paid.active{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.3);color:#10B981;box-shadow:0 0 14px rgba(16,185,129,.2)}
+
+.paid-badge{
+  display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:999px;
+  font-size:12px;font-weight:700;
+  background:linear-gradient(135deg,rgba(16,185,129,.22),rgba(16,185,129,.08));
+  color:#10B981;border:1px solid rgba(16,185,129,.35);
+  box-shadow:0 0 10px rgba(16,185,129,.15),inset 0 1px 0 rgba(255,255,255,.06);
+}
+html[data-theme="dark"] .paid-badge{color:#34D399;background:linear-gradient(135deg,rgba(52,211,153,.2),rgba(52,211,153,.06));border-color:rgba(52,211,153,.3)}
+.table-shell tbody tr.paid-order{background:rgba(16,185,129,.07)!important;border-color:rgba(16,185,129,.25)}
+.table-shell tbody tr.paid-order:hover{background:rgba(16,185,129,.12)!important;border-color:rgba(16,185,129,.35)}
+
 .premium-empty{padding:32px 20px;background:rgba(0,0,0,.02);border-radius:18px;border:1px dashed rgba(0,0,0,.08)}
 .premium-empty .empty-state-icon{background:rgba(217,119,6,.04);border-color:rgba(217,119,6,.1)}
 .premium-empty .empty-state-icon svg{color:var(--gold)}
