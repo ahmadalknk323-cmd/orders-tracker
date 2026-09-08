@@ -135,6 +135,18 @@ def number_format(value):
         return value
 
 
+@app.template_filter("resource_num")
+def resource_num(value):
+    try:
+        v = int(value)
+        if v >= 1_000:
+            n = f"{v / 1_000:.1f}".rstrip('0').rstrip('.')
+            return f'{n}<span class="m-suffix">B</span>'
+        return f'{v}<span class="m-suffix">M</span>'
+    except (ValueError, TypeError):
+        return value
+
+
 def migrate_sqlite_data():
     db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "orders.db")
     if not os.path.exists(db_path):

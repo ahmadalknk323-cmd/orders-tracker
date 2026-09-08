@@ -300,11 +300,11 @@
         <tr class="{{ 'finished' if order.status == 'finished' else 'in-progress' if order.status == 'in_progress' else '' }} {{ 'paid-order' if order.paid else '' }}">
           <td class="row-num">{{ loop.index }}</td>
           <td class="customer"><span class="customer-pill">{{ order.customer_name }}</span>{% if order.paid %}<span class="paid-badge">تم الدفع</span>{% endif %}{% if order.status == 'finished' %}<span class="completed-badge">Completed</span>{% elif order.status == 'in_progress' %}<span class="inprogress-badge">In Progress</span>{% endif %}</td>
-          <td class="food">{{ order.food|number_format }}</td>
-          <td class="wood">{{ order.wood|number_format }}</td>
-          <td class="stone">{{ order.stone|number_format }}</td>
-          <td class="gold">{{ order.gold|number_format }}</td>
-          <td class="price">{{ "%.2f"|format(order.price) }} $</td>
+          <td class="food">{{ order.food|resource_num|safe }}</td>
+          <td class="wood">{{ order.wood|resource_num|safe }}</td>
+          <td class="stone">{{ order.stone|resource_num|safe }}</td>
+          <td class="gold">{{ order.gold|resource_num|safe }}</td>
+          <td class="price">{{ order.price|int|resource_num|safe }} $</td>
           <td class="payment"><span class="payment-badge bubble-glass-v2 {% if order.payment_type|upper == 'USDT' %}payment-usdt{% elif order.payment_type|upper == 'CASH' %}payment-cash{% elif order.payment_type|upper == 'BANK' %}payment-bank{% else %}payment-default{% endif %}">{{ order.payment_type }}</span></td>
           <td class="notes-cell">{{ order.notes }}</td>
           <td class="row-id">{{ order.customer_id }}</td>
