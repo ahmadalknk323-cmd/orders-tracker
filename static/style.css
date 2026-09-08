@@ -909,7 +909,7 @@ html[data-theme="dark"] .theme-toggle-btn{background:rgba(255,255,255,.06);borde
 .table-shell .gold{color:#FFD54A!important;text-shadow:0 0 12px rgba(255,213,74,.25)}
 .table-shell .price{color:#79FF8D;font-size:17px;font-weight:800;text-shadow:0 0 12px rgba(121,255,141,.15)}
 
-.m-suffix{font-size:0.65em;font-weight:800;margin-left:2px;vertical-align:baseline;opacity:1}
+.m-suffix{font-size:1em;font-weight:800;margin-left:2px;vertical-align:baseline;opacity:1}
 .food .m-suffix{color:#7CFF71;text-shadow:0 0 8px rgba(124,255,113,.4)}
 .wood .m-suffix{color:#FF9A52;text-shadow:0 0 8px rgba(255,154,82,.4)}
 .stone .m-suffix{color:#B8D4FF;text-shadow:0 0 8px rgba(184,212,255,.3)}
