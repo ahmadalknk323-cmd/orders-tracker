@@ -304,7 +304,7 @@
           <td class="wood">{{ order.wood|resource_num|safe }}</td>
           <td class="stone">{{ order.stone|resource_num|safe }}</td>
           <td class="gold">{{ order.gold|resource_num|safe }}</td>
-          <td class="price">{{ order.price|int|resource_num|safe }} $</td>
+          <td class="price">{{ "%.2f"|format(order.price) }} $</td>
           <td class="payment"><span class="payment-badge bubble-glass-v2 {% if order.payment_type|upper == 'USDT' %}payment-usdt{% elif order.payment_type|upper == 'CASH' %}payment-cash{% elif order.payment_type|upper == 'BANK' %}payment-bank{% else %}payment-default{% endif %}">{{ order.payment_type }}</span></td>
           <td class="notes-cell">{{ order.notes }}</td>
           <td class="row-id">{{ order.customer_id }}</td>
